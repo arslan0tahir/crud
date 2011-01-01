@@ -10,20 +10,20 @@ and open the template in the editor.
 
 
 
-.PaginationPageNo ul{
+.PaginationComp .PaginationPageNo ul{
     margin:2px;
 }
 
 
 
-.PaginationPageNo{
-    position: absolute;
+.PaginationComp .PaginationPageNo{
+    /*position: absolute;*/
     display: inline-block;
     right: 0px;
     top: 0px
     /*float:right;*/
 }
-.PaginationItemsPerPage{
+.PaginationComp .PaginationItemsPerPage{
     
     display: inline-block;
     text-align: left;

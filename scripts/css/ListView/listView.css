@@ -128,7 +128,8 @@ td span.CurrRowSelector:hover, th span.AllRowSelector:hover{
 }
 .PaginationPageNoContainer{
     display: inline-block;
-    
+    height: 40px;
+    float: right;
 
 
 }

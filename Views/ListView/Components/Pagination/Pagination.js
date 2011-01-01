@@ -19,10 +19,17 @@
 //access scope from JS
 //angular.element($(".SearchListComp")).scope().ListColumnIds 
 var ContainerId="";
-
+var ItemsPerPage="Pagination-ItemsPerPage";
 var PaginationCompSelector=".PaginationComp";
 
 Pagination=function(){
+    //Loading Parts of Pagination Component
+        $("[data-crud-comp="+ItemsPerPage+"]" ).load( "../../views/ListView/Components/Pagination/Parts/ItemsPerPage.html" );
+        $("[data-crud-comp="+ItemsPerPage+"]" ).load( "../../views/ListView/Components/Pagination/Parts/ItemsPerPage.html" );
+
+    
+    
+ //START Angular##########################################################################################################################
     var app = angular.module('PaginationApp', []);
     app.controller('PaginationCtrl', function($scope) {
     });
