@@ -33,7 +33,8 @@ data={
     listName: "Students", 
     settings: [{
             ColumnOrder : [],
-            RowOrderBy:[13,16]
+            RowOrderBy:[13,16],
+            View: "Default"
             
     }],
     columns: [
