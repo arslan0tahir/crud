@@ -5,3 +5,62 @@
  */
 
 
+
+
+
+/*
+ * PROPERTIES
+ * 
+ * list.Name
+ * list.ColumnOrder
+ * list.RowOrder
+ * list.Id
+ * list.Settings
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * METHODS
+ * 
+ * list.fetchData()
+ * list.fetchList()
+ * list.fetchListData()
+ 
+ */
+data={
+    listName: "Students", 
+    settings: [{
+            ColumnOrder : [],
+            RowOrderBy:[13,16]
+            
+    }],
+    columns: [
+            {   
+                ColumnId: 12,
+                ColumnName: "Id",
+            },
+            {   
+                ColumnId: 13,
+                ColumnName: "FirstName",
+            },
+            {   
+                ColumnId: 16,
+                ColumnName: "LastName",
+            },
+            {   
+                ColumnId: 19,
+                ColumnName: "Age",
+            },
+            {   
+                ColumnId: 21,
+                ColumnName: "Class",
+            }
+       ],
+    data: [
+        
+    ]
+}
+
+alert("success")
