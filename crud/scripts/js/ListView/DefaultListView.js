@@ -54,8 +54,8 @@ var ListSettings={
 
                             ListViewName: "Default",
                             ListViewSettings:{
-                                RenderIdAsSr        : "0",
-                                ColumnsWithOrder    : [12,13,19,21,16], //these are permitted columns for users/goup
+                                RenderSr            : 1,
+                                ColumnsWithOrder    : [12,13,16,21,19], //these are permitted columns for users/goup
                                 RowOrderBy          : [13,16],
                                 ItemsPerPage        : 20,
                                 ShowTotalRows       : "1",
@@ -89,18 +89,22 @@ var ListSettings={
 
 
 var TempViewSettings=   {   
-                         /*--TempViewSettings is populated on runtime and data is refetched from the server in acoordance with 
+                         /*TempViewSettings is initially populated with common feilds of currentListview/ListViewSettings
+                          * --TempViewSettings is populated on runtime and data is refetched from the server in acoordance with 
                           * the custom filter settings. 
                           * --TempViewSettings will temporarily override some of the ListViewSettings
                           *   
                           *
                           *contained in this object.
                           */ 
-                            RenderIdAsSr        : "DEFAULT",
+                            RenderSr            : 0,
                             ColumnsWithOrder    : "RISTRICTED",
                             RowOrderBy          : "DEFAULT",
-                            ItemsPerPage        : "DEFAULT",
-                            SearchQ             : ""   
+                            SearchQ             : "",  
+                            CurrPage            : 1,
+                            TotalPages          : 1,  //calculated on run time
+                            ItemsPerPage        : 20, //or Default
+                            TotalItems          : 2   //total items of query
 
                         }
 
@@ -160,33 +164,40 @@ ListCheckData=function(){
 ListPopulateTable= function(){
    
    
-    //vars for for population of header
+    //vars for population of header
     var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
-    var RenderIdAsSr=ListSettings.CurrentListView.ListViewSettings.RenderIdAsSr;
+    var RenderSr=TempViewSettings.RenderSr;
     MyColumns=ListSettings.ListColumns;
     var ColTemplate="<th></th>";
     var TableHeaderSelector="table.ListDataTable thead tr"
     var HeaderCellObject=""; //holds rendered DOM of cell
     var CurrColumnName=""
-     //vars for for population of body
+     //vars for population of body
     var TableBodySelector="table.ListDataTable tbody"; 
     var RowHeadTemplate="<th scope='row'></th>";
     var RowTemplate="<tr id=''></tr>";   
-    var RowCellTemplate="<td ></td>";
+    var RowCellTemplate="<td id=''></td>";
+    var RowHeaderTemplate="<th scope='row'>1</th>";
+    var CurrRowHTML="";
+    var CurrRowData="";
     var RowHeader=ListSettings.CurrentListView.ListViewSettings.RowHeader;
-    
-    
+    var StartSerialNo=1;
+    var SerialNo=0;
+    var EndSerialNo=1;
+    var CurrPage=TempViewSettings.CurrPage;
+    var ItemsPerPage=TempViewSettings.ItemsPerPage;
+    var TotalItems=TempViewSettings.TotalItems;
     
     
     
     
     //populate Table Header
             //Rendering first column title as either Sr. or Id
-            if(RenderIdAsSr){
-                       //if true Id will automatically be rendered in upcomming loop                 
+            if(RenderSr){
+                  HeaderCellObject=$(ColTemplate).html("Sr."); 
             }
             else{
-                        HeaderCellObject=$(ColTemplate).html("Sr."); 
+                        
             }
             $(TableHeaderSelector).append(HeaderCellObject); 
 
@@ -202,6 +213,51 @@ ListPopulateTable= function(){
     
     //populate Table Body
             //populating row header
+            StartSerialNo=(CurrPage-1)*ItemsPerPage+1;
+            SerialNo=StartSerialNo;
+            EndSerialNo=0; //dynamic calculation
+            
+            
+            for (i=0;i<ItemsPerPage;i++){//populating row
+                if (SerialNo>TotalItems){
+                    break;
+                }
+                CurrRowData=ListData.ListData[i];
+                RowId=CurrRowData["Id"];
+                CurrRowHTML=$(RowTemplate).attr("id","Row-"+RowId);
+                CurrRowHTML.attr("data-sr",SerialNo);
+                
+        
+                if(RenderSr){
+                    ColName="Sr";
+                    ColId=0;
+                    CurrColHtml=$(RowHeadTemplate);
+                    CurrColHtml.attr("data-col-name",ColName);
+                    CurrColHtml.attr("data-col-id",ColId);
+                    CurrColHtml.attr("id","Cell-"+RowId+"-"+ColId);
+                    CurrColHtml.html(SerialNo);
+                    CurrRowHTML.append(CurrColHtml);                   
+                }
+                //rendring rest of rows
+                for(j=0;j<MyColumnIds.length;j++){//populating row cells
+                    MyColumnIds[j]
+                    ColName=MyColumns[MyColumnIds[j]].ColumnName;
+                    ColId=MyColumns[MyColumnIds[j]].ColumnId;
+                    CurrColHtml=(j==0 && RenderSr==0? $(RowHeadTemplate):$(RowCellTemplate));
+                    CurrColHtml.attr("data-col-name",ColName);
+                    CurrColHtml.attr("data-col-id",ColId);
+                    CurrColHtml.attr("id","Cell-"+RowId+"-"+ColId);
+                    CurrColHtml.html(CurrRowData[ColName]);
+                    
+                    CurrRowHTML.append(CurrColHtml);
+                }
+                MyColumns ;
+                MyColumnIds;
+                $(TableBodySelector).append(CurrRowHTML);
+                
+                
+                SerialNo++;
+            }
             
             
             
