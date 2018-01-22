@@ -41,19 +41,44 @@ and open the template in the editor.
         <div id="ListViewTemplates">
             
         </div>
-        
- 
     </div>
+        
+        
+        
+<th class="ColumnHeader" style="    padding: 0px;">
+    <div class="dropdown" style="display: inline-block; width:  100%;">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="    border: 0px;    margin:  2px;">
+    FirstName
+    <span class="caret"></span>
+    </button>
+  
+    <a href="#" style="float: right;padding: 8px;"><span class="glyphicon glyphicon-sort"></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+    
+ </th>
+        
+        
+        
     </body>
     
-    <link rel="stylesheet" type="text/css" href="../../scripts/css/bootstrap/bootstrap.min.css">    
-    
+    <link rel="stylesheet" type="text/css" href="../../scripts/css/bootstrap/bootstrap.css">    
     <script src="../../scripts/js/JQuery/jquery-3.2.1.js"></script>
     <script src="../../scripts/js/bootstrap/bootstrap.min.js"></script>
     
-    
     <script src="../../scripts/js/ListView/DefaultListView.js"></script>
-
+    
+<style>
+    th.ColumnHeader:hover{
+        background-color: whitesmoke;
+        border-radius: 5px;
+    }
+</style>   
    
 <!--    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">

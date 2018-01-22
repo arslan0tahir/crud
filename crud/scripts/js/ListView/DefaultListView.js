@@ -97,7 +97,7 @@ var TempViewSettings=   {
                           *
                           *contained in this object.
                           */ 
-                            RenderSr            : 0,
+                            RenderSr            : 1,
                             ColumnsWithOrder    : "RISTRICTED",
                             RowOrderBy          : "DEFAULT",
                             SearchQ             : "",  
@@ -168,10 +168,10 @@ ListPopulateTable= function(){
     var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
     var RenderSr=TempViewSettings.RenderSr;
     MyColumns=ListSettings.ListColumns;
-    var ColTemplate="<th></th>";
+    var ColTemplate="<th style='padding: 0px;'></th>";
     var TableHeaderSelector="table.ListDataTable thead tr"
     var HeaderCellObject=""; //holds rendered DOM of cell
-    var CurrColumnName=""
+    var CurrColumnName="";
      //vars for population of body
     var TableBodySelector="table.ListDataTable tbody"; 
     var RowHeadTemplate="<th scope='row' ></th>";
@@ -205,8 +205,24 @@ ListPopulateTable= function(){
             //Rendering rest of column titles
             for (var i=0;i<MyColumnIds.length;i++){
                 CurrColumnName=MyColumns[MyColumnIds[i]].ColumnName
-                HeaderCellObject=$(ColTemplate).html(CurrColumnName);
-                HeaderCellObject.append("<span class='glyphicon glyphicon-trash' aria-hidden='true'></span>")
+                HeaderCellObject=$(ColTemplate).html("");
+                HeaderCellObject.attr("class","ColumnHeader")
+                HeaderCellObject.append("<div class='dropdown' style='display: inline-block; width:  100%;'>\n\
+                                            <button class='btn btn-default dropdown-toggle' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='    border: 0px;    margin:  2px;'>\n\
+                                                "+CurrColumnName+"\n\
+                                                <span class='caret'></span>\n\
+                                            </button>\n\
+                                            <a href='#' style='float: left;padding: 8px;'><span class='glyphicon glyphicon-sort'></span>\n\
+                                            </a>\n\
+                                            <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>\n\
+                                                <li><a href='#'>Action</a></li>\n\
+                                                <li><a href='#'>Another action</a></li>\n\
+                                                <li><a href='#'>Something else here</a></li>\n\
+                                                <li role='separator' class='divider'></li>\n\
+                                                <li><a href='#'>Separated link</a></li>\n\
+                                            </ul>\n\
+                                        </div>");
+                HeaderCellObject.append("");
                 $(TableHeaderSelector).append(HeaderCellObject); 
 
             }
