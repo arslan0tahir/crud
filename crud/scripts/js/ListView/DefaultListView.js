@@ -174,7 +174,7 @@ ListPopulateTable= function(){
     var CurrColumnName=""
      //vars for population of body
     var TableBodySelector="table.ListDataTable tbody"; 
-    var RowHeadTemplate="<th scope='row'></th>";
+    var RowHeadTemplate="<th scope='row' ></th>";
     var RowTemplate="<tr id=''></tr>";   
     var RowCellTemplate="<td id=''></td>";
     var RowHeaderTemplate="<th scope='row'>1</th>";
@@ -206,6 +206,7 @@ ListPopulateTable= function(){
             for (var i=0;i<MyColumnIds.length;i++){
                 CurrColumnName=MyColumns[MyColumnIds[i]].ColumnName
                 HeaderCellObject=$(ColTemplate).html(CurrColumnName);
+                HeaderCellObject.append("<span class='glyphicon glyphicon-trash' aria-hidden='true'></span>")
                 $(TableHeaderSelector).append(HeaderCellObject); 
 
             }
@@ -226,6 +227,7 @@ ListPopulateTable= function(){
                 RowId=CurrRowData["Id"];
                 CurrRowHTML=$(RowTemplate).attr("id","Row-"+RowId);
                 CurrRowHTML.attr("data-sr",SerialNo);
+                
                 
         
                 if(RenderSr){
