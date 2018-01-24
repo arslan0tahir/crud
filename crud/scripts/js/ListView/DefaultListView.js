@@ -194,7 +194,11 @@ ListPopulateTable= function(){
     //populate Table Header
             //Rendering first column title as either Sr. or Id
             if(RenderSr){
-                  HeaderCellObject=$(ColTemplate).html("Sr."); 
+                  HeaderCellObject=$(ColTemplate).html("<div class='dropdown' style='display: inline-block; width:  100%;'>\n\
+                                                            <button class='btn btn-default dropdown-toggle HeaderDropDown' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-weight:bolder   ; border: 0px;    margin:  2px;'>\n\
+                                                            Sr\n\
+                                                            </button>\n\
+                                                        </div>"); 
             }
             else{
                         
@@ -207,17 +211,17 @@ ListPopulateTable= function(){
                 CurrColumnName=MyColumns[MyColumnIds[i]].ColumnName
                 HeaderCellObject=$(ColTemplate).html("");
                 HeaderCellObject.attr("class","ColumnHeader")
-                HeaderCellObject.append("<div class='dropdown' style='display: inline-block; width:  100%;'>\n\
-                                            <button class='btn btn-default dropdown-toggle' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='    border: 0px;    margin:  2px;'>\n\
+                HeaderCellObject.append("<div class='dropdown' style='display: inline-block; width:  100%;white-space: nowrap;'>\n\
+                                            <button class='btn btn-default dropdown-toggle HeaderDropDown' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-weight:bolder   ; border: 0px;    margin:  2px; width: 85%'>\n\
                                                 "+CurrColumnName+"\n\
                                                 <span class='caret'></span>\n\
                                             </button>\n\
-                                            <a href='#' style='float: left;padding: 8px;'><span class='glyphicon glyphicon-sort'></span>\n\
-                                            </a>\n\
+                                            <div style='display:inline-block;width:15%'><a href='#' style='padding: 8px;'><span class='glyphicon glyphicon-sort'></span>\n\
+                                            </a></div>\n\
                                             <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>\n\
-                                                <li><a href='#'>Action</a></li>\n\
-                                                <li><a href='#'>Another action</a></li>\n\
-                                                <li><a href='#'>Something else here</a></li>\n\
+                                                <li><input id='checkBox' type='checkbox'><a href='#'>Sort Ascending</a></li>\n\
+                                                <li><a href='#'>Sort Decending</a></li>\n\
+                                                <li><a href='#'>Clear Filters</a></li>\n\
                                                 <li role='separator' class='divider'></li>\n\
                                                 <li><a href='#'>Separated link</a></li>\n\
                                             </ul>\n\
