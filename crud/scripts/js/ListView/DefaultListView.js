@@ -56,7 +56,9 @@ var ListSettings={
                             ListViewSettings:{
                                 RenderSr            : 1,
                                 ColumnsWithOrder    : [12,13,16,21,19], //these are permitted columns for users/goup
-                                RowOrderBy          : [13,16],
+                                GroupSortEnable     : 0,
+                                GroupSortColumns    : [],
+                                GroupSortOrder      : [], //Ascending/Descending
                                 ItemsPerPage        : 20,
                                 ShowTotalRows       : "1",
                                 RowHeader           : [12]
@@ -104,7 +106,21 @@ var TempViewSettings=   {
                             CurrPage            : 1,
                             TotalPages          : 1,  //calculated on run time
                             ItemsPerPage        : 20, //or Default
-                            TotalItems          : 2   //total items of query
+                            TotalItems          : 2,   //total items of query
+                            GroupSortEnable     : 0,
+                            GroupSortColumns    : [],
+                            GroupSortOrder      : "Ascending", //Ascending/Descending
+                            Filter             :{
+                                                             
+                                                    13          :{
+                                                                    "SortOrder": "Ascending" ,//Ascending/Descending
+                                                                 },
+                                                    
+                                                    16          :{
+                                                            
+                                                                 }
+                                
+                                                }      
 
                         }
 
@@ -143,13 +159,19 @@ alert("success");
 var ListFetchData=function(){};
 var ListIsDataReady=function(){};
 var ListPopulateTable=function(){};
+var ListnerColumnFilter=function(){};
 
 
+
+
+
+//**************************************************************MAIN START
 $(document).ready(function() {
  //   $("table.ListDataTable thead tr").append("<td>hello<td>");
     ListPopulateTable();
+    ListnerColumnFilter();
 });
-
+//**************************************************************MAIN END
 
 
 
@@ -168,7 +190,7 @@ ListPopulateTable= function(){
     var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
     var RenderSr=TempViewSettings.RenderSr;
     MyColumns=ListSettings.ListColumns;
-    var ColTemplate="<th style='padding: 0px;'></th>";
+    var ColTemplate="<th style='padding: 0px;position:relative'></th>";
     var TableHeaderSelector="table.ListDataTable thead tr"
     var HeaderCellObject=""; //holds rendered DOM of cell
     var CurrColumnName="";
@@ -211,13 +233,13 @@ ListPopulateTable= function(){
                 CurrColumnName=MyColumns[MyColumnIds[i]].ColumnName
                 HeaderCellObject=$(ColTemplate).html("");
                 HeaderCellObject.attr("class","ColumnHeader")
-                HeaderCellObject.append("<div class='dropdown' style='display: inline-block; width:  100%;white-space: nowrap;'>\n\
-                                            <button class='btn btn-default dropdown-toggle HeaderDropDown' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-weight:bolder   ; border: 0px;    margin:  2px; width: 85%'>\n\
+                HeaderCellObject.attr("id",CurrColumnName+"-"+MyColumnIds[i])
+                HeaderCellObject.append("<div class='dropdown' style='position:relative;display: inline-block; width:  100%;white-space: nowrap;'>\n\
+                                            <div style='display:inline-block;padding-right:25px'>\n\
+                                            <button class='btn btn-default dropdown-toggle HeaderDropDown' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-weight:bolder   ; border: 0px;    margin:  2px; '>\n\
                                                 "+CurrColumnName+"\n\
                                                 <span class='caret'></span>\n\
                                             </button>\n\
-                                            <div style='display:inline-block;width:15%'><a href='#' style='padding: 8px;'><span class='glyphicon glyphicon-sort'></span>\n\
-                                            </a></div>\n\
                                             <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>\n\
                                                 <li><input id='checkBox' type='checkbox'><a href='#'>Sort Ascending</a></li>\n\
                                                 <li><a href='#'>Sort Decending</a></li>\n\
@@ -225,7 +247,11 @@ ListPopulateTable= function(){
                                                 <li role='separator' class='divider'></li>\n\
                                                 <li><a href='#'>Separated link</a></li>\n\
                                             </ul>\n\
-                                        </div>");
+                                            </div>\n\
+                                            \n\
+                                            <div style='padding:8px;position:absolute;right:0px; top:50%; transform: translateY(-50%);;display:inline-block;text-align:right'><a class='FilterIcon' href='#' style='' title='Sort Ascending or Descending'><span style='font-size: small;' class='glyphicon glyphicon-sort '></a></span>\n\
+                                            </a></div>\n\
+                                            </div>");
                 HeaderCellObject.append("");
                 $(TableHeaderSelector).append(HeaderCellObject); 
 
@@ -295,7 +321,33 @@ ListPopulateTable= function(){
     
 }
 
-
+ListnerColumnFilter=function(){
+    
+    $("table.ListDataTable").on('click','a.FilterIcon',function(e){
+        
+        var a=$(this).children("span");
+        
+        if (a.hasClass( "glyphicon-sort" )){
+            a.removeClass( "glyphicon-sort" )
+            a.addClass( "glyphicon-sort-by-attributes" )
+        }
+        else{
+            a.toggleClass("glyphicon-sort-by-attributes glyphicon-sort-by-attributes-alt")
+        }
+        
+//        else if(a.hasClass( "glyphicon-sort-by-attributes" )){
+//            a.removeClass( "glyphicon-sort-by-attributes" )
+//            a.addClass( "glyphicon-sort-by-attributes-alt" )
+//        }
+//        else if(a.hasClass( "glyphicon-sort-by-attributes" )){
+//            a.removeClass( "glyphicon-sort-by-attributes" )
+//            a.addClass( "glyphicon-sort-by-attributes-alt" )
+//        }
+        
+        
+        //alert(this.id);
+    })
+}
 
 
 
