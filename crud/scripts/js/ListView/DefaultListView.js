@@ -59,6 +59,9 @@ var ListSettings={
                                 GroupSortEnable     : 0,
                                 GroupSortColumns    : [],
                                 GroupSortOrder      : [], //Ascending/Descending
+                                DataSource          : [], //AJAX  (AJAX Data source in this mode is SQL Tables. LISTDATA/ListColumns in accordance with queires)
+                                                          //LOCAL (LOCAL Data source in this mode is LISTDATA array no queries are sent to the server)  
+                                
                                 ItemsPerPage        : 20,
                                 ShowTotalRows       : "1",
                                 RowHeader           : [12]
@@ -95,7 +98,7 @@ var TempViewSettings=   {
                           * --TempViewSettings is populated on runtime and data is refetched from the server in acoordance with 
                           * the custom filter settings. 
                           * --TempViewSettings will temporarily override some of the ListViewSettings
-                          *   
+                          * --TempViewSettings will send as ajax queries to the server 
                           *
                           *contained in this object.
                           */ 
@@ -110,17 +113,13 @@ var TempViewSettings=   {
                             GroupSortEnable     : 0,
                             GroupSortColumns    : [],
                             GroupSortOrder      : "Ascending", //Ascending/Descending
-                            Filter             :{
-                                                             
-                                                    13          :{
-                                                                    "SortOrder": "Ascending" ,//Ascending/Descending
-                                                                 },
-                                                    
-                                                    16          :{
-                                                            
-                                                                 }
-                                
-                                                }      
+                            Query               :{}
+//                                                              {
+//                                                             
+//                                                                  13          :{
+//                                                                                     "SortOrder": "Ascending" //Ascending/Descending
+//                                                                                },
+//                                                              }      
 
                         }
 
@@ -156,10 +155,31 @@ alert("success");
 
 
 //functions
-var ListFetchData=function(){};
-var ListIsDataReady=function(){};
-var ListPopulateTable=function(){};
-var ListnerColumnFilter=function(){};
+var Initialize=function(){};
+var InitializeTempViewSettings=function(){};
+var InitializeFilterQuery=function(){};
+
+
+var ListFetchData=function(io){};
+var ListIsDataReady=function(io){};
+var ListPopulateTable=function(io){};
+
+
+
+
+var ListnerHeaderCells=function(io){};
+    var ActionIdentifyCell=function(io){};
+    var ActionUpdateQuery=function(io){}; //this routine will update TempViewSettings
+    var ActionSyncViewWithQuery=function(io){};
+    var ActionSendAJAXQuery=function(io){};   //this routine will send TempViewSettings to server
+    var ActionUpdateListData=function(io){};
+    var ActionUpdateListColumns=function(io){};
+
+
+
+
+var ListnerRowCells=function(io){};
+var ListnerPagination=function(io){};
 
 
 
@@ -168,22 +188,47 @@ var ListnerColumnFilter=function(){};
 //**************************************************************MAIN START
 $(document).ready(function() {
  //   $("table.ListDataTable thead tr").append("<td>hello<td>");
+    Initialize();
     ListPopulateTable();
-    ListnerColumnFilter();
+    ListnerHeaderCells();
 });
 //**************************************************************MAIN END
 
 
-
-
-ListFetchData= function(){
+Initialize= function(io){
+    InitializeTempViewSettings();
     
 }
 
-ListCheckData=function(){
+
+
+InitializeTempViewSettings= function(io){
+    
+    
+    InitializeFilterQuery();
+}
+
+InitializeFilterQuery= function(io){
+    
+    
+    var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+    
+    for (i=0;i<MyColumnIds.length;i++){
+            TempViewSettings.Query[MyColumnIds[i]]={
+                "SortOrder": ""
+            };
+    }
+
+}
+
+ListFetchData= function(io){
     
 }
-ListPopulateTable= function(){
+
+ListCheckData=function(io){
+    
+}
+ListPopulateTable= function(io){
    
    
     //vars for population of header
@@ -321,9 +366,22 @@ ListPopulateTable= function(){
     
 }
 
-ListnerColumnFilter=function(){
+ListnerHeaderCells=function(io){
     
     $("table.ListDataTable").on('click','a.FilterIcon',function(e){
+        
+        io={
+            e               : e,
+            EventSource     : this
+        }
+        
+        var SourceCell
+                
+                
+        SourceCell=ActionIdentifyCell(io);
+        ActionUpdateQuery(SourceCell);
+        ActionSyncViewWithQuery(SourceCell);        
+        
         
         var a=$(this).children("span");
         
@@ -349,6 +407,66 @@ ListnerColumnFilter=function(){
     })
 }
 
+ActionIdentifyCell=function(io){
+//   Input Object
+//    
+//   io{
+//          e     :e      RowCell/HeaderCell
+//          source:this
+//   }
+
+
+    
+    
+    var oo={};
+    oo.Response={};
+    var EventSource=io.EventSource;
+    
+    if ($(EventSource).parents("thead").length){
+        oo.Type="HeaderCell";
+        oo.RowId="";
+        oo.CellId=$(EventSource).parents("th").attr("id");
+        oo.ColumnId=oo.CellId.split("-")[1];
+        
+    }
+    else if ($(EventSource).parents("tbody").length){
+        oo.type="RowCell";
+        
+        
+    }
+        
+    
+    
+    
+    
+//   Return Object
+//    
+//   oo{
+//          Type           RowCell/HeaderCell
+//          ColumnId
+//          RowId
+//          CellId
+//   }
+    return oo;
+}
+
+ActionUpdateQuery=function(io){
+    
+    var hold=TempViewSettings.Query[io.ColumnId].SortOrder;
+    
+    if (hold==""){
+        TempViewSettings.Query[io.ColumnId].SortOrder="Ascending"
+    }
+    else if (hold=="Ascending"){
+        TempViewSettings.Query[io.ColumnId].SortOrder="Descending"
+    }
+    else if (hold=="Descending"){
+        TempViewSettings.Query[io.ColumnId].SortOrder="Ascending"
+    }
+    
+    
+
+}
 
 
 
