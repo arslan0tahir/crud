@@ -382,15 +382,16 @@ ListnerHeaderCells=function(io){
         ActionSyncViewWithQuery(SourceCell);        
         
         
-        var a=$(this).children("span");
-        
-        if (a.hasClass( "glyphicon-sort" )){
-            a.removeClass( "glyphicon-sort" )
-            a.addClass( "glyphicon-sort-by-attributes" )
-        }
-        else{
-            a.toggleClass("glyphicon-sort-by-attributes glyphicon-sort-by-attributes-alt")
-        }
+//        var a=$(this).children("span");
+//        
+//        if (a.hasClass( "glyphicon-sort" )){
+//            a.removeClass( "glyphicon-sort" )
+//            a.addClass( "glyphicon-sort-by-attributes" )
+//        }
+//        else{
+//            a.toggleClass("glyphicon-sort-by-attributes glyphicon-sort-by-attributes-alt")
+//        }
+      
         
 //        else if(a.hasClass( "glyphicon-sort-by-attributes" )){
 //            a.removeClass( "glyphicon-sort-by-attributes" )
@@ -453,19 +454,76 @@ ActionUpdateQuery=function(io){
     
     var hold=TempViewSettings.Query[io.ColumnId].SortOrder;
     
-    if (hold==""){
-        TempViewSettings.Query[io.ColumnId].SortOrder="Ascending"
+    
+    var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+    
+    
+    //clear all other sort queries
+    for (i=0;i<MyColumnIds.length;i++){
+            
+        if (MyColumnIds[i]==io.ColumnId){
+            if (hold==""){
+                TempViewSettings.Query[io.ColumnId].SortOrder="Ascending"
+            }
+            else if (hold=="Ascending"){
+                TempViewSettings.Query[io.ColumnId].SortOrder="Descending"
+            }
+            else if (hold=="Descending"){
+                TempViewSettings.Query[io.ColumnId].SortOrder="Ascending"
+            }
+        }
+        else{
+            TempViewSettings.Query[MyColumnIds[i]].SortOrder="";
+        }
+        
+        
     }
-    else if (hold=="Ascending"){
-        TempViewSettings.Query[io.ColumnId].SortOrder="Descending"
-    }
-    else if (hold=="Descending"){
-        TempViewSettings.Query[io.ColumnId].SortOrder="Ascending"
-    }
+
+
+
+    
     
     
 
 }
 
+
+ActionSyncViewWithQuery=function(io){
+    var hold="";
+    var HeaderCellId=""
+    var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+    
+    for (i=0;i<MyColumnIds.length;i++){
+       
+        ColId=ListSettings.ListColumns[MyColumnIds[i]].ColumnId;
+        ColName=ListSettings.ListColumns[MyColumnIds[i]].ColumnName;
+        HeaderCellId=ColName+"-"+ColId;
+        
+        hold=TempViewSettings.Query[MyColumnIds[i]].SortOrder;
+        IconSpan="#"+HeaderCellId+" a.FilterIcon span";
+        
+        
+        
+        if(hold==""){
+           $(IconSpan).addClass("glyphicon-sort");
+           $(IconSpan).removeClass("glyphicon-sort-by-attributes-alt");
+           $(IconSpan).removeClass("glyphicon-sort-by-attributes");
+           
+           
+        }
+        else if (hold=="Ascending"){
+           $(IconSpan).removeClass("glyphicon-sort");
+           $(IconSpan).removeClass("glyphicon-sort-by-attributes-alt");
+           $(IconSpan).addClass("glyphicon-sort-by-attributes");
+        }
+        else if (hold=="Descending"){
+           $(IconSpan).removeClass("glyphicon-sort");
+           $(IconSpan).addClass("glyphicon-sort-by-attributes-alt");
+           $(IconSpan).removeClass("glyphicon-sort-by-attributes");
+        }
+       
+       
+    }
+}
 
 
