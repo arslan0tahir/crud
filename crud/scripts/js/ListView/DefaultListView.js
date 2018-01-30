@@ -164,8 +164,6 @@ var ListIsDataReady=function(io){};
 var ListPopulateTable=function(io){};
 
 
-
-
 var ListnerHeaderCells=function(io){};
     var ActionIdentifyCell=function(io){};
     var ActionUpdateQuery=function(io){}; //this routine will update TempViewSettings
@@ -280,16 +278,33 @@ ListPopulateTable= function(io){
                 HeaderCellObject.attr("id",CurrColumnName+"-"+MyColumnIds[i])
                 HeaderCellObject.append("<div class='dropdown' style='position:relative;display: inline-block; width:  100%;white-space: nowrap;'>\n\
                                             <div style='display:inline-block;padding-right:25px'>\n\
-                                            <button class='btn btn-default dropdown-toggle HeaderDropDown' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-weight:bolder   ; border: 0px;    margin:  2px; '>\n\
-                                                "+CurrColumnName+"\n\
-                                                <span class='caret'></span>\n\
-                                            </button>\n\
-                                            <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>\n\
-                                                <li><input id='checkBox' type='checkbox'><a href='#'>Sort Ascending</a></li>\n\
-                                                <li><a href='#'>Sort Decending</a></li>\n\
-                                                <li><a href='#'>Clear Filters</a></li>\n\
+                                            <button class='btn btn-default dropdown-toggle HeaderDropDown' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-weight:bolder   ; border: 0px;    margin:  2px; '>"+CurrColumnName+"  \n\
+<span class='caret'></span>\n\
+</button>\n\
+                                            <ul class='dropdown-menu' aria-labelledby='dropdownMenu1' style='padding:8px'>\n\
+                                                <li style='padding:0px' class='AO-Filter'>\n\
+                                                     <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>\n\
+                                                        <label><input type='checkbox' value='' name='SortOrder'>Ascending</label>\n\
+                                                     </div>\n\
+                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon-sort-by-attributes'></span>\n\
+                                                    </a>\n\
+                                                </li>\n\
+                                                <li style='padding:0px' class='DO-Filter'>\n\
+                                                    <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>\n\
+                                                        <label><input type='checkbox' value='' name='SortOrder'>Descending</label>\n\
+                                                     </div>\n\
+                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon-sort-by-attributes-alt'></span>\n\
+                                                    </a>\n\
+                                                </li>\n\
+                                                \n\
                                                 <li role='separator' class='divider'></li>\n\
-                                                <li><a href='#'>Separated link</a></li>\n\
+                                                <li style='padding:0px' class='No=Filter'>\n\
+                                                     <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>\n\
+                                                        <label><input type='checkbox' value='' name='SortOrder'>No Filter</label>\n\
+                                                     </div>\n\
+                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon glyphicon-sort'></span>\n\
+                                                    </a>\n\
+                                                </li>\n\
                                             </ul>\n\
                                             </div>\n\
                                             \n\
@@ -301,6 +316,12 @@ ListPopulateTable= function(io){
 
             }
             
+            
+            //Prevent Bootstrap dropdown from closing on clicks
+            $('.dropdown-menu').click(function(e) {
+                    e.stopPropagation();
+            });
+
     
     //populate Table Body
             //populating row header
@@ -502,6 +523,9 @@ ActionSyncViewWithQuery=function(io){
         hold=TempViewSettings.Query[MyColumnIds[i]].SortOrder;
         IconSpan="#"+HeaderCellId+" a.FilterIcon span";
         
+        AOFilterChkBox="#"+HeaderCellId+" ul li.AO-Filter input";
+        DOFilterChkBox="#"+HeaderCellId+" ul li.DO-Filter input";
+        NoFilterChkBox="#"+HeaderCellId+" ul li.No-Filter input";
         
         
         if(hold==""){
@@ -509,17 +533,22 @@ ActionSyncViewWithQuery=function(io){
            $(IconSpan).removeClass("glyphicon-sort-by-attributes-alt");
            $(IconSpan).removeClass("glyphicon-sort-by-attributes");
            
+           $(NoFilterChkBox).attr('checked', true);
            
         }
         else if (hold=="Ascending"){
            $(IconSpan).removeClass("glyphicon-sort");
            $(IconSpan).removeClass("glyphicon-sort-by-attributes-alt");
            $(IconSpan).addClass("glyphicon-sort-by-attributes");
+           
+           $(AOFilterChkBox).attr('checked', true); 
         }
         else if (hold=="Descending"){
            $(IconSpan).removeClass("glyphicon-sort");
            $(IconSpan).addClass("glyphicon-sort-by-attributes-alt");
            $(IconSpan).removeClass("glyphicon-sort-by-attributes");
+           
+           $(DOFilterChkBox).attr('checked', true); 
         }
        
        
