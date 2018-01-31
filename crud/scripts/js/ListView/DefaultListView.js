@@ -155,8 +155,8 @@ alert("success");
 
 //functions
 var Initialize=function(){};
-var InitializeTempViewSettings=function(){};
-var InitializeFilterQuery=function(){};
+var InitializeTempViewSettings=function(){}; //it will initialize json object TempViewSettings
+var InitializeFilterQuery=function(){};      //it will initialize json object TempViewSettings.Query
 
 
 var ListFetchData=function(io){};
@@ -165,8 +165,11 @@ var ListPopulateTable=function(io){};
 
 
 var ListnerHeaderCells=function(io){};
+var ListnerHeaderIcons=function(io){};
+var ListnerHeaderCellsDropDown=function(io){};
+
     var ActionIdentifyCell=function(io){};
-    var ActionUpdateQuery=function(io){}; //this routine will update TempViewSettings
+    var ActionUpdateQueryFromIcon=function(io){}; //this routine will update TempViewSettings
     var ActionSyncViewWithQuery=function(io){};
     var ActionSendAJAXQuery=function(io){};   //this routine will send TempViewSettings to server
     var ActionUpdateListData=function(io){};
@@ -187,7 +190,7 @@ $(document).ready(function() {
  //   $("table.ListDataTable thead tr").append("<td>hello<td>");
     Initialize();
     ListPopulateTable();
-    ListnerHeaderCells();
+    ListnerHeaderCells(); //Attach listners to specific elements
 });
 //**************************************************************MAIN END
 
@@ -282,14 +285,14 @@ ListPopulateTable= function(io){
 <span class='caret'></span>\n\
 </button>\n\
                                             <ul class='dropdown-menu' aria-labelledby='dropdownMenu1' style='padding:8px'>\n\
-                                                <li style='padding:0px' class='AO-Filter'>\n\
+                                                <li style='padding:0px' class='AO-FilterChkBox'>\n\
                                                      <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>\n\
                                                         <label><input type='checkbox' value='' name='SortOrder'>Ascending</label>\n\
                                                      </div>\n\
                                                      <span style='font-size: small;float:right' class='glyphicon glyphicon-sort-by-attributes'></span>\n\
                                                     </a>\n\
                                                 </li>\n\
-                                                <li style='padding:0px' class='DO-Filter'>\n\
+                                                <li style='padding:0px' class='DO-FilterChkBox'>\n\
                                                     <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>\n\
                                                         <label><input type='checkbox' value='' name='SortOrder'>Descending</label>\n\
                                                      </div>\n\
@@ -298,7 +301,7 @@ ListPopulateTable= function(io){
                                                 </li>\n\
                                                 \n\
                                                 <li role='separator' class='divider'></li>\n\
-                                                <li style='padding:0px' class='No=Filter'>\n\
+                                                <li style='padding:0px' class='No-FilterChkBox'>\n\
                                                      <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>\n\
                                                         <label><input type='checkbox' value='' name='SortOrder'>No Filter</label>\n\
                                                      </div>\n\
@@ -318,9 +321,9 @@ ListPopulateTable= function(io){
             
             
             //Prevent Bootstrap dropdown from closing on clicks
-            $('.dropdown-menu').click(function(e) {
-                    e.stopPropagation();
-            });
+//            $('table thead .dropdown-menu').click(function(e) {
+//                    e.stopPropagation();
+//            });
 
     
     //populate Table Body
@@ -383,10 +386,18 @@ ListPopulateTable= function(io){
                     </tr>
                 */
     
-    
+    ActionSyncViewWithQuery(); //initial synchronization of view with query
 }
 
 ListnerHeaderCells=function(io){
+    
+    ListnerHeaderCellsIcons(io);
+    ListnerHeaderCellsDropDown(io)
+    
+    
+}
+
+ListnerHeaderCellsIcons=function(io){
     
     $("table.ListDataTable").on('click','a.FilterIcon',function(e){
         
@@ -399,32 +410,35 @@ ListnerHeaderCells=function(io){
                 
                 
         SourceCell=ActionIdentifyCell(io);
-        ActionUpdateQuery(SourceCell);
+        ActionUpdateQueryFromIcon(SourceCell);
         ActionSyncViewWithQuery(SourceCell);        
+    })
+}
+
+ListnerHeaderCellsDropDown=function(io){
         
+        $("table.ListDataTable thead").on('click','ul li',function(e){
+         e.stopPropagation();
+         if (e.target.tagName=='LABEL'){
+             return;//if mouse is clicked on label, click event is invoked twice
+         }
+         
+         
+         alert(e.target.tagName);
+
+
+        io={
+            e               : e,
+            EventSource     : this
+        }
         
-//        var a=$(this).children("span");
-//        
-//        if (a.hasClass( "glyphicon-sort" )){
-//            a.removeClass( "glyphicon-sort" )
-//            a.addClass( "glyphicon-sort-by-attributes" )
-//        }
-//        else{
-//            a.toggleClass("glyphicon-sort-by-attributes glyphicon-sort-by-attributes-alt")
-//        }
-      
-        
-//        else if(a.hasClass( "glyphicon-sort-by-attributes" )){
-//            a.removeClass( "glyphicon-sort-by-attributes" )
-//            a.addClass( "glyphicon-sort-by-attributes-alt" )
-//        }
-//        else if(a.hasClass( "glyphicon-sort-by-attributes" )){
-//            a.removeClass( "glyphicon-sort-by-attributes" )
-//            a.addClass( "glyphicon-sort-by-attributes-alt" )
-//        }
-        
-        
-        //alert(this.id);
+        var SourceCell;
+                
+                
+        SourceCell=ActionIdentifyCell(io);
+        io.SourceCell=SourceCell;
+        ActionUpdateQueryFromDropDown(io);
+        ActionSyncViewWithQuery(SourceCell);        
     })
 }
 
@@ -471,7 +485,7 @@ ActionIdentifyCell=function(io){
     return oo;
 }
 
-ActionUpdateQuery=function(io){
+ActionUpdateQueryFromIcon=function(io){
     
     var hold=TempViewSettings.Query[io.ColumnId].SortOrder;
     
@@ -508,9 +522,65 @@ ActionUpdateQuery=function(io){
 
 }
 
+ActionUpdateQueryFromDropDown=function(io){
+    
+    var hold=io.EventSource.className;
+    var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+       
+    //clear all other sort queries
+    for (i=0;i<MyColumnIds.length;i++){
+            
+        if (MyColumnIds[i]==io.SourceCell.ColumnId){
+            Checked=$(io.EventSource).find('input').prop('checked');
+            if (hold=="No-FilterChkBox"){
+                if(Checked){
+                    TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
+                }
+                
+            }
+            else if (hold=="AO-FilterChkBox"){
+                if(Checked){
+                    TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="Ascending";
+                }
+                else{
+                    TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
+                }
+                
+            }
+            else if (hold=="DO-FilterChkBox"){
+                if(Checked){
+                    TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="Descending";
+                }
+                else{
+                    TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
+                }
+            }
+        }
+        else{
+            TempViewSettings.Query[MyColumnIds[i]].SortOrder="";
+        }
+        
+        
+    }
 
+
+    test=function(){}
+    
+    
+    
+
+}
 ActionSyncViewWithQuery=function(io){
-    var hold="";
+    
+    ActionSyncViewWithQuery_Icons(io);
+    ActionSyncViewWithQuery_Dropdown(io);
+    
+    
+
+}
+
+ActionSyncViewWithQuery_Icons=function(io){
+        var hold="";
     var HeaderCellId=""
     var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
     
@@ -523,9 +593,9 @@ ActionSyncViewWithQuery=function(io){
         hold=TempViewSettings.Query[MyColumnIds[i]].SortOrder;
         IconSpan="#"+HeaderCellId+" a.FilterIcon span";
         
-        AOFilterChkBox="#"+HeaderCellId+" ul li.AO-Filter input";
-        DOFilterChkBox="#"+HeaderCellId+" ul li.DO-Filter input";
-        NoFilterChkBox="#"+HeaderCellId+" ul li.No-Filter input";
+        AOFilterChkBox="#"+HeaderCellId+" ul li.AO-FilterChkBox input";
+        DOFilterChkBox="#"+HeaderCellId+" ul li.DO-FilterChkBox input";
+        NoFilterChkBox="#"+HeaderCellId+" ul li.No-FilterChkBox input";
         
         
         if(hold==""){
@@ -533,7 +603,7 @@ ActionSyncViewWithQuery=function(io){
            $(IconSpan).removeClass("glyphicon-sort-by-attributes-alt");
            $(IconSpan).removeClass("glyphicon-sort-by-attributes");
            
-           $(NoFilterChkBox).attr('checked', true);
+           $(NoFilterChkBox).prop('checked', true);
            
         }
         else if (hold=="Ascending"){
@@ -541,18 +611,61 @@ ActionSyncViewWithQuery=function(io){
            $(IconSpan).removeClass("glyphicon-sort-by-attributes-alt");
            $(IconSpan).addClass("glyphicon-sort-by-attributes");
            
-           $(AOFilterChkBox).attr('checked', true); 
+           $(AOFilterChkBox).prop('checked', true); 
         }
         else if (hold=="Descending"){
            $(IconSpan).removeClass("glyphicon-sort");
            $(IconSpan).addClass("glyphicon-sort-by-attributes-alt");
            $(IconSpan).removeClass("glyphicon-sort-by-attributes");
            
-           $(DOFilterChkBox).attr('checked', true); 
+           $(DOFilterChkBox).prop('checked', true); 
+        }
+       
+       
+    }
+};
+
+
+ActionSyncViewWithQuery_Dropdown=function(io){
+    var hold="";
+    var HeaderCellId=""
+    var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+    
+    for (i=0;i<MyColumnIds.length;i++){
+       
+        ColId=ListSettings.ListColumns[MyColumnIds[i]].ColumnId;
+        ColName=ListSettings.ListColumns[MyColumnIds[i]].ColumnName;
+        HeaderCellId=ColName+"-"+ColId;
+        
+        hold=TempViewSettings.Query[MyColumnIds[i]].SortOrder;
+        
+        AOFilterChkBox="#"+HeaderCellId+" ul li.AO-FilterChkBox input";
+        DOFilterChkBox="#"+HeaderCellId+" ul li.DO-FilterChkBox input";
+        NoFilterChkBox="#"+HeaderCellId+" ul li.No-FilterChkBox input";
+        
+        
+        if(hold==""){
+           
+           $(NoFilterChkBox).prop('checked', true);
+           $(DOFilterChkBox).prop('checked', false);
+           $(AOFilterChkBox).prop('checked', false);
+           
+        }
+        else if (hold=="Ascending"){
+          
+           
+           $(NoFilterChkBox).prop('checked', false); 
+           $(DOFilterChkBox).prop('checked', false);
+           $(AOFilterChkBox).prop('checked', true);
+        }
+        else if (hold=="Descending"){
+           
+           
+           $(NoFilterChkBox).prop('checked', false); 
+           $(DOFilterChkBox).prop('checked', true);
+           $(AOFilterChkBox).prop('checked', false);
         }
        
        
     }
 }
-
-
