@@ -215,7 +215,8 @@ InitializeFilterQuery= function(io){
     
     for (i=0;i<MyColumnIds.length;i++){
             TempViewSettings.Query[MyColumnIds[i]]={
-                "SortOrder": ""
+                "SortOrder": "",
+                "QueryText": ""
             };
     }
 
@@ -285,6 +286,12 @@ ListPopulateTable= function(io){
 <span class='caret'></span>\n\
 </button>\n\
                                             <ul class='dropdown-menu' aria-labelledby='dropdownMenu1' style='padding:8px'>\n\
+                                                <li style='padding:0px' class='NO-FilterTxtBox'>\n\
+                                                     <div class='input-group add-on'>\n\
+                                                        <input class='' placeholder='Search' name='srch-term' id='srch-term' type='text' style='padding:2px; font-size:smaller; color:midnightblue'>\n\
+                                                     </div>\n\
+                                                </li>\n\
+                                                 <li role='separator' class='divider'></li>\n\
                                                 <li style='padding:0px' class='AO-FilterChkBox'>\n\
                                                      <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>\n\
                                                         <label><input type='checkbox' value='' name='SortOrder'>Ascending</label>\n\
