@@ -47,6 +47,8 @@
  *   
  *     
  */
+var TemplateModel={};
+
 var ListSettings={
 
                     ListName: "Students",
@@ -191,6 +193,7 @@ $(document).ready(function() {
     Initialize();
     ListPopulateTable();
     ListnerHeaderCells(); //Attach listners to specific elements
+    $( ".draggable" ).draggable();
 });
 //**************************************************************MAIN END
 
@@ -280,47 +283,12 @@ ListPopulateTable= function(io){
                 HeaderCellObject=$(ColTemplate).html("");
                 HeaderCellObject.attr("class","ColumnHeader")
                 HeaderCellObject.attr("id",CurrColumnName+"-"+MyColumnIds[i])
-                HeaderCellObject.append("<div class='dropdown' style='position:relative;display: inline-block; width:  100%;white-space: nowrap;'>\n\
-                                            <div style='display:inline-block;padding-right:25px'>\n\
-                                            <button class='btn btn-default dropdown-toggle HeaderDropDown' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-weight:bolder   ; border: 0px;    margin:  2px; '>"+CurrColumnName+"  \n\
-<span class='caret'></span>\n\
-</button>\n\
-                                            <ul class='dropdown-menu' aria-labelledby='dropdownMenu1' style='padding:8px'>\n\
-                                                <li style='padding:0px' class='NO-FilterTxtBox'>\n\
-                                                     <div class='input-group add-on'>\n\
-                                                        <input class='' placeholder='Search' name='srch-term' id='srch-term' type='text' style='padding:2px; font-size:smaller; color:midnightblue'>\n\
-                                                     </div>\n\
-                                                </li>\n\
-                                                 <li role='separator' class='divider'></li>\n\
-                                                <li style='padding:0px' class='AO-FilterChkBox'>\n\
-                                                     <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>\n\
-                                                        <label><input type='checkbox' value='' name='SortOrder'>Ascending</label>\n\
-                                                     </div>\n\
-                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon-sort-by-attributes'></span>\n\
-                                                    </a>\n\
-                                                </li>\n\
-                                                <li style='padding:0px' class='DO-FilterChkBox'>\n\
-                                                    <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>\n\
-                                                        <label><input type='checkbox' value='' name='SortOrder'>Descending</label>\n\
-                                                     </div>\n\
-                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon-sort-by-attributes-alt'></span>\n\
-                                                    </a>\n\
-                                                </li>\n\
-                                                \n\
-                                                <li role='separator' class='divider'></li>\n\
-                                                <li style='padding:0px' class='No-FilterChkBox'>\n\
-                                                     <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>\n\
-                                                        <label><input type='checkbox' value='' name='SortOrder'>No Filter</label>\n\
-                                                     </div>\n\
-                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon glyphicon-sort'></span>\n\
-                                                    </a>\n\
-                                                </li>\n\
-                                            </ul>\n\
-                                            </div>\n\
-                                            \n\
-                                            <div style='padding:8px;position:absolute;right:0px; top:50%; transform: translateY(-50%);;display:inline-block;text-align:right'><a class='FilterIcon' href='#' style='' title='Sort Ascending or Descending'><span style='font-size: small;' class='glyphicon glyphicon-sort '></a></span>\n\
-                                            </a></div>\n\
-                                            </div>");
+                
+                DropDownHtml=$("#ListHeaderDropDownTemplate").html();
+                regex=/var_.*_rav/;
+                DropDownHtml=DropDownHtml.replace(regex,CurrColumnName);
+                HeaderCellObject.append(DropDownHtml);
+
                 HeaderCellObject.append("");
                 $(TableHeaderSelector).append(HeaderCellObject); 
 
@@ -428,15 +396,20 @@ ListnerHeaderCellsDropDown=function(io){
          e.stopPropagation();
          if (e.target.tagName=='LABEL'){
              return;//if mouse is clicked on label, click event is invoked twice
+                    //this condition will ingore extra click event
          }
          
+
          
-         alert(e.target.tagName);
+         
+         //alert(e.target.tagName);
 
 
         io={
             e               : e,
-            EventSource     : this
+            EventSource     : this,
+            SourceCell      : {}
+            
         }
         
         var SourceCell;
@@ -447,6 +420,29 @@ ListnerHeaderCellsDropDown=function(io){
         ActionUpdateQueryFromDropDown(io);
         ActionSyncViewWithQuery(SourceCell);        
     })
+    
+    $("table.ListDataTable thead").on('keyup','ul li input',function(e){
+        io={
+            e               : e,
+            EventSource     : this,
+            SourceCell      : {}
+            
+        }
+        
+        var SourceCell;
+                
+                
+        SourceCell=ActionIdentifyCell(io);
+        io.SourceCell=SourceCell;
+        ActionUpdateQueryFromDropDown(io);
+        ActionSyncViewWithQuery(SourceCell);  
+        //alert("key up");
+        
+    })
+
+    
+    
+  
 }
 
 ActionIdentifyCell=function(io){
@@ -531,45 +527,52 @@ ActionUpdateQueryFromIcon=function(io){
 
 ActionUpdateQueryFromDropDown=function(io){
     
-    var hold=io.EventSource.className;
-    var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
-       
-    //clear all other sort queries
-    for (i=0;i<MyColumnIds.length;i++){
-            
-        if (MyColumnIds[i]==io.SourceCell.ColumnId){
-            Checked=$(io.EventSource).find('input').prop('checked');
-            if (hold=="No-FilterChkBox"){
-                if(Checked){
-                    TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
-                }
-                
-            }
-            else if (hold=="AO-FilterChkBox"){
-                if(Checked){
-                    TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="Ascending";
-                }
-                else{
-                    TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
-                }
-                
-            }
-            else if (hold=="DO-FilterChkBox"){
-                if(Checked){
-                    TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="Descending";
-                }
-                else{
-                    TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
-                }
-            }
-        }
-        else{
-            TempViewSettings.Query[MyColumnIds[i]].SortOrder="";
-        }
-        
-        
+    if (io.e.target.tagName=='INPUT' && $(io.e.target).parents("li.NO-FilterTxtBox").length==1){
+            // var s=io.SourceCell.ColumnId;
+             TempViewSettings.Query[io.SourceCell.ColumnId].QueryText=$(io.e.target).val();
+             return;//
     }
+    else {
+    
+        var hold=io.EventSource.className;
+        var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+       
+        //clear all other sort queries
+        for (i=0;i<MyColumnIds.length;i++){
 
+            if (MyColumnIds[i]==io.SourceCell.ColumnId){
+                Checked=$(io.EventSource).find('input').prop('checked');
+                if (hold=="No-FilterChkBox"){
+                    if(Checked){
+                        TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
+                    }
+
+                }
+                else if (hold=="AO-FilterChkBox"){
+                    if(Checked){
+                        TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="Ascending";
+                    }
+                    else{
+                        TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
+                    }
+
+                }
+                else if (hold=="DO-FilterChkBox"){
+                    if(Checked){
+                        TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="Descending";
+                    }
+                    else{
+                        TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
+                    }
+                }
+            }
+            else{
+                TempViewSettings.Query[MyColumnIds[i]].SortOrder="";
+            }
+
+
+        }
+    }
 
     test=function(){}
     

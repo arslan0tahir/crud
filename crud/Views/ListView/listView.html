@@ -52,10 +52,59 @@ and open the template in the editor.
         
         
         
-    <div id="ListViewTemplates">
-        <div id="ListViewTemplates">
-            
-        </div>
+    <div id="ListHeaderDropDownTemplate" style= 'width:  250px;'>
+        <div class='dropdown ' style='position:relative;display: inline-block; width:  100%;white-space: nowrap;'> 
+                                            <div style='display:inline-block;padding-right:25px'> 
+                                            <button class='btn btn-default dropdown-toggle HeaderDropDown' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-weight:bolder   ; border: 0px;    margin:  2px; '>var_CurrColumnName_rav   
+                                                    <span class='caret'></span> 
+                                            </button> 
+                                            <ul class='dropdown-menu draggable' aria-labelledby='dropdownMenu1' style='padding:8px'> 
+                                                <li style="cursor: move;">
+                                                    <div class="form-group">
+                                                       
+                                                       <select class="form-control" id="sel1">
+                                                         <option>1</option>
+                                                         <option>2</option>
+                                                         <option>3</option>
+                                                         <option>4</option>
+                                                       </select>
+                                                     </div>
+                                                </li>
+                                                <li style='padding:0px' class='NO-FilterTxtBox'> 
+                                                     <div class='input-group add-on'> 
+                                                        <input class='' placeholder='Search' name='srch-term' id='srch-term' type='text' style='padding:2px; font-size:smaller; color:midnightblue'> 
+                                                     </div> 
+                                                </li> 
+                                                 <li role='separator' class='divider'></li> 
+                                                <li style='padding:0px' class='AO-FilterChkBox'>
+                                                     <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>
+                                                        <label><input type='checkbox' value='' name='SortOrder'>Ascending</label>
+                                                     </div>
+                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon-sort-by-attributes'></span> 
+                                                    </a> 
+                                                </li> 
+                                                <li style='padding:0px' class='DO-FilterChkBox'> 
+                                                    <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'> 
+                                                        <label><input type='checkbox' value='' name='SortOrder'>Descending</label> 
+                                                     </div> 
+                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon-sort-by-attributes-alt'></span> 
+                                                    </a> 
+                                                </li> 
+                                                 
+                                                <li role='separator' class='divider'></li> 
+                                                <li style='padding:0px' class='No-FilterChkBox'> 
+                                                     <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'> 
+                                                        <label><input type='checkbox' value='' name='SortOrder'>No Filter</label> 
+                                                     </div> 
+                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon glyphicon-sort'></span> 
+                                                    </a> 
+                                                </li> 
+                                            </ul> 
+                                            </div> 
+                                             
+                                            <div style='padding:8px;position:absolute;right:0px; top:50%; transform: translateY(-50%);;display:inline-block;text-align:right'><a class='FilterIcon' href='#' style='' title='Sort Ascending or Descending'><span style='font-size: small;' class='glyphicon glyphicon-sort '></a></span> 
+                                            </a></div> 
+                                            </div>
     </div>
         
         
@@ -64,6 +113,7 @@ and open the template in the editor.
     
     <link rel="stylesheet" type="text/css" href="../../scripts/css/bootstrap/bootstrap.css">    
     <script src="../../scripts/js/JQuery/jquery-3.2.1.js"></script>
+    <script src="../../scripts/js/JQuery/jquery-ui.js"></script>
     <script src="../../scripts/js/bootstrap/bootstrap.min.js"></script>
     
     <script src="../../scripts/js/ListView/DefaultListView.js"></script>
