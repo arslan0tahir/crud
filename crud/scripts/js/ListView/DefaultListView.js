@@ -47,8 +47,14 @@
  *   
  *     
  */
-var TemplateModel={};
 
+
+
+
+//All server routine starts with List
+//All view routines will start with Table
+var TemplateModel={};
+var DDPosition={};
 var ListSettings={
 
                     ListName: "Students",
@@ -193,7 +199,13 @@ $(document).ready(function() {
     Initialize();
     ListPopulateTable();
     ListnerHeaderCells(); //Attach listners to specific elements
-    $( ".draggable" ).draggable();
+    ListnerBody();
+    
+    
+    
+    
+    
+    
 });
 //**************************************************************MAIN END
 
@@ -285,7 +297,7 @@ ListPopulateTable= function(io){
                 HeaderCellObject.attr("id",CurrColumnName+"-"+MyColumnIds[i])
                 
                 DropDownHtml=$("#ListHeaderDropDownTemplate").html();
-                regex=/var_.*_rav/;
+                regex=/var_.*_rav/g;
                 DropDownHtml=DropDownHtml.replace(regex,CurrColumnName);
                 HeaderCellObject.append(DropDownHtml);
 
@@ -392,57 +404,101 @@ ListnerHeaderCellsIcons=function(io){
 
 ListnerHeaderCellsDropDown=function(io){
         
+        $("table.ListDataTable thead").on('click','ul',function(e){
+                e.stopPropagation();
+        })
+        
+        
         $("table.ListDataTable thead").on('click','ul li',function(e){
-         e.stopPropagation();
-         if (e.target.tagName=='LABEL'){
-             return;//if mouse is clicked on label, click event is invoked twice
-                    //this condition will ingore extra click event
-         }
-         
+                //e.stopPropagation();
+                 if (e.target.tagName=='LABEL'){
+                     return;//if mouse is clicked on label, click event is invoked twice
+                            //this condition will ingore extra click event
+                   }
 
-         
-         
-         //alert(e.target.tagName);
+                //alert(e.target.tagName);
 
 
-        io={
-            e               : e,
-            EventSource     : this,
-            SourceCell      : {}
-            
-        }
-        
-        var SourceCell;
-                
-                
-        SourceCell=ActionIdentifyCell(io);
-        io.SourceCell=SourceCell;
-        ActionUpdateQueryFromDropDown(io);
-        ActionSyncViewWithQuery(SourceCell);        
-    })
+               io={
+                   e               : e,
+                   EventSource     : this,
+                   SourceCell      : {}
+
+               }
+
+               var SourceCell;
+
+
+               SourceCell=ActionIdentifyCell(io);
+               io.SourceCell=SourceCell;
+               ActionUpdateQueryFromDropDown(io);
+               ActionSyncViewWithQuery(SourceCell);        
+        })
     
-    $("table.ListDataTable thead").on('keyup','ul li input',function(e){
-        io={
-            e               : e,
-            EventSource     : this,
-            SourceCell      : {}
-            
-        }
-        
-        var SourceCell;
-                
-                
-        SourceCell=ActionIdentifyCell(io);
-        io.SourceCell=SourceCell;
-        ActionUpdateQueryFromDropDown(io);
-        ActionSyncViewWithQuery(SourceCell);  
-        //alert("key up");
-        
-    })
+        $(".draggable").draggable({
+                   start:function(){
+                       $(this).children(".DDTitleBar").css("display","inline-block");
+                       $(this).parents("th.ColumnHeader").find("button").attr("data-toggle","");
+                       io={
+                           e               : '',
+                           EventSource     : this
+                       };
+                       Output=ActionIdentifyCell(io);
+                       if (!DDPosition.hasOwnProperty(Output.ColumnId)){
+                           DDPosition[Output.ColumnId]=$(this).position();
+                       }
+                       //DDPosition[Output];
+                   }
+               //containment: "body",
+              // scroll: false
+       });
+    
+    
+        $("table.ListDataTable thead").on('keyup','ul li input',function(e){
+            io={
+                e               : e,
+                EventSource     : this,
+                SourceCell      : {}
+
+            }
+
+            var SourceCell;
+
+
+            SourceCell=ActionIdentifyCell(io);
+            io.SourceCell=SourceCell;
+            ActionUpdateQueryFromDropDown(io);
+            ActionSyncViewWithQuery(SourceCell);  
+            //alert("key up");
+
+        })
+        $("table.ListDataTable thead th.ColumnHeader").on('click','li.DDTitleBar',function(e){
+           // alert('minimize');
+            io={
+                e               : e,
+                EventSource     : this,
+                SourceCell      : {}
+            }
+            ActionResetCurrDropdownDraggable(io);
+//
+//            var SourceCell;
+//
+//
+//            SourceCell=ActionIdentifyCell(io);
+//            io.SourceCell=SourceCell;
+//            ActionUpdateQueryFromDropDown(io);
+//            ActionSyncViewWithQuery(SourceCell);  
+//            //alert("key up");
+
+        })
 
     
     
   
+}
+
+ListnerBody=function(io){
+    //$("body").on("click",ActionResetAllDropdownDraggable);
 }
 
 ActionIdentifyCell=function(io){
@@ -678,4 +734,21 @@ ActionSyncViewWithQuery_Dropdown=function(io){
        
        
     }
+}
+
+ActionResetAllDropdownDraggable=function(io){
+    for (var prop in DDPosition){
+        Selector="#"+ListSettings.ListColumns[prop].ColumnName+"-"+prop
+        $(Selector+" ul .DDTitleBar").css({display:"none"});
+        $(Selector+" ul").css(DDPosition[prop]);
+    }
+    
+}
+
+ActionResetCurrDropdownDraggable=function(io){
+        SourceCell=ActionIdentifyCell(io);
+        $("#"+SourceCell.CellId+" ul").css(DDPosition[SourceCell.ColumnId]);
+        $("#"+SourceCell.CellId+" ul .DDTitleBar").css({display:"none"});
+        $("#"+SourceCell.CellId+" button.HeaderDropDown").attr("data-toggle","dropdown");
+        $("#"+SourceCell.CellId).trigger("click");
 }
