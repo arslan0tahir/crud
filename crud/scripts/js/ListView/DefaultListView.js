@@ -114,14 +114,23 @@ var TempViewSettings=   {
                             ColumnsWithOrder    : "RISTRICTED",
                             RowOrderBy          : "DEFAULT",
                             SearchQ             : "",  
-                            CurrPage            : 1,
-                            TotalPages          : 1,  //calculated on run time
-                            ItemsPerPage        : 20, //or Default
-                            TotalItems          : 2,   //total items of query
                             GroupSortEnable     : 0,
                             GroupSortColumns    : [],
                             GroupSortOrder      : "Ascending", //Ascending/Descending
-                            Query               :{}
+                            Query               :{},
+                            Pagination          :{
+                                    
+                                    Render:{
+                                        DisplayModule   :   1,
+                                        Summary         :   1,
+                                        ItemPerPage     :   1
+                                    },                                    
+                                    CurrPage            :   1,
+                                    TotalPages          :   1,  //calculated on run time
+                                    ItemsPerPage        :   20, //or Default
+                                    PagerLenght         :   5,  //if 5 then <Previos  1-5 Next>
+                                    TotalItems          :   2   //total items of query
+                            }
 //                                                              {
 //                                                             
 //                                                                  13          :{
@@ -199,6 +208,7 @@ $(document).ready(function() {
     Initialize();
     ListPopulateTable();
     ListnerHeaderCells(); //Attach listners to specific elements
+    ListnerPagination();
     ListnerBody();
     
     
@@ -211,6 +221,7 @@ $(document).ready(function() {
 
 
 Initialize= function(io){
+    InitializePagination();
     InitializeTempViewSettings();
     
 }
@@ -235,6 +246,10 @@ InitializeFilterQuery= function(io){
             };
     }
 
+}
+
+InitializePagination=function(){
+    $('.PaginationItemsPerPage input').val(TempViewSettings.Pagination.ItemsPerPage);
 }
 
 ListFetchData= function(io){
@@ -267,9 +282,9 @@ ListPopulateTable= function(io){
     var StartSerialNo=1;
     var SerialNo=0;
     var EndSerialNo=1;
-    var CurrPage=TempViewSettings.CurrPage;
-    var ItemsPerPage=TempViewSettings.ItemsPerPage;
-    var TotalItems=TempViewSettings.TotalItems;
+    var CurrPage=TempViewSettings.Pagination.CurrPage;
+    var ItemsPerPage=TempViewSettings.Pagination.ItemsPerPage;
+    var TotalItems=TempViewSettings.Pagination.TotalItems;
     
     
     
@@ -500,6 +515,21 @@ ListnerHeaderCellsDropDown=function(io){
 ListnerBody=function(io){
     //$("body").on("click",ActionResetAllDropdownDraggable);
 }
+
+ListnerPagination=function(io){
+                
+            
+    
+                $('.PaginationItemsPerPage input').on('click', function() {
+                  $(this).val('');
+                });
+                $('.PaginationItemsPerPage input').on('mouseleave', function() {
+                  if ($(this).val() == '') {
+                    $(this).val(TempViewSettings.Pagination.ItemsPerPage);
+                  }
+                });
+}
+
 
 ActionIdentifyCell=function(io){
 //   Input Object

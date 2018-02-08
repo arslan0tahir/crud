@@ -1,0 +1,104 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 8, 2018, 2:27:14 PM
+    Author     : anonymous
+*/
+
+.container{
+    display: inline-table;
+    width: 100%;
+}
+.ContainerTable{
+/*    //border: 1px solid;
+    //border-color: silver;*/
+    display: inline-block;
+}
+
+.ContainerTable{
+    width: 100%;
+}
+
+.ListDataTable tbody{
+    border-bottom: 2px solid #ddd;
+}
+
+table.ListDataTable{
+    margin: 0px;
+}
+
+table.ListDataTable thead{
+    border-top: 2px solid #ddd;
+}
+
+.ListDataTable th{
+/*    border: 2px solid #ddd;*/
+}
+
+
+
+
+.ContainerPagination{
+    position: relative;
+}
+
+
+
+
+.PaginationPageSummary{
+    /*display: none;*/
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*transform: translateY(-50%);*/
+    
+}
+.PaginationItemsPerPage{
+    
+    display: inline-block;
+    text-align: center;
+    /*position: absolute;*/
+/*    left:50%;
+    transform: translateX(-50%);*/
+    /*float:*/ 
+}
+
+.PaginationItemsPerPage input{
+     text-align: center;
+     width: 50px;
+}
+
+.PaginationPageNo{
+    position: absolute;
+    display: inline-block;
+    right: 0px;
+    /*float:right;*/
+}
+
+.PaginationPageNo ul{
+    margin:2px;
+}
+
+.ListDataTable thead th ul a span{
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.ListDataTable thead th ul a{
+    position: relative;
+}
+
+li.DDTitleBar{
+    position: relative;
+}
+
+li.DDTitleBar span{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
