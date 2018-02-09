@@ -129,7 +129,7 @@ var TempViewSettings=   {
                                     TotalPages          :   1,  //calculated on run time
                                     ItemsPerPage        :   20, //or Default
                                     PagerLenght         :   5,  //if 5 then <Previos  1-5 Next>
-                                    TotalItems          :   2   //total items of query
+                                    TotalItems          :   20    //total items of query
                             }
 //                                                              {
 //                                                             
@@ -157,6 +157,62 @@ var ListData= {
                                             LastName: "Mustafa",
                                             Age: "31",
                                             Class: "10"
+                                    },
+                                    {   
+                                            Id: 14,
+                                            FirstName: "Ishaq  ",
+                                            LastName: "Dar",
+                                            Age: "56",
+                                            Class: "12"
+                                    },
+                                    {   
+                                            Id: 15,
+                                            FirstName: "Nawaz",
+                                            LastName: "Sharif",
+                                            Age: "34",
+                                            Class: "8"
+                                    },
+                                    {   
+                                            Id: 16,
+                                            FirstName: "Ahmad",
+                                            LastName: "Riaz",
+                                            Age: "31",
+                                            Class: "10"
+                                    },
+                                    {   
+                                            Id: 17,
+                                            FirstName: "Marwa",
+                                            LastName: "Hussain",
+                                            Age: "11",
+                                            Class: "13"
+                                    },
+                                    {   
+                                            Id: 18,
+                                            FirstName: "Rohan",
+                                            LastName: "Tahir",
+                                            Age: "21",
+                                            Class: "12"
+                                    },
+                                    {   
+                                            Id: 19,
+                                            FirstName: "Ayesha",
+                                            LastName: "Riaz",
+                                            Age: "31",
+                                            Class: "12"
+                                    },
+                                    {   
+                                            Id: 20,
+                                            FirstName: "Ghulam",
+                                            LastName: "Mustafa",
+                                            Age: "32",
+                                            Class: "8"
+                                    },
+                                    {   
+                                            Id: 21,
+                                            FirstName: "Ghulam",
+                                            LastName: "Fareed",
+                                            Age: "38",
+                                            Class: "16"
                                     }
                             ]
             }
@@ -210,6 +266,7 @@ $(document).ready(function() {
     ListnerHeaderCells(); //Attach listners to specific elements
     ListnerPagination();
     ListnerBody();
+    ListenerSearchBox();
     
     
     
@@ -340,6 +397,9 @@ ListPopulateTable= function(io){
                     break;
                 }
                 CurrRowData=ListData.ListData[i];
+                if (CurrRowData===undefined){
+                    break;
+                }
                 RowId=CurrRowData["Id"];
                 CurrRowHTML=$(RowTemplate).attr("id","Row-"+RowId);
                 CurrRowHTML.attr("data-sr",SerialNo);
@@ -530,6 +590,15 @@ ListnerPagination=function(io){
                 });
 }
 
+ListenerSearchBox=function(io){
+    $('.SearchTable .SearchInput').focus(function()
+    {
+        $(this).parent(".SearchInputHolder").animate({ width: '+=50'}, 'slow');
+    }).blur(function()
+    {
+        $(this).parent(".SearchInputHolder").animate({ width: '-=50'}, 'slow');
+    });
+}
 
 ActionIdentifyCell=function(io){
 //   Input Object

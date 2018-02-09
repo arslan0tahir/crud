@@ -43,8 +43,12 @@ table.ListDataTable thead{
 
 .ContainerPagination{
     position: relative;
+    display: inline-block;
+    width: 100%;
 }
-
+.ContainerPagination .PaginationPageSummary{
+    display: inline-block;
+}
 
 
 
@@ -58,7 +62,7 @@ table.ListDataTable thead{
 .PaginationItemsPerPage{
     
     display: inline-block;
-    text-align: center;
+    text-align: left;
     /*position: absolute;*/
 /*    left:50%;
     transform: translateX(-50%);*/
@@ -67,7 +71,8 @@ table.ListDataTable thead{
 
 .PaginationItemsPerPage input{
      text-align: center;
-     width: 50px;
+     width: 70px;
+     display: inline-block !important;
 }
 
 .PaginationPageNo{
@@ -101,4 +106,21 @@ li.DDTitleBar span{
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.SearchTable{
+    
+}
+
+
+
+.WidthPercent50{
+    width: 49.6%;
+    display: inline-block;
+    /*font-size: 0px;*/
+        
+}
+.MyRight{
+    float:right;
+    padding-right: 0px;
 }

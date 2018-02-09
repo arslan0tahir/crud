@@ -32,10 +32,17 @@ and open the template in the editor.
             
             <br>
             <br>
-            <div class="ContainerPagination">
-                  <div class="PaginationPageSummary">  
-                    Showing <span>21 to 30</span> of <span>56</span>
-                  </div>
+            <div class="PositionTOP">
+                <div class="ContainerPagination WidthPercent50">
+                      <div class="PaginationPageSummary">  
+                        Showing <span>21 to 30</span> of <span>56</span>
+                      </div>
+                </div>
+                <div class="WidthPercent50 SearchTable">
+                    <div class="SearchInputHolder MyRight">
+                        <input class="form-control SearchInput" type="text" placeholder="Search">
+                    </div>
+                </div>
             </div>
             <div class="ContainerTable">
                 <table class="table table-hover table-responsive ListDataTable" id="NameGoesHere">
@@ -53,7 +60,7 @@ and open the template in the editor.
               
               
               <div class="PaginationItemsPerPage">  
-                    <input list="ItemPerPage" name="ItemPerPage" />
+                    <input list="ItemPerPage" name="ItemPerPage" class="form-control"/>
                         <datalist id="ItemPerPage">
                           <option value="All">
                           <option value="20">
@@ -73,7 +80,7 @@ and open the template in the editor.
               </div>  
               <div class="PaginationPageNo">  
                     <ul class="pagination pagination">
-                      <li class="page-item active"><a class="page-link" href="#"><<</a></li>
+                      <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
                       <li class="page-item"><a class="page-link active" href="#">1</a></li>
                       <li class="page-item"><a class="page-link" href="#">2</a></li>
                       <li class="page-item"><a class="page-link" href="#">3</a></li>
@@ -81,7 +88,7 @@ and open the template in the editor.
                       <li class="page-item"><a class="page-link" href="#">5</a></li>
 
 
-                      <li class="page-item"><a class="page-link" href="#">>></a></li>
+                      <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
                     </ul>
                   
               </div>
