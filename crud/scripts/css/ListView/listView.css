@@ -124,3 +124,25 @@ li.DDTitleBar span{
     float:right;
     padding-right: 0px;
 }
+.LowVisibility{
+    /*visibility: hidden;*/
+    opacity: 0.2
+}
+
+.CurrRowSelector, .AllRowSelector{
+    cursor: pointer;
+}
+
+.SelectedRow{
+    background-color: #ddd;
+    border-bottom: 2px solid white;    
+    border-top: 2px solid white;
+    
+    
+}
+
+
+td:hover span.CurrRowSelector, th:hover span.AllRowSelector{
+    visibility: visible;
+    opacity: 1;
+}

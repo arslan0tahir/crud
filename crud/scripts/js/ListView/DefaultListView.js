@@ -117,6 +117,8 @@ var TempViewSettings=   {
                             GroupSortEnable     : 0,
                             GroupSortColumns    : [],
                             GroupSortOrder      : "Ascending", //Ascending/Descending
+                            AllowSelection      : "1",
+                            SelectedRows        : [],
                             Query               :{},
                             Pagination          :{
                                     
@@ -223,7 +225,7 @@ var ListData= {
 
 //MyURL="http://something/CRUD/m/List/index.php?lid=12" path form mobiles
 MyURL="http://something/CRUD/d/List/index.php?lid=12"    //path for destop
-alert("success");
+//lert("success");
 
 
 //functions
@@ -246,7 +248,7 @@ var ListnerHeaderCellsDropDown=function(io){};
     var ActionSyncViewWithQuery=function(io){};
     var ActionSendAJAXQuery=function(io){};   //this routine will send TempViewSettings to server
     var ActionUpdateListData=function(io){};
-    var ActionUpdateListColumns=function(io){};
+    var AllRowSelector=function(io){};
 
 
 
@@ -267,12 +269,7 @@ $(document).ready(function() {
     ListnerPagination();
     ListnerBody();
     ListenerSearchBox();
-    
-    
-    
-    
-    
-    
+    ListenerRowSelector();
 });
 //**************************************************************MAIN END
 
@@ -322,6 +319,7 @@ ListPopulateTable= function(io){
     //vars for population of header
     var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
     var RenderSr=TempViewSettings.RenderSr;
+    var AllowSelection=TempViewSettings.AllowSelection;
     MyColumns=ListSettings.ListColumns;
     var ColTemplate="<th style='padding: 0px;position:relative'></th>";
     var TableHeaderSelector="table.ListDataTable thead tr"
@@ -348,15 +346,25 @@ ListPopulateTable= function(io){
     
     //populate Table Header
             //Rendering first column title as either Sr. or Id
+            
+    
+            //Render Selection CheckBox
+            if (AllowSelection){
+                HeaderCellObject=$(ColTemplate).html("\n\
+                                                      <span class='glyphicon glyphicon-check LowVisibility AllRowSelector'></span>\n\
+                                                      "); 
+                $(HeaderCellObject).css("padding","");
+                $(TableHeaderSelector).append(HeaderCellObject); 
+            }
+           
+           
+            //Render Selection CheckBox
             if(RenderSr){
                   HeaderCellObject=$(ColTemplate).html("<div class='dropdown' style='display: inline-block; width:  100%;'>\n\
                                                             <button class='btn btn-default dropdown-toggle HeaderDropDown' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-weight:bolder   ; border: 0px;    margin:  2px;'>\n\
                                                             Sr\n\
                                                             </button>\n\
                                                         </div>"); 
-            }
-            else{
-                        
             }
             $(TableHeaderSelector).append(HeaderCellObject); 
 
@@ -405,6 +413,17 @@ ListPopulateTable= function(io){
                 CurrRowHTML.attr("data-sr",SerialNo);
                 
                 
+                
+                if(AllowSelection){
+                    ColName="";
+                    ColId="";
+                    CurrColHtml=$(RowCellTemplate);
+                    CurrColHtml.attr("data-col-name",ColName);
+                    CurrColHtml.attr("data-col-id",ColId);
+                    CurrColHtml.attr("id","Cell-"+RowId+"-"+ColId);
+                    CurrColHtml.html("<span class='glyphicon glyphicon-check LowVisibility CurrRowSelector'></span>");
+                    CurrRowHTML.append(CurrColHtml);                   
+                }
         
                 if(RenderSr){
                     ColName="Sr";
@@ -574,12 +593,15 @@ ListnerHeaderCellsDropDown=function(io){
 
 ListnerBody=function(io){
     //$("body").on("click",ActionResetAllDropdownDraggable);
+    $("body").on("click",function(){
+        $(".SelectedRow span").addClass("LowVisibility");
+        $(".SelectedRow").removeClass("SelectedRow");
+        TempViewSettings.SelectedRows=[];
+    })
 }
 
 ListnerPagination=function(io){
-                
-            
-    
+  
                 $('.PaginationItemsPerPage input').on('click', function() {
                   $(this).val('');
                 });
@@ -588,6 +610,7 @@ ListnerPagination=function(io){
                     $(this).val(TempViewSettings.Pagination.ItemsPerPage);
                   }
                 });
+                
 }
 
 ListenerSearchBox=function(io){
@@ -598,6 +621,22 @@ ListenerSearchBox=function(io){
     {
         $(this).parent(".SearchInputHolder").animate({ width: '-=50'}, 'slow');
     });
+}
+
+
+ListenerRowSelector=function(io){
+    //hover action is imnplemented in css
+    $(".ListDataTable tr").on("click",".CurrRowSelector,.AllRowSelector",function(e){
+//        alert("hi");
+        e.stopPropagation()
+        io={
+               e     :e    ,  
+               source:this
+        };
+        ActionUpdateRowSelectionArray(io);
+        ActionSyncViewWihRowSelection(io);
+    })
+    
 }
 
 ActionIdentifyCell=function(io){
@@ -851,3 +890,33 @@ ActionResetCurrDropdownDraggable=function(io){
         $("#"+SourceCell.CellId+" button.HeaderDropDown").attr("data-toggle","dropdown");
         $("#"+SourceCell.CellId).trigger("click");
 }
+
+ActionUpdateRowSelectionArray=function(io){
+
+    
+    if ($(io.e.currentTarget).hasClass("CurrRowSelector")){
+        var SelectedRowId=$(io.e.currentTarget).parents("tr").attr("id");
+        var SelectedItemId=SelectedRowId.split("-")[1];
+        TempViewSettings.SelectedRows.push(SelectedItemId);
+    }
+    else if ($(io.e.currentTarget).hasClass("AllRowSelector")){
+       
+       var Rows=$("tbody tr");
+       for (i=0;i<Rows.length;i++){
+           TempViewSettings.SelectedRows.push($(Rows[i]).attr("id").split("-")[1]);
+       }
+    }
+    
+    
+};
+ActionSyncViewWihRowSelection=function(io){
+    var SelectedRows=TempViewSettings.SelectedRows;
+    
+    for(i=0;i<SelectedRows.length;i++){
+       if ( !$("#Row-"+SelectedRows[i]).hasClass("SelectedRow")){
+           $("#Row-"+SelectedRows[i]).addClass("SelectedRow");
+           $("#Row-"+SelectedRows[i]+" span").removeClass("LowVisibility");
+       }
+        
+    }
+};
