@@ -278,6 +278,7 @@ $(document).ready(function() {
     ListnerBody();
     ListenerSearchBox();
     ListenerRowSelector();
+    $.getScript("../../scripts/js/ListView/Components/NewItemButton.js");
 });
 //**************************************************************MAIN END
 
