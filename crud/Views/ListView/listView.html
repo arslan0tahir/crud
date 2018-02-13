@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <style>
+       th.ColumnHeader:hover{
+           background-color: #e6e6e6;
+           border-radius: 5px;
+           
+       }
+       table.ListDataTable>thead>*>th>*>button{
+           padding-left: 6px !important;
+           padding-right: 0px !important;
+           margin-right: 0px;
+           text-align: left;
+           
+       }
+       </style>   
+    </head>
+    
+    
+    <body>
+        <div class="container" >
+            
+            <br>
+            <br>
+            <div class="PositionTOP">
+                <div class="ContainerPagination WidthPercent50">
+                      <div class="PaginationPageSummary">  
+                        Showing <span>21 to 30</span> of <span>56</span>
+                      </div>
+                </div>
+                <div class="WidthPercent50 SearchTable">
+                    <div class="SearchInputHolder MyRight">
+                        <input class="form-control SearchInput" type="text" placeholder="Search">
+                    </div>
+                </div>
+            </div>
+            <div class="ContainerTable">
+                <table class="table table-hover table-responsive ListDataTable" id="NameGoesHere">
+                  <thead>
+                    <tr>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+            </div>
+            <div class="ContainerPagination">
+              
+              
+              <div class="PaginationItemsPerPage">  
+                    <input list="ItemPerPage" name="ItemPerPage" class="form-control"/>
+                        <datalist id="ItemPerPage">
+                          <option value="All">
+                          <option value="20">
+                          <option value="30">
+                          <option value="40">
+                          <option value="50">
+                          <option value="60">
+                          <option value="70">
+                          <option value="80">
+                          <option value="90">
+                          <option value="100">
+                          <option value="150">
+                          <option value="200">
+                          <option value="300">
+                          <option value="500">                          
+                        </datalist> Items per Page
+              </div>  
+              <div class="PaginationPageNo">  
+                    <ul class="pagination pagination">
+                      <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                      <li class="page-item"><a class="page-link active" href="#">1</a></li>
+                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                      <li class="page-item"><a class="page-link" href="#">4</a></li>
+                      <li class="page-item"><a class="page-link" href="#">5</a></li>
+
+
+                      <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                    </ul>
+                  
+              </div>
+            </div>
+            
+            
+        </div>
+    
+        
+        
+        
+        
+    <div id="ListHeaderDropDownTemplate" style= 'width:  250px;display:none;'>
+        <div class='dropdown ' style='position:relative;display: inline-block; width:  100%;white-space: nowrap;'> 
+                                            <div style='display:inline-block;padding-right:25px'> 
+                                            <button class='btn btn-default dropdown-toggle HeaderDropDown' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='font-weight:bolder   ; border: 0px;    margin:  2px; '>var_CurrColumnName_rav   
+                                                    <span class='caret'></span> 
+                                            </button> 
+                                            <ul class='dropdown-menu draggable' aria-labelledby='dropdownMenu1' style='padding:8px;cursor: move'> 
+                                                <li style="padding:0px;position: relative;top: -10px;background-color: steelblue;width: 114%;left: -7%;padding: 4px;border-radius: 2px;box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1), 0 2px 2px 0 rgba(0, 0, 0, 0.2);color:  white; display:none" class="DDTitleBar">
+                                                    var_CurrColumnName_rav
+                                                    <span class="glyphicon glyphicon-minus" style="float:right; cursor:pointer;"></span>
+                                                </li>
+                                                <li style='padding:0px' class='NO-FilterTxtBox'> 
+                                                     <div class='input-group add-on'> 
+                                                        <input class='' placeholder='Search' name='srch-term' id='srch-term' type='text' style='padding:2px; font-size:smaller; color:midnightblue'> 
+                                                     </div> 
+                                                </li> 
+                                                 <li role='separator' class='divider'></li> 
+                                                <li style='padding:0px' class='AO-FilterChkBox'>
+                                                     <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'>
+                                                        <label><input type='checkbox' value='' name='SortOrder'>Ascending</label>
+                                                     </div>
+                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon-sort-by-attributes'></span> 
+                                                    </a> 
+                                                </li> 
+                                                <li style='padding:0px' class='DO-FilterChkBox'> 
+                                                    <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'> 
+                                                        <label><input type='checkbox' value='' name='SortOrder'>Descending</label> 
+                                                     </div> 
+                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon-sort-by-attributes-alt'></span> 
+                                                    </a> 
+                                                </li> 
+                                                 
+                                                <li role='separator' class='divider'></li> 
+                                                <li style='padding:0px' class='No-FilterChkBox'> 
+                                                     <a style='padding:2px'><div class='checkbox'     style='margin: 0px; display:inline-block'> 
+                                                        <label><input type='checkbox' value='' name='SortOrder'>No Filter</label> 
+                                                     </div> 
+                                                     <span style='font-size: small;float:right' class='glyphicon glyphicon glyphicon-sort'></span> 
+                                                    </a> 
+                                                </li> 
+                                            </ul> 
+                                            </div> 
+                                             
+                                            <div style='padding:8px;position:absolute;right:0px; top:50%; transform: translateY(-50%);;display:inline-block;text-align:right'><a class='FilterIcon' href='#' style='' title='Sort Ascending or Descending'><span style='font-size: small;' class='glyphicon glyphicon-sort '></span></a> 
+                                            </div> 
+        </div>
+    </div>
+        
+        
+        
+    </body>
+    
+    <link rel="stylesheet" type="text/css" href="../../scripts/css/bootstrap/bootstrap.css">    
+    <script src="../../scripts/js/JQuery/jquery-3.2.1.js"></script>
+    <script src="../../scripts/js/JQuery/jquery-ui.js"></script>
+    <script src="../../scripts/js/bootstrap/bootstrap.min.js"></script>
+    <script src="../../scripts/js/ListView/DefaultListView.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="../../scripts/css/ListView/listView.css">  
+   
+<!--    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+-->    
+
+</html>
