@@ -142,7 +142,7 @@ li.DDTitleBar span{
 }
 
 
-td:hover span.CurrRowSelector, th:hover span.AllRowSelector{
+td span.CurrRowSelector:hover, th span.AllRowSelector:hover{
     visibility: visible;
     opacity: 1;
 }

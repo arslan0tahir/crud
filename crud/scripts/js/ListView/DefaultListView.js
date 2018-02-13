@@ -117,9 +117,17 @@ var TempViewSettings=   {
                             GroupSortEnable     : 0,
                             GroupSortColumns    : [],
                             GroupSortOrder      : "Ascending", //Ascending/Descending
-                            AllowSelection      : "1",
-                            SelectedRows        : [],
+
                             Query               :{},
+                            RowSelection        :{
+                                    AllowSelection      : 1,
+                                    AllSelectedRel      : 0,//1 if all all rows in a view are selected
+                                    AllSelectedAbs      : 0,//1 if all all rows in a db are selected
+                                    SelectedRows        : [],//contains selected
+                                    HoldUnSelectedRows  : [],//hold unselcted rows. Reinitialized after updating view.  
+                                
+                                
+                            },
                             Pagination          :{
                                     
                                     Render:{
@@ -319,7 +327,7 @@ ListPopulateTable= function(io){
     //vars for population of header
     var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
     var RenderSr=TempViewSettings.RenderSr;
-    var AllowSelection=TempViewSettings.AllowSelection;
+    var AllowSelection=TempViewSettings.RowSelection.AllowSelection;
     MyColumns=ListSettings.ListColumns;
     var ColTemplate="<th style='padding: 0px;position:relative'></th>";
     var TableHeaderSelector="table.ListDataTable thead tr"
@@ -596,7 +604,7 @@ ListnerBody=function(io){
     $("body").on("click",function(){
         $(".SelectedRow span").addClass("LowVisibility");
         $(".SelectedRow").removeClass("SelectedRow");
-        TempViewSettings.SelectedRows=[];
+        TempViewSettings.RowSelection.SelectedRows=[];
     })
 }
 
@@ -893,40 +901,69 @@ ActionResetCurrDropdownDraggable=function(io){
 
 ActionUpdateRowSelectionArray=function(io){
 
-    
+    //one row selection
     if ($(io.e.currentTarget).hasClass("CurrRowSelector")){
         var SelectedRowId=$(io.e.currentTarget).parents("tr").attr("id");
         var SelectedItemId=SelectedRowId.split("-")[1];
-        var SelectedRows=TempViewSettings.SelectedRows;
+        var SelectedRows=TempViewSettings.RowSelection.SelectedRows;// arrays are copied by reference
         var ExistingIndex=$.inArray(SelectedItemId, SelectedRows);
         
-        if ( ExistingIndex > -1 ) {
-                // the value is in the array
-           SelectedRows.splice(ExistingIndex, 1);
+        if ( ExistingIndex > -1 ) {//if already selected
+            TempViewSettings.RowSelection.HoldUnSelectedRows.push(SelectedRows[ExistingIndex]);
+            TempViewSettings.RowSelection.SelectedRows.splice(ExistingIndex, 1);
         }
-        else{
+        else{//new row selection
             SelectedRows.push(SelectedItemId);
+            
         }
         
     }
+    //All row selection
     else if ($(io.e.currentTarget).hasClass("AllRowSelector")){
-       
+//       var SelectedRows=TempViewSettings.SelectedRows;
+//       SelectedRows=[];   it does not work for refrenced array because it actually creates a brand new (empty) array
+       TempViewSettings.RowSelection.SelectedRows=[];
        var Rows=$("tbody tr");
        for (i=0;i<Rows.length;i++){
-           SelectedRows.push($(Rows[i]).attr("id").split("-")[1]);
-       }
+           TempViewSettings.RowSelection.SelectedRows.push($(Rows[i]).attr("id").split("-")[1]);
+       } 
+       TempViewSettings.RowSelection.AllSelectedRel=1;
     }
+    
     
     
 };
 ActionSyncViewWihRowSelection=function(io){
-    var SelectedRows=TempViewSettings.SelectedRows;
+    var SelectedRows=TempViewSettings.RowSelection.SelectedRows;
+    var HoldUnSelectedRows=TempViewSettings.RowSelection.HoldUnSelectedRows;
     
+    
+    
+    
+    //sync selected rows
     for(i=0;i<SelectedRows.length;i++){
        if ( !$("#Row-"+SelectedRows[i]).hasClass("SelectedRow")){
            $("#Row-"+SelectedRows[i]).addClass("SelectedRow");
            $("#Row-"+SelectedRows[i]+" span").removeClass("LowVisibility");
-       }
-        
+       }        
     }
+    
+    //sync unselected rows
+    for(i=0;i<HoldUnSelectedRows.length;i++){
+           $("#Row-"+HoldUnSelectedRows[i]).removeClass("SelectedRow");
+           $("#Row-"+HoldUnSelectedRows[i]+" span").addClass("LowVisibility");
+    }
+    TempViewSettings.RowSelection.HoldUnSelectedRows=[];
+    
+    
+    //sync all row selector
+    if(TempViewSettings.RowSelection.AllSelectedRel){
+        $("table.ListDataTable thead th .AllRowSelector").removeClass("LowVisibility");
+    }
+    else{
+        $("table.ListDataTable thead th .AllRowSelector").addClass("LowVisibility");       
+    }
+    
+    
+    
 };
