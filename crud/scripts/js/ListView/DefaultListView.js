@@ -897,13 +897,23 @@ ActionUpdateRowSelectionArray=function(io){
     if ($(io.e.currentTarget).hasClass("CurrRowSelector")){
         var SelectedRowId=$(io.e.currentTarget).parents("tr").attr("id");
         var SelectedItemId=SelectedRowId.split("-")[1];
-        TempViewSettings.SelectedRows.push(SelectedItemId);
+        var SelectedRows=TempViewSettings.SelectedRows;
+        var ExistingIndex=$.inArray(SelectedItemId, SelectedRows);
+        
+        if ( ExistingIndex > -1 ) {
+                // the value is in the array
+           SelectedRows.splice(ExistingIndex, 1);
+        }
+        else{
+            SelectedRows.push(SelectedItemId);
+        }
+        
     }
     else if ($(io.e.currentTarget).hasClass("AllRowSelector")){
        
        var Rows=$("tbody tr");
        for (i=0;i<Rows.length;i++){
-           TempViewSettings.SelectedRows.push($(Rows[i]).attr("id").split("-")[1]);
+           SelectedRows.push($(Rows[i]).attr("id").split("-")[1]);
        }
     }
     
