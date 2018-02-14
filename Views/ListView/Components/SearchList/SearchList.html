@@ -9,8 +9,34 @@ and open the template in the editor.
 
 <script src="Components/SearchList/SearchList.js"></script>
 
-<div class="SearchInputHolder" data-crud-comp="SearchBox">
-    <input class="form-control SearchInput" type="text" placeholder="Search">
+<div class="SearchInputHolder SearchListComp" data-crud-comp="SearchBox" style="position:absolute;bottom: 0px">
+    <div class="input-group ">
+      <div class="input-group-btn form-group">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="glyphicon glyphicon-option-horizontal"></span></button>
+        <ul class="dropdown-menu">
+          <li>
+            <div>   
+                <select class="form-control" id="sel1">
+                  <option>Exists</option>
+                  <option>Equals</option>
+                </select>
+                <div>  
+                    in ID
+                </div>
+            </div>
+          </li>
+          <li><a href="#">Another action</a></li>
+          <li><a href="#">Something else here</a></li>
+        </ul>
+      </div>
+        
+      <input type="text" class="form-control SearchInput" placeholder="Search for...">
+    </div>
+    
+<!--    <div class="input-group-prepend">
+      <div class="input-group-text">@</div>
+    </div>
+    <input class="form-control SearchInput" type="text" placeholder="Search">-->
 </div>
 
 
