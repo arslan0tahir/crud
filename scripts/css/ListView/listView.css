@@ -46,19 +46,16 @@ table.ListDataTable thead{
     display: inline-block;
     width: 100%;
 }
-.ContainerPagination .PaginationPageSummary{
-    display: inline-block;
-}
-
-
-
 .PaginationPageSummary{
-    /*display: none;*/
-    /*position: absolute;*/
-    /*top: 50%;*/
-    /*transform: translateY(-50%);*/
-    
+    display: inline-block;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
 }
+
+
+
+
 .PaginationItemsPerPage{
     
     display: inline-block;
@@ -145,4 +142,12 @@ li.DDTitleBar span{
 td span.CurrRowSelector:hover, th span.AllRowSelector:hover{
     visibility: visible;
     opacity: 1;
+}
+
+.InlineBlock{
+    display:inline-block;
+}
+
+.PositionTOP{
+    position: relative;
 }

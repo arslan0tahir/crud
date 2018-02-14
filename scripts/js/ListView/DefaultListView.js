@@ -278,7 +278,9 @@ $(document).ready(function() {
     ListnerBody();
     ListenerSearchBox();
     ListenerRowSelector();
-    $( "#loadJS" ).load( "http://10.50.150.91/crud/views/ListView/Components/NewItemButton.html" );
+
+    $('[data-crud-comp="NewItemControl"]' ).load( "http://10.50.150.91/crud/views/ListView/Components/NewItemControl/NewItemControl.html" );
+    $('[data-crud-comp="SearchList"]' ).load( "http://10.50.150.91/crud/views/ListView/Components/SearchList/SearchList.html" );
     //$.getScript("../../scripts/js/ListView/Components/NewItemButton.js");
 });
 //**************************************************************MAIN END

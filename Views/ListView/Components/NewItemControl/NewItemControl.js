@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 
-NewItemButton=function(){
-    alert("a");
+NewItemControl=function(){
+    alert("NewItemControl");
 };
 
-NewItemButton();
+NewItemControl();
