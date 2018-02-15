@@ -11,23 +11,53 @@
  * and open the template in the editor.
  */
 SearchList=function(){
+    
+    //load corresponding css
     $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'Components/SearchList/SearchList.css') );
     
     alert("SearchList");
     
-    
+    //menu is not closed if clicked
     $(".SearchListComp ").on('click','ul.dropdown-menu',function(e){
         e.stopPropagation();    
-    })
+    });
     
-    
-    $('.SearchInput').focus(function()
+    //expand search box on click
+    $('.SearchListComp .SearchInput').focus(function()
     {
         $(this).parents(".SearchInputHolder").animate({ width: '+=50'}, 'slow');
     }).blur(function()
     {
         $(this).parents(".SearchInputHolder").animate({ width: '-=50'}, 'slow');
     });
+    
+    $(".SearchListComp .draggable").draggable({
+                   start:function(){
+//                       $(this).children(".DDTitleBar").css("display","inline-block");
+//                       $(this).parents("th.ColumnHeader").find("button").attr("data-toggle","");
+//                       io={
+//                           e               : '',
+//                           EventSource     : this
+//                       };
+//                       Output=ActionIdentifyCell(io);
+//                       if (!DDPosition.hasOwnProperty(Output.ColumnId)){
+//                           DDPosition[Output.ColumnId]=$(this).position();
+//                       }
+                       //DDPosition[Output];
+                   }
+               //containment: "body",
+              // scroll: false
+       });
+    
+    
+    
 };
 
-SearchList();
+ var checkExist = setInterval(function() {
+                        if ($('.SearchListComp').length) {
+                            console.log("Exists!");
+                            clearInterval(checkExist);
+                            SearchList();
+                        }                        
+                     }, 500);
+

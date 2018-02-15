@@ -7,21 +7,37 @@ and open the template in the editor.
 
 
 
-<script src="Components/SearchList/SearchList.js"></script>
 
-<div class="SearchInputHolder SearchListComp" data-crud-comp="SearchBox" style="position:absolute;bottom: 0px">
+
+<div class="SearchInputHolder SearchListComp" style="position:absolute;bottom: 0px">
     <div class="input-group ">
+            
+                    <p>{{"this"+"how"}}</p>
+           
       <div class="input-group-btn form-group">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="glyphicon glyphicon-option-horizontal"></span></button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu draggable ui-draggable ui-draggable-handle">
           <li>
-            <div>   
-                <select class="form-control" id="sel1">
-                  <option>Exists</option>
-                  <option>Equals</option>
-                </select>
-                <div>  
-                    in ID
+            <div>  
+                <div class="SearchIn" data-ng-app="">  
+                    <input type="text" Value="ID" class="form-control" disabled="">
+                                        <!--<span class="form-control" >ID</span>-->
+                     
+                </div>
+                <div class="SearchCondition">
+                    <select class="form-control" id="sel1">
+                      <option>Contains</option>
+                      <option>Equals</option>
+                    </select>
+                </div>
+                <div class="SearchFor">
+                    <input type="text" class="form-control">
+                </div>
+                <div class="SearchLogic">
+                    <select class="form-control" id="sel1">
+                      <option>OR</option>
+                      <option>AND</option>
+                    </select>
                 </div>
             </div>
           </li>
@@ -38,5 +54,5 @@ and open the template in the editor.
     </div>
     <input class="form-control SearchInput" type="text" placeholder="Search">-->
 </div>
-
+<script src="Components/SearchList/SearchList.js"></script>
 

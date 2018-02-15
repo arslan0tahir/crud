@@ -29,7 +29,9 @@ and open the template in the editor.
     
     <body>
         <div class="container" >
-            
+             <div  data-ng-app="">  
+                    <p>{{"this"+"how"}}</p>
+             </div>
             <br>
             <br>
             <div class="PositionTOP">
@@ -38,7 +40,7 @@ and open the template in the editor.
                             
                       </div>
                 </div>
-                <div class="InlineBlock" data-crud-comp="SearchList">
+                <div class="InlineBlock" data-crud-comp="SearchList" data-ng-app="App1">
                     
                 </div>
                 <div class="PaginationPageSummary">  
@@ -160,6 +162,7 @@ and open the template in the editor.
     <script src="../../scripts/js/JQuery/jquery-3.2.1.js"></script>
     <script src="../../scripts/js/JQuery/jquery-ui.js"></script>
     <script src="../../scripts/js/bootstrap/bootstrap.min.js"></script>
+    <script src="../../scripts/js/angular/angular.js"></script>    
     <script src="../../scripts/js/ListView/DefaultListView.js"></script>
     
     <link rel="stylesheet" type="text/css" href="../../scripts/css/ListView/listView.css">  

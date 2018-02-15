@@ -14,4 +14,29 @@ and open the template in the editor.
     z-index: 100;
     left: 0px;
     top: 100%;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+
+
+
+.SearchListComp .SearchIn{
+        display: inline-block;
+        width: 200px;
+}
+
+.SearchListComp .SearchCondition{
+        display: inline-block;
+        width: 120px;
+}
+
+.SearchListComp .SearchFor{
+        display: inline-block;
+        width: 200px;
+}
+
+.SearchListComp .SearchLogic{
+        display: inline-block;
+        width: 80px;
 }
