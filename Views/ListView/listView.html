@@ -23,26 +23,34 @@ and open the template in the editor.
            text-align: left;
            
        }
-       </style>   
+       </style>
+       
+       
+            <link rel="stylesheet" type="text/css" href="../../scripts/css/bootstrap/bootstrap.css">    
+            <script src="../../scripts/js/JQuery/jquery-3.2.1.js"></script>
+            <script src="../../scripts/js/JQuery/jquery-ui.js"></script>
+            <script src="../../scripts/js/bootstrap/bootstrap.min.js"></script>
+            <script src="../../scripts/js/angular/angular.js"></script>  
     </head>
     
     
     <body>
-        <div class="container" >
-             <div  data-ng-app="">  
-                    <p>{{"this"+"how"}}</p>
-             </div>
+        <div class="container">
+
             <br>
             <br>
             <div class="PositionTOP">
                 <div class="InlineBlock">
+                    
+                      <!--<div class="" data-crud-comp="NewItemControl" data-ng-include="'../../views/ListView/Components/NewItemControl/NewItemControl.html'">-->  
                       <div class="" data-crud-comp="NewItemControl">  
-                            
+      
                       </div>
                 </div>
-                <div class="InlineBlock" data-crud-comp="SearchList" data-ng-app="App1">
-                    
+                <!---->
+                <div class="InlineBlock" data-crud-comp="SearchList">
                 </div>
+
                 <div class="PaginationPageSummary">  
                         Showing <span>21 to 30</span> of <span>56</span>
                 </div>
@@ -158,13 +166,8 @@ and open the template in the editor.
         
     </body>
     
-    <link rel="stylesheet" type="text/css" href="../../scripts/css/bootstrap/bootstrap.css">    
-    <script src="../../scripts/js/JQuery/jquery-3.2.1.js"></script>
-    <script src="../../scripts/js/JQuery/jquery-ui.js"></script>
-    <script src="../../scripts/js/bootstrap/bootstrap.min.js"></script>
-    <script src="../../scripts/js/angular/angular.js"></script>    
+  
     <script src="../../scripts/js/ListView/DefaultListView.js"></script>
-    
     <link rel="stylesheet" type="text/css" href="../../scripts/css/ListView/listView.css">  
    
 <!--    

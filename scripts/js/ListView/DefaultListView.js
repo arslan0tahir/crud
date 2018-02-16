@@ -53,6 +53,11 @@
 
 //All server routine starts with List
 //All view routines will start with Table
+
+
+//angular app is initialized
+
+
 var TemplateModel={};
 var DDPosition={};
 var ListSettings={
@@ -279,8 +284,8 @@ $(document).ready(function() {
     ListenerSearchBox();
     ListenerRowSelector();
 
-    $('[data-crud-comp="NewItemControl"]' ).load( "../../views/ListView/Components/NewItemControl/NewItemControl.html" );
-    $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html" );
+    $('[data-crud-comp="NewItemControl"]' ).load( "../../views/ListView/Components/NewItemControl/NewItemControl.html?i=1004" );
+    $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html?i=1003");
     //$.getScript("../../scripts/js/ListView/Components/NewItemButton.js");
 });
 //**************************************************************MAIN END

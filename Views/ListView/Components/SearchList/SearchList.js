@@ -10,9 +10,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
+
+//angular controller for SearchList is Defined Here
+
+
+
 SearchList=function(){
+    var app = angular.module('SearchListApp', []);
+    app.controller('SearchCtrl', function($scope) {
+        $scope.ListColumns = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+        $scope.lastName = "Doe";
+        $scope.fullName = function() {
+            return $scope.firstName + " " + $scope.lastName;
+        };
+    });
+
+
     
-    //load corresponding css
+    
+    
+        //load corresponding css
     $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'Components/SearchList/SearchList.css') );
     
     alert("SearchList");
@@ -50,14 +69,21 @@ SearchList=function(){
        });
     
     
-    
+     angular.bootstrap(document.querySelector(".SearchListComp"), ["SearchListApp"])//manual bootstrapping of SearchListComp
 };
 
- var checkExist = setInterval(function() {
+
+
+
+var checkExist = setInterval(function() {
                         if ($('.SearchListComp').length) {
                             console.log("Exists!");
                             clearInterval(checkExist);
                             SearchList();
                         }                        
-                     }, 500);
+                     }, 100);
+
+
+
+
 

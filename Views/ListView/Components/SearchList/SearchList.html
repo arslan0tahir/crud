@@ -8,18 +8,15 @@ and open the template in the editor.
 
 
 
-
-<div class="SearchInputHolder SearchListComp" style="position:absolute;bottom: 0px">
-    <div class="input-group ">
-            
-                    <p>{{"this"+"how"}}</p>
-           
-      <div class="input-group-btn form-group">
+<script src="Components/SearchList/SearchList.js"></script>
+<div class="SearchInputHolder SearchListComp" style="position:absolute;bottom: 0px"  data-ng-controller="SearchCtrl">
+    <div class="input-group ">  
+     <div class="input-group-btn form-group">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="glyphicon glyphicon-option-horizontal"></span></button>
         <ul class="dropdown-menu draggable ui-draggable ui-draggable-handle">
-          <li>
+          <li data-ng-repeat="CurrColda in ListColumns">
             <div>  
-                <div class="SearchIn" data-ng-app="">  
+                <div class="SearchIn">  
                     <input type="text" Value="ID" class="form-control" disabled="">
                                         <!--<span class="form-control" >ID</span>-->
                      
@@ -54,5 +51,5 @@ and open the template in the editor.
     </div>
     <input class="form-control SearchInput" type="text" placeholder="Search">-->
 </div>
-<script src="Components/SearchList/SearchList.js"></script>
+
 
