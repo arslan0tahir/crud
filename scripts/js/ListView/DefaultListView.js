@@ -738,19 +738,20 @@ ActionUpdateQueryFromIcon=function(io){
 
 ActionUpdateQueryFromDropDown=function(io){
     
+    //update TempViewSettings.Query.QueryText String from dropdown textboxes
     if (io.e.target.tagName=='INPUT' && $(io.e.target).parents("li.NO-FilterTxtBox").length==1){
             // var s=io.SourceCell.ColumnId;
              TempViewSettings.Query[io.SourceCell.ColumnId].QueryText=$(io.e.target).val();
              return;//
     }
     else {
-    
+    //update Query from checkboxes
         var hold=io.EventSource.className;
         var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
        
-        //clear all other sort queries
+        //clear all other sort queries except operated column
         for (i=0;i<MyColumnIds.length;i++){
-
+            //Update query from operated column 
             if (MyColumnIds[i]==io.SourceCell.ColumnId){
                 Checked=$(io.EventSource).find('input').prop('checked');
                 if (hold=="No-FilterChkBox"){
@@ -778,6 +779,7 @@ ActionUpdateQueryFromDropDown=function(io){
                 }
             }
             else{
+                //Reset CheckBoxes of all columns except the operated one 
                 TempViewSettings.Query[MyColumnIds[i]].SortOrder="";
             }
 

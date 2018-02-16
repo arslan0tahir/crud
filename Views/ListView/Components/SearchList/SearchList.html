@@ -14,10 +14,11 @@ and open the template in the editor.
      <div class="input-group-btn form-group">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="glyphicon glyphicon-option-horizontal"></span></button>
         <ul class="dropdown-menu draggable ui-draggable ui-draggable-handle">
-          <li data-ng-repeat="CurrColda in ListColumns">
-            <div>  
+          <li data-ng-repeat="CurrCol in ListColumnIds">
+            <div>
+                
                 <div class="SearchIn">  
-                    <input type="text" Value="ID" class="form-control" disabled="">
+                    <input type="text" Value={{ListColumnDetails[CurrCol].ColumnName}} class="form-control" disabled="">
                                         <!--<span class="form-control" >ID</span>-->
                      
                 </div>
@@ -38,8 +39,7 @@ and open the template in the editor.
                 </div>
             </div>
           </li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
+         
         </ul>
       </div>
         

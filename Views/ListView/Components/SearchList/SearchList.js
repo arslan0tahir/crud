@@ -20,7 +20,8 @@
 SearchList=function(){
     var app = angular.module('SearchListApp', []);
     app.controller('SearchCtrl', function($scope) {
-        $scope.ListColumns = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+        $scope.ListColumnIds = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+        $scope.ListColumnDetails = ListSettings.ListColumns;
         $scope.lastName = "Doe";
         $scope.fullName = function() {
             return $scope.firstName + " " + $scope.lastName;
