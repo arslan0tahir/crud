@@ -11,9 +11,26 @@ and open the template in the editor.
 <script src="Components/SearchList/SearchList.js"></script>
 <div class="SearchInputHolder SearchListComp" style="position:absolute;bottom: 0px"  data-ng-controller="SearchCtrl">
     <div class="input-group ">  
-     <div class="input-group-btn form-group">
+     <div class="input-group-btn form-group SearchBoxAdv" >
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="glyphicon glyphicon-option-horizontal"></span></button>
-        <ul class="dropdown-menu draggable ui-draggable ui-draggable-handle">
+        <ul class="dropdown-menu draggable ui-draggable ui-draggable-handle container-fluid">
+          
+          <li> 
+                <label><input type="checkbox" name="remember"> Enable Custom Query</label>
+          </li>
+          <li role="separator" class="divider"></li>
+          <li class="row" style="margin-left: auto;margin-right: auto;">
+              <div class="col-xs-3">
+                  <b>Starter Query</b>
+              </div>
+                <div  class="col-xs-9">
+                    <label class="radio-inline"><input type="radio" name="optradio">Main Search Box</label>
+                    <label class="radio-inline"><input type="radio" name="optradio">Column Header Box</label>
+                    <label class="radio-inline"><input type="radio" name="optradio">Custom Raw</label>
+                </div>
+                
+          </li>
+          <li role="separator" class="divider"></li>
           <li data-ng-repeat="CurrCol in ListColumnIds">
             <div>
                 

@@ -22,8 +22,9 @@ SearchList=function(){
     app.controller('SearchCtrl', function($scope) {
         $scope.ListColumnIds = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
         $scope.ListColumnDetails = ListSettings.ListColumns;
-        $scope.lastName = "Doe";
+        $scope.RenderSearchBoxAdv = TempViewSettings.Search.Render.SearchBoxAdv;
         $scope.fullName = function() {
+            alert(RenderSearchBoxAdv);
             return $scope.firstName + " " + $scope.lastName;
         };
     });

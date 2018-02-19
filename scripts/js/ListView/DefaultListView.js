@@ -118,16 +118,36 @@ var TempViewSettings=   {
                             RenderSr            : 1,
                             ColumnsWithOrder    : "RISTRICTED",
                             RowOrderBy          : "DEFAULT",
-                            SearchQ             : "",  
                             GroupSortEnable     : 0,
                             GroupSortColumns    : [],
                             GroupSortOrder      : "Ascending", //Ascending/Descending
-
-                            Query               :{},
+                            SearchListComp      :{
+                                    
+                                    Render:{
+                                            ColumnHeaderWithSearch      : 1,
+                                            SearchBox                   : 0,
+                                            SearchBoxAdv               : 1,
+                                    },                             
+                                    SearchBoxQ             : {   //it handles Custom Query and MainSeachBox Query (OR operated)
+                                            SearchString:"",
+                                            CustomQuery :""
+                                     },
+                                    ColumnHeaderQ               :{   //it will Handle Column Header Query and SortOder
+                                
+                                                     
+//                                                   23:{ "SortOrder": "",      //columnId and its related query (Text query is and operated)     
+//                                                        "QueryText": ""
+//                                                    }
+                                
+                                    }
+                            },
                             RowSelection        :{
-                                    AllowSelection      : 1,
-                                    AllSelectedRel      : 0,//1 if all all rows in a view are selected
-                                    AllSelectedAbs      : 0,//1 if all all rows in a db are selected
+                                    Render:{
+                                            Selection      : 1,
+                                    }, 
+//                                    AllowSelection      : 1,
+                                    AllSelectedRel      : 0,//holds 1 if all all rows in a view are selected
+                                    AllSelectedAbs      : 0,//holds 1 if all all rows in a db are selected
                                     SelectedRows        : [],//contains selected
                                     HoldUnSelectedRows  : [],//hold unselcted rows. Reinitialized after updating view.  
                                 
@@ -244,7 +264,7 @@ MyURL="http://something/CRUD/d/List/index.php?lid=12"    //path for destop
 //functions
 var Initialize=function(){};
 var InitializeTempViewSettings=function(){}; //it will initialize json object TempViewSettings
-var InitializeFilterQuery=function(){};      //it will initialize json object TempViewSettings.Query
+var InitializeFilterQuery=function(){};      //it will initialize json object TempViewSettings.Search.ColumnHeaderQ
 
 
 var ListFetchData=function(io){};
@@ -285,7 +305,7 @@ $(document).ready(function() {
     ListenerRowSelector();
 
     $('[data-crud-comp="NewItemControl"]' ).load( "../../views/ListView/Components/NewItemControl/NewItemControl.html?i=1004" );
-    $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html?i=1003");
+    $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html?u=1000");
     //$.getScript("../../scripts/js/ListView/Components/NewItemButton.js");
 });
 //**************************************************************MAIN END
@@ -311,7 +331,7 @@ InitializeFilterQuery= function(io){
     var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
     
     for (i=0;i<MyColumnIds.length;i++){
-            TempViewSettings.Query[MyColumnIds[i]]={
+            TempViewSettings.SearchListComp.ColumnHeaderQ[MyColumnIds[i]]={
                 "SortOrder": "",
                 "QueryText": ""
             };
@@ -336,7 +356,7 @@ ListPopulateTable= function(io){
     //vars for population of header
     var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
     var RenderSr=TempViewSettings.RenderSr;
-    var AllowSelection=TempViewSettings.RowSelection.AllowSelection;
+    var AllowSelection=TempViewSettings.RowSelection.Render.Selection;
     MyColumns=ListSettings.ListColumns;
     var ColTemplate="<th style='padding: 0px;position:relative'></th>";
     var TableHeaderSelector="table.ListDataTable thead tr"
@@ -610,10 +630,16 @@ ListnerHeaderCellsDropDown=function(io){
 
 ListnerBody=function(io){
     //$("body").on("click",ActionResetAllDropdownDraggable);
+    
     $("body").on("click",function(){
+        
+        
+        //Clear Selection
         $(".SelectedRow span").addClass("LowVisibility");
         $(".SelectedRow").removeClass("SelectedRow");
-        TempViewSettings.RowSelection.SelectedRows=[];
+        $("table.ListDataTable thead th .AllRowSelector").addClass("LowVisibility"); 
+        TempViewSettings.RowSelection.SelectedRows=[]; 
+        TempViewSettings.RowSelection.AllSelectedRel=0;
     })
 }
 
@@ -663,9 +689,6 @@ ActionIdentifyCell=function(io){
 //          e     :e      RowCell/HeaderCell
 //          source:this
 //   }
-
-
-    
     
     var oo={};
     oo.Response={};
@@ -701,7 +724,7 @@ ActionIdentifyCell=function(io){
 
 ActionUpdateQueryFromIcon=function(io){
     
-    var hold=TempViewSettings.Query[io.ColumnId].SortOrder;
+    var hold=TempViewSettings.SearchListComp.ColumnHeaderQ[io.ColumnId].SortOrder;
     
     
     var MyColumnIds=ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
@@ -712,17 +735,17 @@ ActionUpdateQueryFromIcon=function(io){
             
         if (MyColumnIds[i]==io.ColumnId){
             if (hold==""){
-                TempViewSettings.Query[io.ColumnId].SortOrder="Ascending"
+                TempViewSettings.SearchListComp.ColumnHeaderQ[io.ColumnId].SortOrder="Ascending"
             }
             else if (hold=="Ascending"){
-                TempViewSettings.Query[io.ColumnId].SortOrder="Descending"
+                TempViewSettings.SearchListComp.ColumnHeaderQ[io.ColumnId].SortOrder="Descending"
             }
             else if (hold=="Descending"){
-                TempViewSettings.Query[io.ColumnId].SortOrder="Ascending"
+                TempViewSettings.SearchListComp.ColumnHeaderQ[io.ColumnId].SortOrder="Ascending"
             }
         }
         else{
-            TempViewSettings.Query[MyColumnIds[i]].SortOrder="";
+            TempViewSettings.SearchListComp.ColumnHeaderQ[MyColumnIds[i]].SortOrder="";
         }
         
         
@@ -738,10 +761,10 @@ ActionUpdateQueryFromIcon=function(io){
 
 ActionUpdateQueryFromDropDown=function(io){
     
-    //update TempViewSettings.Query.QueryText String from dropdown textboxes
+    //update TempViewSettings.SearchListComp.ColumnHeaderQ.QueryText String from dropdown textboxes
     if (io.e.target.tagName=='INPUT' && $(io.e.target).parents("li.NO-FilterTxtBox").length==1){
             // var s=io.SourceCell.ColumnId;
-             TempViewSettings.Query[io.SourceCell.ColumnId].QueryText=$(io.e.target).val();
+             TempViewSettings.SearchListComp.ColumnHeaderQ[io.SourceCell.ColumnId].QueryText=$(io.e.target).val();
              return;//
     }
     else {
@@ -756,31 +779,31 @@ ActionUpdateQueryFromDropDown=function(io){
                 Checked=$(io.EventSource).find('input').prop('checked');
                 if (hold=="No-FilterChkBox"){
                     if(Checked){
-                        TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
+                        TempViewSettings.SearchListComp.ColumnHeaderQ[io.SourceCell.ColumnId].SortOrder="";
                     }
 
                 }
                 else if (hold=="AO-FilterChkBox"){
                     if(Checked){
-                        TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="Ascending";
+                        TempViewSettings.SearchListComp.ColumnHeaderQ[io.SourceCell.ColumnId].SortOrder="Ascending";
                     }
                     else{
-                        TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
+                        TempViewSettings.SearchListComp.ColumnHeaderQ[io.SourceCell.ColumnId].SortOrder="";
                     }
 
                 }
                 else if (hold=="DO-FilterChkBox"){
                     if(Checked){
-                        TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="Descending";
+                        TempViewSettings.SearchListComp.ColumnHeaderQ[io.SourceCell.ColumnId].SortOrder="Descending";
                     }
                     else{
-                        TempViewSettings.Query[io.SourceCell.ColumnId].SortOrder="";
+                        TempViewSettings.SearchListComp.ColumnHeaderQ[io.SourceCell.ColumnId].SortOrder="";
                     }
                 }
             }
             else{
                 //Reset CheckBoxes of all columns except the operated one 
-                TempViewSettings.Query[MyColumnIds[i]].SortOrder="";
+                TempViewSettings.SearchListComp.ColumnHeaderQ[MyColumnIds[i]].SortOrder="";
             }
 
 
@@ -813,7 +836,7 @@ ActionSyncViewWithQuery_Icons=function(io){
         ColName=ListSettings.ListColumns[MyColumnIds[i]].ColumnName;
         HeaderCellId=ColName+"-"+ColId;
         
-        hold=TempViewSettings.Query[MyColumnIds[i]].SortOrder;
+        hold=TempViewSettings.SearchListComp.ColumnHeaderQ[MyColumnIds[i]].SortOrder;
         IconSpan="#"+HeaderCellId+" a.FilterIcon span";
         
         AOFilterChkBox="#"+HeaderCellId+" ul li.AO-FilterChkBox input";
@@ -860,7 +883,7 @@ ActionSyncViewWithQuery_Dropdown=function(io){
         ColName=ListSettings.ListColumns[MyColumnIds[i]].ColumnName;
         HeaderCellId=ColName+"-"+ColId;
         
-        hold=TempViewSettings.Query[MyColumnIds[i]].SortOrder;
+        hold=TempViewSettings.SearchListComp.ColumnHeaderQ[MyColumnIds[i]].SortOrder;
         
         AOFilterChkBox="#"+HeaderCellId+" ul li.AO-FilterChkBox input";
         DOFilterChkBox="#"+HeaderCellId+" ul li.DO-FilterChkBox input";
@@ -912,7 +935,7 @@ ActionResetCurrDropdownDraggable=function(io){
 
 ActionUpdateRowSelectionArray=function(io){
 
-    //one row selection
+    //one row selection/deselection
     if ($(io.e.currentTarget).hasClass("CurrRowSelector")){
         var SelectedRowId=$(io.e.currentTarget).parents("tr").attr("id");
         var SelectedItemId=SelectedRowId.split("-")[1];
@@ -929,16 +952,31 @@ ActionUpdateRowSelectionArray=function(io){
         }
         
     }
-    //All row selection
+    
+    
+    //All rows selection/deselection
     else if ($(io.e.currentTarget).hasClass("AllRowSelector")){
 //       var SelectedRows=TempViewSettings.SelectedRows;
 //       SelectedRows=[];   it does not work for refrenced array because it actually creates a brand new (empty) array
-       TempViewSettings.RowSelection.SelectedRows=[];
        var Rows=$("tbody tr");
-       for (i=0;i<Rows.length;i++){
-           TempViewSettings.RowSelection.SelectedRows.push($(Rows[i]).attr("id").split("-")[1]);
-       } 
-       TempViewSettings.RowSelection.AllSelectedRel=1;
+       //all row selction
+        if (TempViewSettings.RowSelection.AllSelectedRel==1){//  if all rows are being deselected
+            TempViewSettings.RowSelection.SelectedRows=[];
+            for (i=0;i<Rows.length;i++){
+                TempViewSettings.RowSelection.HoldUnSelectedRows.push($(Rows[i]).attr("id").split("-")[1]);
+            } 
+            TempViewSettings.RowSelection.AllSelectedRel=0
+       }
+       else{// if all rows are being selected
+            TempViewSettings.RowSelection.SelectedRows=[];
+            var Rows=$("tbody tr");
+            for (i=0;i<Rows.length;i++){
+                TempViewSettings.RowSelection.SelectedRows.push($(Rows[i]).attr("id").split("-")[1]);
+            } 
+            TempViewSettings.RowSelection.AllSelectedRel=1;
+        } 
+        
+        
     }
     
     
@@ -967,7 +1005,7 @@ ActionSyncViewWihRowSelection=function(io){
     TempViewSettings.RowSelection.HoldUnSelectedRows=[];
     
     
-    //sync all row selector
+    //sync AllRow selector
     if(TempViewSettings.RowSelection.AllSelectedRel){
         $("table.ListDataTable thead th .AllRowSelector").removeClass("LowVisibility");
     }
