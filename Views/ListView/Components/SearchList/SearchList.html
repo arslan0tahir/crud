@@ -12,21 +12,23 @@ and open the template in the editor.
 <div class="SearchInputHolder SearchListComp" style="position:absolute;bottom: 0px"  data-ng-controller="SearchCtrl">
     <div class="input-group ">  
      <div class="input-group-btn form-group SearchBoxAdv" >
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="glyphicon glyphicon-option-horizontal"></span></button>
+        <button class="btn btn-default dropdown-toggle AdvSBMenu" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="glyphicon glyphicon-option-horizontal"></span></button>
         <ul class="dropdown-menu draggable ui-draggable ui-draggable-handle container-fluid">
-          
-          <li> 
+          <li style="position: relative;top: -10px;background-color: steelblue;width: 104%;left: -2%;padding: 4px;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 2px 0px, rgba(0, 0, 0, 0.2) 0px 2px 2px 0px;color: white;display: none;" class="SBTitleBar">
+                    SearchBox <span class="glyphicon glyphicon-minus" style="float:right; cursor:pointer;"></span>
+          </li>
+          <li id="CustomQueryChkBox" data-ng-click="ListenerCustomQueryCheckBox($event)"> 
                 <label><input type="checkbox" name="remember"> Enable Custom Query</label>
           </li>
           <li role="separator" class="divider"></li>
-          <li class="row" style="margin-left: auto;margin-right: auto;">
+          <li class="row CustomQueryStarter" style="margin-left: auto;margin-right: auto;" data-ng-click="ListenerCustomQueryStarter($event)">
               <div class="col-xs-3">
                   <b>Starter Query</b>
               </div>
                 <div  class="col-xs-9">
-                    <label class="radio-inline"><input type="radio" name="optradio">Main Search Box</label>
-                    <label class="radio-inline"><input type="radio" name="optradio">Column Header Box</label>
-                    <label class="radio-inline"><input type="radio" name="optradio">Custom Raw</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" class="CustomSearchMain">Main Search Box</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" class="CustomSearchColHeader">Column Header Box</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" class="CustomSearchRaw">Custom Raw</label>
                 </div>
                 
           </li>

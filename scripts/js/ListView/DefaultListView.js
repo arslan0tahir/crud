@@ -123,6 +123,7 @@ var TempViewSettings=   {
                             GroupSortOrder      : "Ascending", //Ascending/Descending
                             SearchListComp      :{
                                     
+                                    
                                     Render:{
                                             ColumnHeaderWithSearch      : 1,
                                             SearchBox                   : 0,
@@ -133,14 +134,16 @@ var TempViewSettings=   {
                                             CustomQuery :""
                                      },
                                     ColumnHeaderQ               :{   //it will Handle Column Header Query and SortOder
-                                
+                                   
                                                      
 //                                                   23:{ "SortOrder": "",      //columnId and its related query (Text query is and operated)     
 //                                                        "QueryText": ""
 //                                                    }
                                 
-                                    }
+                                    },
+                                    ActiveSearchMethod: 1,                 //1 for columnheader, 2 for SearchBox, 3 for custom
                             },
+                            
                             RowSelection        :{
                                     Render:{
                                             Selection      : 1,
@@ -304,8 +307,8 @@ $(document).ready(function() {
     ListenerSearchBox();
     ListenerRowSelector();
 
-    $('[data-crud-comp="NewItemControl"]' ).load( "../../views/ListView/Components/NewItemControl/NewItemControl.html?i=1004" );
-    $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html?u=1000");
+    $('[data-crud-comp="NewItemControl"]' ).load( "../../views/ListView/Components/NewItemControl/NewItemControl.html?i=100" );
+    $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html?u=1005");
     //$.getScript("../../scripts/js/ListView/Components/NewItemButton.js");
 });
 //**************************************************************MAIN END
