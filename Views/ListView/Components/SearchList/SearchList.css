@@ -40,3 +40,8 @@ and open the template in the editor.
         display: inline-block;
         width: 80px;
 }
+
+.SearchListComp .SearchAdd,.SearchRemove{
+        display: inline-block;
+        
+}

@@ -26,14 +26,20 @@ and open the template in the editor.
                   <b>Starter Query</b>
               </div>
                 <div  class="col-xs-9">
-                    <label class="radio-inline"><input type="radio" name="optradio" class="CustomSearchMain">Main Search Box</label>
-                    <label class="radio-inline"><input type="radio" name="optradio" class="CustomSearchColHeader">Column Header Box</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" class="CustomCopySearchBox" checked="checked">Main Search Box</label>
+                    <label class="radio-inline"><input type="radio" name="optradio" class="CustomCopyColHeader">Column Header Box</label>
                     <label class="radio-inline"><input type="radio" name="optradio" class="CustomSearchRaw">Custom Raw</label>
                 </div>
                 
           </li>
           <li role="separator" class="divider"></li>
-          <li data-ng-repeat="CurrCol in ListColumnIds">
+          <li>
+
+              <button type="button" class="btn btn-default btn-sm SearchAdd" >
+                    <span class="glyphicon glyphicon-plus"></span> Plus
+              </button>
+          </li>
+          <li data-ng-repeat="CurrCol in ListColumnIds" id="QueryForCol{{CurrCol}}">
             <div>
                 
                 <div class="SearchIn">  
@@ -56,13 +62,21 @@ and open the template in the editor.
                       <option>AND</option>
                     </select>
                 </div>
+                <div class="SearchRemove">
+                   
+                    
+                    <span  class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-minus"></span> 
+                    </span>
+                </div>
+                
             </div>
           </li>
          
         </ul>
       </div>
         
-      <input type="text" class="form-control SearchInput" placeholder="Search for...">
+      <input type="text" class="form-control SearchInput" placeholder="Search for..." >
     </div>
     
 <!--    <div class="input-group-prepend">

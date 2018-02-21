@@ -25,6 +25,11 @@ SearchList=function(){
         $scope.ListColumnIds = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
         $scope.ListColumnDetails = ListSettings.ListColumns;
         $scope.RenderSearchBoxAdv = TempViewSettings.SearchListComp.Render.SearchBoxAdv;
+        $scope.SyncScope=function(e){
+                    $scope.ListColumnIds = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+                    $scope.ListColumnDetails = ListSettings.ListColumns;
+                    $scope.RenderSearchBoxAdv = TempViewSettings.SearchListComp.Render.SearchBoxAdv;
+        }
         $scope.ListenerCustomQueryCheckBox=function(e){
             if (e.target.nodeName=="LABEL"){ //this function is called twice if label is clicked
                 return;
@@ -64,26 +69,42 @@ SearchList=function(){
 
         }
         $scope.ListenerCustomQueryStarter=function(e){
-            if ($(e.target).hasClass("CustomSearchMain")){
+            if ($(e.target).hasClass("CustomCopySearchBox")){
+                // OR Operated Query will be copied and reflected in Adv Search 
+                $scope.ActionReflectMainSBQuery(e);
+                $scope.ActionComputeAdvSearchQuery(e);
                 
             }
-            else if ($(e.target).hasClass("CustomSearchColHeader")){
+            else if ($(e.target).hasClass("CustomCopyColHeader")){
+                // AND Operated Query will be copied and reflected in Adv Search
+                $scope.ActionReflectColHdrQuery(e);
+                $scope.ActionComputeAdvSearchQuery(e);
                 
             }
             else if ($(e.target).hasClass("CustomSearchRaw")){
+                // Custom Query can be added here
                 
             }
         }
-        $scope.ActionBuildCustomQuery=function(){
+        $scope.ActionComputeAdvSearchQuery=function(){
             
         }
-        $scope.ActionSyncViewWithMainSBQuery=function(){
-            
+        $scope.ActionReflectMainSBQuery=function(e){
+            for(i=0;i<$scope.ListColumnIds.length;i++){
+                $(SearchListCompSelector+" #QueryForCol"+$scope.ListColumnIds[i]+" .SearchCondition select").val("Contains")
+                $(SearchListCompSelector+" #QueryForCol"+$scope.ListColumnIds[i]+" .SearchLogic select").val("OR")
+                $(SearchListCompSelector+" #QueryForCol"+$scope.ListColumnIds[i]+" .SearchFor input").val($(SearchListCompSelector+" .SearchInput").val())
+            }
         }
-        $scope.ActionSyncViewWithColHdrQuery=function(){
-            
+        $scope.ActionReflectColHdrQuery=function(e){
+            for(i=0;i<$scope.ListColumnIds.length;i++){
+                var currColId=$scope.ListColumnIds[i];
+                $(SearchListCompSelector+" #QueryForCol"+currColId+" .SearchCondition select").val("Contains")
+                $(SearchListCompSelector+" #QueryForCol"+currColId+" .SearchLogic select").val("AND")
+                $(SearchListCompSelector+" #QueryForCol"+currColId+" .SearchFor input").val($("th#"+$scope.ListColumnDetails[currColId].ColumnName+"-"+currColId+" ul input.ColumnHeaderSearchBox").val())
+            }
         }
-        $scope.ActionSyncViewWithRawQuery=function(){
+        $scope.ActionRawQuery=function(){
             
         }
         $scope.fullName = function(e) {
@@ -91,7 +112,7 @@ SearchList=function(){
             return $scope.firstName + " " + $scope.lastName;
         };
     });
-
+//END Angular##########################################################################################################################
 
     
     
@@ -136,6 +157,8 @@ SearchList=function(){
             $(".ColumnHeader .ColumnHeaderSearchBox").removeAttr("disabled")
         }
         
+        
+        //SB changes are also reflected in Custom Query But are not applied until custom query is not enabled---- angular keyup ActionReflectMainSBQuery();
         
     })
     
