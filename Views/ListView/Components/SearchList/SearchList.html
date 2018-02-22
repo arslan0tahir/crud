@@ -33,41 +33,62 @@ and open the template in the editor.
                 
           </li>
           <li role="separator" class="divider"></li>
-          <li>
+          <li data-ng-if="SearchTemplate=='CustomSearchRaw'">
 
-              <button type="button" class="btn btn-default btn-sm SearchAdd" >
-                    <span class="glyphicon glyphicon-plus"></span> Plus
-              </button>
+              <span class="input-group-btn" >
+                      <button class="btn btn-default" style="margin-bottom: 5px;" type="button"> <span class="glyphicon glyphicon-plus"></span> New</button>
+              </span>
           </li>
-          <li data-ng-repeat="CurrCol in ListColumnIds" id="QueryForCol{{CurrCol}}">
+          <li data-ng-repeat="CurrCol in ListColumnIds track by $index" id="QueryForCol{{CurrCol}}" class='QueryForCols'>
             <div>
-                
-                <div class="SearchIn">  
-                    <input type="text" Value={{ListColumnDetails[CurrCol].ColumnName}} class="form-control" disabled="">
-                                        <!--<span class="form-control" >ID</span>-->
-                     
+                <div style="display: inline-block">
+                    <div class="SearchIn" data-ng-if="SearchTemplate!='CustomSearchRaw'">  
+                        <input type="text" Value={{ListColumnDetails[CurrCol].ColumnName}} class="form-control" disabled="">
+                                            <!--<span class="form-control" >ID</span>-->
+
+                    </div>
+                    <div class="SearchIn" data-ng-if="SearchTemplate=='CustomSearchRaw'">  
+                        <select class="form-control" id="sel1"  data-ng-click='HelperSelectEventCapture($event)' data-ng-change='ActionTagParentQueryElement($event)' data-ng-model="HoldFocusEvent">
+                          <option value='' ></option>
+                          <option value='{{ListColumnDetails[LCurrCol].ColumnId}}' data-ng-repeat="LCurrCol in HoldListColumnIds">{{ListColumnDetails[LCurrCol].ColumnName}}</option>
+                        </select>
+
+                    </div>
+                    <div class="SearchCondition">
+                        <select class="form-control" id="sel1">
+                          <option>Contains</option>
+                          <option>Equals</option>
+                        </select>
+                    </div>
+                    <div class="SearchFor">
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="SearchLogic">
+                        <select class="form-control" id="sel1">
+                          <option>OR</option>
+                          <option>AND</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="SearchCondition">
-                    <select class="form-control" id="sel1">
-                      <option>Contains</option>
-                      <option>Equals</option>
-                    </select>
-                </div>
-                <div class="SearchFor">
-                    <input type="text" class="form-control">
-                </div>
-                <div class="SearchLogic">
-                    <select class="form-control" id="sel1">
-                      <option>OR</option>
-                      <option>AND</option>
-                    </select>
-                </div>
-                
-                <div class="input-group SearchRemove">
+                <div class="input-group SearchRemove" data-ng-click="ActionToggleCurrFilterItem($event)" data-ng-if="SearchTemplate!='CustomSearchRaw'">
                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
+                      <button class="btn btn-default " type="button">
+                          <span class="glyphicon glyphicon-eye-open" >
+                              
+                          </span>
+
+                      </button>
                     </span>
-                  </div>
+                </div>
+                <div class="input-group SearchRemove" data-ng-click="ActionRemoveCurrFilterItem($event)" data-ng-if="SearchTemplate=='CustomSearchRaw'">
+                   <span class="input-group-btn">
+                      <button class="btn btn-default " type="button">
+                          <span class="glyphicon glyphicon-minus" >
+                              
+                          </span>
+                      </button>
+                    </span>
+                </div>
                 
                 
             </div>

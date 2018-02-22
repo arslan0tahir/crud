@@ -45,3 +45,9 @@ and open the template in the editor.
         display: inline-block;
         
 }
+
+.SearchListComp .RoundBtn{
+        border-radius: 50% !important;
+        
+        
+}
