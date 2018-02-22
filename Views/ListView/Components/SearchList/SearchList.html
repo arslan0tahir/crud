@@ -55,16 +55,16 @@ and open the template in the editor.
 
                     </div>
                     <div class="SearchCondition">
-                        <select class="form-control" id="sel1">
+                        <select class="form-control" id="sel1" ng-disabled="FilterExcludedCol.indexOf(CurrCol)>-1" >
                           <option>Contains</option>
                           <option>Equals</option>
                         </select>
                     </div>
                     <div class="SearchFor">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" data-ng-disabled="FilterExcludedCol.indexOf(CurrCol)>-1">
                     </div>
                     <div class="SearchLogic">
-                        <select class="form-control" id="sel1">
+                        <select class="form-control" id="sel1" data-ng-disabled="FilterExcludedCol.indexOf(CurrCol)>-1">
                           <option>OR</option>
                           <option>AND</option>
                         </select>
@@ -73,7 +73,10 @@ and open the template in the editor.
                 <div class="input-group SearchRemove" data-ng-click="ActionToggleCurrFilterItem($event)" data-ng-if="SearchTemplate!='CustomSearchRaw'">
                    <span class="input-group-btn">
                       <button class="btn btn-default " type="button">
-                          <span class="glyphicon glyphicon-eye-open" >
+                          <span class="glyphicon glyphicon-eye-close" data-ng-if="FilterExcludedCol.indexOf(CurrCol)>-1">
+                              
+                          </span>
+                          <span class="glyphicon glyphicon-eye-open" data-ng-if="FilterExcludedCol.indexOf(CurrCol)==-1">
                               
                           </span>
 

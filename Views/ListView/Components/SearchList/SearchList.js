@@ -76,6 +76,7 @@ SearchList=function(){
             $scope.ListColumnIds = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
             if ($(e.target).hasClass("CustomCopySearchBox")){
                 // OR Operated Query will be copied and reflected in Adv Search 
+                $scope.FilterExcludedCol=[];//initialize excluded column to []
                 $scope.SearchTemplate="CustomCopySearchBox";
                 $scope.ActionReflectMainSBQuery(e);
                 $scope.ActionComputeAdvSearchQuery(e);
@@ -83,6 +84,7 @@ SearchList=function(){
             }
             else if ($(e.target).hasClass("CustomCopyColHeader")){
                 // AND Operated Query will be copied and reflected in Adv Search
+                $scope.FilterExcludedCol=[];
                 $scope.SearchTemplate="CustomCopyColHeader";
                 $scope.ActionReflectColHdrQuery(e);
                 $scope.ActionComputeAdvSearchQuery(e);
