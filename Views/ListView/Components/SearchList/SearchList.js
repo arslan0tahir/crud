@@ -28,12 +28,31 @@ SearchList=function(){
         $scope.RenderSearchBoxAdv = TempViewSettings.SearchListComp.Render.SearchBoxAdv;//not used
         $scope.SearchTemplate="CustomCopySearchBox"; //this variabel stores the information of template being copied (SB,ColHeader,Raw)
         $scope.FilterExcludedCol=[];//It cols being excluded from query in SB,ColHeader mode. Whereas its not valid for RawCustomn
+        $scope.CustomQuery={
+            //12:{
+            //  
+            //  Name        : ""
+            //  Condition   : "Contains",
+            //  String      : "",
+            //  Logic       : "OR"  
+            //  Include     : 1    
+            //}
+            //
+        };
+        $scope.Debugging=1;
         $scope.SyncScope=function(e){
                     $scope.HoldListColumnIds = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
                     $scope.ListColumnIds = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
                     $scope.ListColumnDetails = ListSettings.ListColumns;
                     $scope.RenderSearchBoxAdv = TempViewSettings.SearchListComp.Render.SearchBoxAdv;
         }
+        
+//        $scope.InitializeCopiedQuery=function(CurrCol){
+//            $scope.CustomQuery[CurrCol].ColName=$scope.ListColumnDetails[CurrCol].ColumnName;
+//            $scope.CustomQuery[CurrCol].Include=1;
+//                    
+//        }
+        
         $scope.ListenerCustomQueryCheckBox=function(e){
             if (e.target.nodeName=="LABEL"){ //this function is called twice if label is clicked
                 return;
@@ -93,38 +112,47 @@ SearchList=function(){
             else if ($(e.target).hasClass("CustomSearchRaw")){
                 // Custom Query can be added here
                 $scope.SearchTemplate="CustomSearchRaw";
+                $scope.CustomQuery={}
                 $scope.ListColumnIds=[];
                 $scope.ListColumnIds[0] = $scope.ListColumnIds[1];
             }
         }
         $scope.ActionComputeAdvSearchQuery=function(){
-            var QueryRows=$(".QueryForCols")
-            var Query="START "
-            for (var i=0; i<QueryRows.length;i++){
-                Query=Query+$(".QueryForCols")[i].id.split("QueryForCol")[1]+" ";
-                Query=Query+$($(".QueryForCols")[0]).find(".SearchCondition select").val()+" ";
-                Query=Query+$($(".QueryForCols")[0]).find(".SearchFor input").val()+" ";
-                Query=Query+$($(".QueryForCols")[0]).find(".SearchLogic select").val()+" ";
-            }
-            Query=Query+"STOP"
-            TempViewSettings.SearchListComp.SearchBoxQ.CustomQuery=Query;
-            //START 12 Contains 'Hello' 32 AND 24 Contains 'Test'  
-            //alert(Query);
+//            var QueryObject=$scope.CustomQuery;
+//            var Query="START "
+//            for (CurrCol in QueryObject){
+//                if (QueryObject[CurrCol].include==0){continue;}
+//                Query=Query+CurrCol+" ";
+//                Query=Query+QueryObject[CurrCol].Condition+" ";
+//                Query=Query+QueryObject[CurrCol].String+" ";
+//                Query=Query+QueryObject[CurrCol].Logic+" ";
+//                
+//            }
+//            Query=Query+"STOP"
+//            TempViewSettings.SearchListComp.SearchBoxQ.CustomQuery=Query;
+//            
+//            
+//            
+//            //START 12 Contains 'Hello' 32 AND 24 Contains 'Test'  
+//            alert(Query);
         }
         $scope.ActionReflectMainSBQuery=function(e){
             for(i=0;i<$scope.ListColumnIds.length;i++){
-                $(SearchListCompSelector+" #QueryForCol"+$scope.ListColumnIds[i]+" .SearchCondition select").val("Contains")
-                $(SearchListCompSelector+" #QueryForCol"+$scope.ListColumnIds[i]+" .SearchLogic select").val("OR")
-                $(SearchListCompSelector+" #QueryForCol"+$scope.ListColumnIds[i]+" .SearchFor input").val($(SearchListCompSelector+" .SearchInput").val())
+                
+               $scope.CustomQuery[$scope.ListColumnIds[i]].Condition="Contains";
+               $scope.CustomQuery[$scope.ListColumnIds[i]].Logic="OR"
+               $scope.CustomQuery[$scope.ListColumnIds[i]].String=$(SearchListCompSelector+" .SearchInput").val()
             }
         }
         $scope.ActionReflectColHdrQuery=function(e){
+            
             for(i=0;i<$scope.ListColumnIds.length;i++){
-                var currColId=$scope.ListColumnIds[i];
-                $(SearchListCompSelector+" #QueryForCol"+currColId+" .SearchCondition select").val("Contains")
-                $(SearchListCompSelector+" #QueryForCol"+currColId+" .SearchLogic select").val("AND")
-                $(SearchListCompSelector+" #QueryForCol"+currColId+" .SearchFor input").val($("th#"+$scope.ListColumnDetails[currColId].ColumnName+"-"+currColId+" ul input.ColumnHeaderSearchBox").val())
+               var currColId=$scope.ListColumnIds[i]; 
+               $scope.CustomQuery[$scope.ListColumnIds[i]].Condition="Contains";
+               $scope.CustomQuery[$scope.ListColumnIds[i]].Logic="AND"
+               $scope.CustomQuery[$scope.ListColumnIds[i]].String=$("th#"+$scope.ListColumnDetails[currColId].ColumnName+"-"+currColId+" ul input.ColumnHeaderSearchBox").val()
             }
+                       
         }
         $scope.ActionRawQuery=function(){
             
@@ -140,11 +168,11 @@ SearchList=function(){
             
             if (Index<0){// exclude in query
                 $scope.FilterExcludedCol.push(ToggleRow)
+                $scope.CustomQuery[ToggleRow].Include=0;
             }
             else{//include in query
-                $scope.FilterExcludedCol=$scope.FilterExcludedCol.filter(function(item){
-                                                                        return item!==ToggleRow
-                                                                   })
+                $scope.FilterExcludedCol=$scope.FilterExcludedCol.filter(function(item){ return item!==ToggleRow; })
+                $scope.CustomQuery[ToggleRow].Include=1; 
             }
             
         }
@@ -157,11 +185,11 @@ SearchList=function(){
        
         
         
-        $scope.HelperSelectEventCapture=function(e){
+        $scope.HelperSelectEventCapture=function(e){// $event is not passed on chnage evenet so it will hold the change event for select
             e.stopPropagation();
             $scope.HoldFocusEvent=e;
         }
-        $scope.ActionTagParentQueryElement=function(e){
+        $scope.ActionTagParentQueryElement=function(e){//not used
             e=$scope.HoldFocusEvent;
             $(e.target).parents("li").attr("id","QueryForCol"+$(e.target).val());
         }
@@ -271,6 +299,13 @@ var checkExist = setInterval(function() {
                      }, 100);
 
 
-
+//Object.prototype.get = function(prop) {
+//    this[prop] = this[prop] || {};
+//    return this[prop];
+//};
+//
+//Object.prototype.set = function(prop, value) {
+//    this[prop] = value;
+//}
 
 

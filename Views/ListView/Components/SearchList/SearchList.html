@@ -21,7 +21,7 @@ and open the template in the editor.
                 <label><input type="checkbox" name="remember"> Enable Custom Query</label>
           </li>
           <li role="separator" class="divider"></li>
-          <li class="row CustomQueryStarter" style="margin-left: auto;margin-right: auto;" data-ng-click="ListenerCustomQueryStarter($event)">
+          <li class="row CustomQueryStarter" style="margin-left: auto;margin-right: auto;" data-ng-click="ListenerCustomQueryStarter($event)" >
               <div class="col-xs-3">
                   <b>Starter Query</b>
               </div>
@@ -39,13 +39,18 @@ and open the template in the editor.
                       <button class="btn btn-default" style="margin-bottom: 5px;" type="button"> <span class="glyphicon glyphicon-plus"></span> New</button>
               </span>
           </li>
-          <li data-ng-repeat="CurrCol in ListColumnIds track by $index" id="QueryForCol{{CurrCol}}" class='QueryForCols'>
-            <div>
+          
+          
+          
+          <!--######################################################################Search window in accordance with cols is populated here-->
+          <li data-ng-repeat="CurrCol in ListColumnIds track by $index" id="QueryForCol{{CurrCol}}" class='QueryForCols' >
+            <!--{{CustomQuery[CurrCol].ColName=ListColumnDetails[CurrCol].ColumnName}}--> 
+              <div>
                 <div style="display: inline-block">
-                    <div class="SearchIn" data-ng-if="SearchTemplate!='CustomSearchRaw'">  
-                        <input type="text" Value={{ListColumnDetails[CurrCol].ColumnName}} class="form-control" disabled="">
-                                            <!--<span class="form-control" >ID</span>-->
-
+                    <div class="SearchIn" data-ng-if="SearchTemplate!='CustomSearchRaw'" data-ng-init="CustomQuery[CurrCol].ColName=ListColumnDetails[CurrCol].ColumnName;CustomQuery[CurrCol].Include=1;">  
+                        <input type="text" value={{CustomQuery[CurrCol].ColName}} class="form-control" disabled="">
+                                           <!--<span class="form-control" >ID</span>-->
+                                                
                     </div>
                     <div class="SearchIn" data-ng-if="SearchTemplate=='CustomSearchRaw'">  
                         <select class="form-control" id="sel1"  data-ng-click='HelperSelectEventCapture($event)' data-ng-change='ActionTagParentQueryElement($event)' data-ng-model="HoldFocusEvent">
@@ -55,16 +60,16 @@ and open the template in the editor.
 
                     </div>
                     <div class="SearchCondition">
-                        <select class="form-control" id="sel1" ng-disabled="FilterExcludedCol.indexOf(CurrCol)>-1" >
+                        <select class="form-control" id="sel1" data-ng-disabled="FilterExcludedCol.indexOf(CurrCol)>-1" data-ng-model="CustomQuery[CurrCol].Condition">
                           <option>Contains</option>
                           <option>Equals</option>
                         </select>
                     </div>
                     <div class="SearchFor">
-                        <input type="text" class="form-control" data-ng-disabled="FilterExcludedCol.indexOf(CurrCol)>-1">
+                        <input type="text" class="form-control" data-ng-disabled="FilterExcludedCol.indexOf(CurrCol)>-1" data-ng-model="CustomQuery[CurrCol].String">
                     </div>
                     <div class="SearchLogic">
-                        <select class="form-control" id="sel1" data-ng-disabled="FilterExcludedCol.indexOf(CurrCol)>-1">
+                        <select class="form-control" id="sel1" data-ng-disabled="FilterExcludedCol.indexOf(CurrCol)>-1" data-ng-model="CustomQuery[CurrCol].Logic">
                           <option>OR</option>
                           <option>AND</option>
                         </select>
@@ -95,6 +100,9 @@ and open the template in the editor.
                 
                 
             </div>
+          </li>
+          <li data-ng-if="Debugging==1" >
+             <pre> {{CustomQuery | json}}</pre>
           </li>
          
         </ul>
