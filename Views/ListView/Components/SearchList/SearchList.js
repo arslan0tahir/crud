@@ -15,6 +15,9 @@
 
 //angular controller for SearchList is Defined Here
 
+
+//access scope from JS
+//angular.element($(".SearchListComp")).scope().ListColumnIds 
 var ContainerId="";
 
 var SearchListCompSelector=".SearchListComp";
@@ -23,6 +26,7 @@ SearchList=function(){
     var app = angular.module('SearchListApp', []);
     app.controller('SearchCtrl', function($scope) {
         $scope.HoldListColumnIds = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder; //hold original ListIds 
+       $scope.HoldFocusEvent={};
         $scope.ListColumnIds = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder; //these ids behaves as controlling unit for query display
         $scope.ListColumnDetails = ListSettings.ListColumns;//
         $scope.RenderSearchBoxAdv = TempViewSettings.SearchListComp.Render.SearchBoxAdv;//not used
@@ -47,11 +51,28 @@ SearchList=function(){
                     $scope.RenderSearchBoxAdv = TempViewSettings.SearchListComp.Render.SearchBoxAdv;
         }
         
-//        $scope.InitializeCopiedQuery=function(CurrCol){
+        $scope.InitializeCopiedQuery=function(mode){
+            
+            for(i=0;i<$scope.HoldListColumnIds.length;i++){
+                var CurrColId=$scope.HoldListColumnIds[i];
+                $scope.CustomQuery[CurrColId]={};
+                $scope.CustomQuery[CurrColId].Include=1;
+                $scope.CustomQuery[CurrColId].ColName=$scope.ListColumnDetails[CurrColId].ColumnName;
+                $scope.CustomQuery[CurrColId].Condition="Contains";
+//                if (mode==""){
+//                    $scope.CustomQuery[CurrColId].Condition="AND";
+//                }
+//                else if (mode==""){
+//                    $scope.CustomQuery[CurrColId].Condition="AND";
+//                }
+                
+                
+            
+            }
 //            $scope.CustomQuery[CurrCol].ColName=$scope.ListColumnDetails[CurrCol].ColumnName;
 //            $scope.CustomQuery[CurrCol].Include=1;
-//                    
-//        }
+                    
+        }
         
         $scope.ListenerCustomQueryCheckBox=function(e){
             if (e.target.nodeName=="LABEL"){ //this function is called twice if label is clicked
@@ -91,8 +112,10 @@ SearchList=function(){
             }
 
         }
-        $scope.ListenerCustomQueryStarter=function(e){
+//        CustomQuery[CurrCol].ColName=ListColumnDetails[CurrCol].ColumnName;CustomQuery[CurrCol].Include=1;
+        $scope.ListenerCustomQueryStarter=function(e){//Manage Advnce Search
             $scope.ListColumnIds = ListSettings.CurrentListView.ListViewSettings.ColumnsWithOrder;
+            $scope.InitializeCopiedQuery();
             if ($(e.target).hasClass("CustomCopySearchBox")){
                 // OR Operated Query will be copied and reflected in Adv Search 
                 $scope.FilterExcludedCol=[];//initialize excluded column to []
@@ -112,9 +135,14 @@ SearchList=function(){
             else if ($(e.target).hasClass("CustomSearchRaw")){
                 // Custom Query can be added here
                 $scope.SearchTemplate="CustomSearchRaw";
-                $scope.CustomQuery={}
-                $scope.ListColumnIds=[];
-                $scope.ListColumnIds[0] = $scope.ListColumnIds[1];
+//                for(key in $scope.CustomQuery){
+//                    $scope.CustomQuery[key].Include=0;
+//                }
+                $scope.CustomQuery={
+                                        0:{}
+                                    };
+                $scope.ListColumnIds=[0];
+//                $scope.ListColumnIds[0] = $scope.ListColumnIds[1];
             }
         }
         $scope.ActionComputeAdvSearchQuery=function(){
@@ -139,7 +167,7 @@ SearchList=function(){
         $scope.ActionReflectMainSBQuery=function(e){
             for(i=0;i<$scope.ListColumnIds.length;i++){
                 
-               $scope.CustomQuery[$scope.ListColumnIds[i]].Condition="Contains";
+//               $scope.CustomQuery[$scope.ListColumnIds[i]].Condition="Contains";
                $scope.CustomQuery[$scope.ListColumnIds[i]].Logic="OR"
                $scope.CustomQuery[$scope.ListColumnIds[i]].String=$(SearchListCompSelector+" .SearchInput").val()
             }
@@ -148,7 +176,7 @@ SearchList=function(){
             
             for(i=0;i<$scope.ListColumnIds.length;i++){
                var currColId=$scope.ListColumnIds[i]; 
-               $scope.CustomQuery[$scope.ListColumnIds[i]].Condition="Contains";
+//               $scope.CustomQuery[$scope.ListColumnIds[i]].Condition="Contains";
                $scope.CustomQuery[$scope.ListColumnIds[i]].Logic="AND"
                $scope.CustomQuery[$scope.ListColumnIds[i]].String=$("th#"+$scope.ListColumnDetails[currColId].ColumnName+"-"+currColId+" ul input.ColumnHeaderSearchBox").val()
             }
@@ -161,7 +189,7 @@ SearchList=function(){
             alert(RenderSearchBoxAdv);
             return $scope.firstName + " " + $scope.lastName;
         };
-        $scope.ActionToggleCurrFilterItem=function(e){
+        $scope.ActionToggleCurrFilterItem=function(e){//it will include or exlude items from query (is not valid in custom query option)
             e.stopPropagation();
             var ToggleRow=parseInt($(e.target).parents("li").attr("id").split("QueryForCol")[1]);
             var Index=$scope.FilterExcludedCol.indexOf(ToggleRow)
@@ -179,20 +207,48 @@ SearchList=function(){
         
         $scope.ActionRemoveCurrFilterItem=function(e){
             e.stopPropagation();
-            var RemoveRow=parseInt($(e.target).parents("li").attr("id").split("QueryForCol")[1]);
-            $scope.ListColumnIds= $scope.ListColumnIds.filter(function(item) { return item !== RemoveRow})
+            var RemoveRow=parseInt($(e.target).parents("li").attr("id").split("QueryForCol")[1]);//as key are bignint
+            
+            if(EvaluateBoundry(RemoveRow==0,"Trying to delete unidentified(Oth) query element")){return}
+            $scope.ListColumnIds= $scope.ListColumnIds.filter(function(item) { return item !== RemoveRow})//delete id from model
+            delete $scope.CustomQuery[RemoveRow];         
         }
-       
+        $scope.ListnerAddNewFilterItem=function(e){//Listens whens new button in raw custom query is selected
+            $scope.ActionAddNewFilterItem(e);
+        }
+        $scope.ActionAddNewFilterItem=function(e){
+
+          
+            var Curr=$(SearchListCompSelector+" .QueryForCols");//all custom query elements
+            var CurrId=Curr[Curr.length-1].id.split("QueryForCol")[1];//tagged id of 0 elemnet i.e. last row
+            if(EvaluateBoundry(CurrId==0,"No identity assigned to 0th Query Element")){return;}
+            
+           
+            
+            
+            CurrId=parseInt(CurrId)
+            $scope.ListColumnIds.splice(Curr.length-1, 0, CurrId);//(start index,delete 0 item,insert currId[can be multiple items])
+            //$scope.ListColumnIds.unshift(CurrId);
+            
+            $scope.CustomQuery[CurrId]=$scope.CustomQuery[0];
+            
+            $scope.CustomQuery[0]={}
+            
+            
+            
+        }
         
         
         $scope.HelperSelectEventCapture=function(e){// $event is not passed on chnage evenet so it will hold the change event for select
             e.stopPropagation();
             $scope.HoldFocusEvent=e;
         }
-        $scope.ActionTagParentQueryElement=function(e){//not used
+        $scope.ActionTagParentQueryElement=function(e){//Tag Parent li in raw custom query mode
             e=$scope.HoldFocusEvent;
-            $(e.target).parents("li").attr("id","QueryForCol"+$(e.target).val());
+            var HoldId=$(e.target).find(":selected").attr("data-col-option-id");
+            $(e.target).parents("li").attr("id","QueryForCol"+HoldId);
         }
+
         
     });
 //END Angular##########################################################################################################################
@@ -298,7 +354,17 @@ var checkExist = setInterval(function() {
                         }                        
                      }, 100);
 
-
+EvaluateBoundry=function(con,comment){
+    //if con true error exists
+    if(con){
+        console.trace();
+        console.log("CRUD Warning: "+comment);
+        //console.trace();
+        return true;
+    }
+    return false;
+    
+}
 //Object.prototype.get = function(prop) {
 //    this[prop] = this[prop] || {};
 //    return this[prop];

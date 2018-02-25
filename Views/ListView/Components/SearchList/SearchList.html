@@ -33,29 +33,24 @@ and open the template in the editor.
                 
           </li>
           <li role="separator" class="divider"></li>
-          <li data-ng-if="SearchTemplate=='CustomSearchRaw'">
-
-              <span class="input-group-btn" >
-                      <button class="btn btn-default" style="margin-bottom: 5px;" type="button"> <span class="glyphicon glyphicon-plus"></span> New</button>
-              </span>
-          </li>
           
           
           
+          <!--{{InitializeCopiedQuery();ActionReflectMainSBQuery();}}-->
           <!--######################################################################Search window in accordance with cols is populated here-->
-          <li data-ng-repeat="CurrCol in ListColumnIds track by $index" id="QueryForCol{{CurrCol}}" class='QueryForCols' >
+          <li data-ng-repeat="CurrCol in ListColumnIds track by $index" id="QueryForCol{{CurrCol}}" class='QueryForCols'  >
             <!--{{CustomQuery[CurrCol].ColName=ListColumnDetails[CurrCol].ColumnName}}--> 
               <div>
                 <div style="display: inline-block">
-                    <div class="SearchIn" data-ng-if="SearchTemplate!='CustomSearchRaw'" data-ng-init="CustomQuery[CurrCol].ColName=ListColumnDetails[CurrCol].ColumnName;CustomQuery[CurrCol].Include=1;">  
-                        <input type="text" value={{CustomQuery[CurrCol].ColName}} class="form-control" disabled="">
+                    <div class="SearchIn" data-ng-if="SearchTemplate!='CustomSearchRaw'" >  
+                        <input type="text" value='{{CustomQuery[CurrCol].ColName}}' class="form-control" disabled="">
                                            <!--<span class="form-control" >ID</span>-->
                                                 
                     </div>
                     <div class="SearchIn" data-ng-if="SearchTemplate=='CustomSearchRaw'">  
-                        <select class="form-control" id="sel1"  data-ng-click='HelperSelectEventCapture($event)' data-ng-change='ActionTagParentQueryElement($event)' data-ng-model="HoldFocusEvent">
+                        <select class="form-control" id="sel1"  data-ng-click='HelperSelectEventCapture($event)' data-ng-change='ActionTagParentQueryElement($event)' data-ng-model="CustomQuery[CurrCol].Name">
                           <option value='' ></option>
-                          <option value='{{ListColumnDetails[LCurrCol].ColumnId}}' data-ng-repeat="LCurrCol in HoldListColumnIds">{{ListColumnDetails[LCurrCol].ColumnName}}</option>
+                          <option data-col-option-id="{{ListColumnDetails[LCurrCol].ColumnId}}" value='{{ListColumnDetails[LCurrCol].ColumnName}}' data-ng-repeat="LCurrCol in HoldListColumnIds">{{ListColumnDetails[LCurrCol].ColumnName}}</option>
                         </select>
 
                     </div>
@@ -101,6 +96,14 @@ and open the template in the editor.
                 
             </div>
           </li>
+          
+          <li data-ng-if="SearchTemplate=='CustomSearchRaw'">
+
+              <span class="input-group-btn" >
+                  <button class="btn btn-default" style="margin-bottom: 5px;" type="button" data-ng-click="ListnerAddNewFilterItem($event)"> <span class="glyphicon glyphicon-plus"></span> New</button>
+              </span>
+          </li>
+          
           <li data-ng-if="Debugging==1" >
              <pre> {{CustomQuery | json}}</pre>
           </li>
