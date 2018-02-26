@@ -130,10 +130,10 @@ var TempViewSettings=   {
                                             SearchBoxAdv               : 1,
                                     },                             
                                     SearchBoxQ             : {   //it handles Custom Query and MainSeachBox Query (OR operated)
-                                            SearchString:"",
-                                            CustomQuery :""
+                                            SearchString:"",   //Main SB 
+                                            CustomQuery :""    //Custom Query
                                      },
-                                    ColumnHeaderQ               :{   //it will Handle Column Header Query and SortOder
+                                    ColumnHeaderQ          :    {   //it will Handle Column Header Query and SortOder
                                    
                                                      
 //                                                   23:{ "SortOrder": "",      //columnId and its related query (Text query is and operated)     
@@ -808,8 +808,6 @@ ActionUpdateQueryFromDropDown=function(io){
                 //Reset CheckBoxes of all columns except the operated one 
                 TempViewSettings.SearchListComp.ColumnHeaderQ[MyColumnIds[i]].SortOrder="";
             }
-
-
         }
     }
 

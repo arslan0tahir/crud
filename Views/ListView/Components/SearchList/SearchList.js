@@ -65,9 +65,6 @@ SearchList=function(){
 //                else if (mode==""){
 //                    $scope.CustomQuery[CurrColId].Condition="AND";
 //                }
-                
-                
-            
             }
 //            $scope.CustomQuery[CurrCol].ColName=$scope.ListColumnDetails[CurrCol].ColumnName;
 //            $scope.CustomQuery[CurrCol].Include=1;
@@ -87,10 +84,6 @@ SearchList=function(){
                 $(SearchListCompSelector+" .SearchInput").attr("disabled","disabled")
                 $(".ColumnHeader .ColumnHeaderSearchBox").attr("disabled","disabled") 
                 TempViewSettings.SearchListComp.ActiveSearchMethod=3;
-                
-                
-                
-                
                 
             }//deactivating custom query i.e mode 2 or 1
             else{
