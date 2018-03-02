@@ -339,10 +339,10 @@ SearchList=function(){
 
 
 
-var checkExist = setInterval(function() {
+var CHKSearchList = setInterval(function() {
                         if ($('.SearchListComp').length) {
-                            console.log("Exists!");
-                            clearInterval(checkExist);
+                            console.log("SearchList Loaded");
+                            clearInterval(CHKSearchList);
                             SearchList();
                         }                        
                      }, 100);

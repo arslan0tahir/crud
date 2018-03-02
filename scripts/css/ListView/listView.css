@@ -46,42 +46,17 @@ table.ListDataTable thead{
     display: inline-block;
     width: 100%;
 }
-.PaginationPageSummary{
-    display: inline-block;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-}
 
 
 
 
-.PaginationItemsPerPage{
-    
-    display: inline-block;
-    text-align: left;
-    /*position: absolute;*/
-/*    left:50%;
-    transform: translateX(-50%);*/
-    /*float:*/ 
-}
 
-.PaginationItemsPerPage input{
-     text-align: center;
-     width: 70px;
-     display: inline-block !important;
-}
 
-.PaginationPageNo{
-    position: absolute;
-    display: inline-block;
-    right: 0px;
-    /*float:right;*/
-}
 
-.PaginationPageNo ul{
-    margin:2px;
-}
+
+
+
+
 
 .ListDataTable thead th ul a span{
     position: absolute;
@@ -150,4 +125,15 @@ td span.CurrRowSelector:hover, th span.AllRowSelector:hover{
 
 .PositionTOP{
     position: relative;
+}
+.PaginationPageNoContainer{
+    display: inline-block;
+    
+
+
+}
+.PaginationItemsPerPageContainer{
+    display: inline-block;
+    width:200px;
+    
 }

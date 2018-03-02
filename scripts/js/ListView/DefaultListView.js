@@ -309,6 +309,7 @@ $(document).ready(function() {
 
     $('[data-crud-comp="NewItemControl"]' ).load( "../../views/ListView/Components/NewItemControl/NewItemControl.html?i=100" );
     $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html?u=1005");
+    $('[data-crud-comp="Pagination"]' ).load( "../../views/ListView/Components/Pagination/Pagination.html?u=1005");
     //$.getScript("../../scripts/js/ListView/Components/NewItemButton.js");
 });
 //**************************************************************MAIN END

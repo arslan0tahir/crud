@@ -1,0 +1,41 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 14, 2018, 1:13:46 PM
+    Author     : anonymous
+*/
+
+
+
+.PaginationPageNo ul{
+    margin:2px;
+}
+
+
+
+.PaginationPageNo{
+    position: absolute;
+    display: inline-block;
+    right: 0px;
+    top: 0px
+    /*float:right;*/
+}
+.PaginationItemsPerPage{
+    
+    display: inline-block;
+    text-align: left;
+    /*position: absolute;*/
+/*    left:50%;
+    transform: translateX(-50%);*/
+    /*float:*/ 
+}
+
+.PaginationPageSummary{
+    display: inline-block;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
