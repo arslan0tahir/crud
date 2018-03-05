@@ -138,3 +138,10 @@ td span.CurrRowSelector:hover, th span.AllRowSelector:hover{
     width:200px;
     
 }
+
+.PaginationPageSummaryContainer{
+    display: inline-block;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}

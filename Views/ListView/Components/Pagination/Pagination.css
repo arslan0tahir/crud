@@ -33,9 +33,3 @@ and open the template in the editor.
     /*float:*/ 
 }
 
-.PaginationPageSummary{
-    display: inline-block;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-}

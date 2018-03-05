@@ -13,76 +13,109 @@
 
 
 
-//angular controller for SearchList is Defined Here
+
+(function() {//avoid pollution of gloabl scope
+        var ContainerId="";
+        var ItemsPerPage="";
+        var CompName=""
+        var CompPart=[]
+        var CompSelector="";
+        var AppName="";
+        var CtrlName="";
+
+        CompName="Pagination"
+        CompSelector="."+CompName+"Comp";
+        AppName=CompName+'App';
+        CtrlName=CompName+'Ctrl';
+        //Component parts to be loaded
+        CompPart[0]="ItemsPerPage"; //e.g. Pagination-ItemsPerPage
+        CompPart[1]="PaginationSummary";
 
 
-//access scope from JS
-//angular.element($(".SearchListComp")).scope().ListColumnIds 
-var ContainerId="";
-var ItemsPerPage="Pagination-ItemsPerPage";
-var PaginationCompSelector=".PaginationComp";
 
-Pagination=function(){
-    //Loading Parts of Pagination Component
-        $("[data-crud-comp="+ItemsPerPage+"]" ).load( "../../views/ListView/Components/Pagination/Parts/ItemsPerPage.html" );
-        $("[data-crud-comp="+ItemsPerPage+"]" ).load( "../../views/ListView/Components/Pagination/Parts/ItemsPerPage.html" );
+        //Loading Parts of This Component
+        CompPart.forEach(function(part,i){        
+            $("[data-crud-comp='"+CompName+"-"+part+"'" ).load( "../../views/ListView/Components/"+CompName+"/Parts/"+part+".html" );
+        })
 
-    
-    
- //START Angular##########################################################################################################################
-    var app = angular.module('PaginationApp', []);
-    app.controller('PaginationCtrl', function($scope) {
-    });
-//END Angular##########################################################################################################################
 
-    
-    
-    
+
+
+
+
+
+        Beat=function(){//core of pagination component
+
+
         //load corresponding css
-    $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'Components/Pagination/Pagination.css') );
-    
-//    alert("SearchList");
-    
-
-
-    
-
- 
-    
-    
-    
-    angular.bootstrap(document.querySelector(".PaginationComp"), ["PaginationApp"])//manual bootstrapping of PaginationComp
-};
+            $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'Components/'+CompName+'/'+CompName+'.css') );
+        //START Angular##########################################################################################################################
+            var app = angular.module(AppName, []);//e.g. PaginationApp
+            app.controller(CtrlName, function($scope) {
+                $scope.test="I AM IN"
+            });
+        //END Angular##########################################################################################################################
 
 
 
 
-var CHKPagination = setInterval(function() {
-                        if ($('.PaginationComp').length) {
-                            console.log("Pagination Loaded!");
-                            clearInterval(CHKPagination);
-                            Pagination();
-                        }                        
-                     }, 100);
-
-EvaluateBoundry=function(con,comment){
-    //if con true error exists
-    if(con){
-        console.trace();
-        console.log("CRUD Warning: "+comment);
-        //console.trace();
-        return true;
-    }
-    return false;
-    
-}
-//Object.prototype.get = function(prop) {
-//    this[prop] = this[prop] || {};
-//    return this[prop];
-//};
-//
-//Object.prototype.set = function(prop, value) {
-//    this[prop] = value;
-//}
+                
+     
 
 
+
+            //manual bootstrapping of PaginationComp and parts
+            angular.bootstrap(document.querySelector(CompSelector), [AppName])//manual bootstrapping of PaginationComp
+            CompPart.forEach(function(part,i){//bootstrapping parts   
+                angular.bootstrap(document.querySelector("[data-crud-comp='"+CompName+"-"+part+"'" ), [AppName])//manual bootstrapping of PaginationComp
+            })
+
+        };
+
+
+
+
+        var CHKLoading = setInterval(function() {
+                                if (CompAndPartsLoaded()) {
+                                    console.log(CompName+" Loaded With All Parts");
+                                    clearInterval(CHKLoading);
+                                    Beat();
+                                }                        
+                             }, 100);
+
+
+        EvaluateBoundry=function(con,comment){
+            //if con true error exists
+            if(con){
+                console.trace();
+                console.log("CRUD Warning: "+comment);
+                //console.trace();
+                return true;
+            }
+            return false;
+
+        }
+
+
+        //check if all part of a component are loaded
+        CompAndPartsLoaded=function(){
+            var ReturnVal=1;
+            if ($(CompSelector).length){
+                CompPart.forEach(function(part,i){ 
+                        if($("[data-crud-comp='"+CompName+"-"+part+"'" ).length){
+
+                        }
+                        else{
+                            ReturnVal=0;
+                        }
+                })
+                return ReturnVal
+            }
+            else{
+                ReturnVal=0;
+                return ReturnVal;
+            }
+        }
+
+
+})();

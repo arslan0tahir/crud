@@ -1,4 +1,6 @@
- <input list="ItemPerPage" name="ItemPerPage" class="form-control" style="width:70px;display: inline-block;">
+ 
+<div data-ng-controller="PaginationCtrl">
+<input list="ItemPerPage" name="ItemPerPage" class="form-control" style="width:70px;display: inline-block;">
                         <datalist id="ItemPerPage">
                           <option value="All">
                           <option value="20">
@@ -13,5 +15,6 @@
                           <option value="150">
                           <option value="200">
                           <option value="300">
-                          <option value="500">                          
+                          <option value="500"> {{test+"hello"}}                         
                         </datalist> Items per Page
+</div>
