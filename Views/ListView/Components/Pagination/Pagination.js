@@ -41,18 +41,48 @@
 
 
 
+//Pagination          :{
+//                                    
+//                                    Render:{
+//                                        DisplayModule   :   1,
+//                                        Summary         :   1,
+//                                        ItemPerPage     :   1
+//                                    },                                    
+//                                    CurrPage            :   1,
+//                                    TotalPages          :   1,  //calculated on run time
+//                                    ItemsPerPage        :   20, //or Default
+//                                    PagerLenght         :   5,  //if 5 then <Previos  1-5 Next>
+//                                    TotalItems          :   20,    //total items of query
+//                                    PaginationWindow    :  []
+//                            }
 
 
-
-        Beat=function(){//core of pagination component
+        Beat=function(){//core of  component
 
 
         //load corresponding css
             $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'Components/'+CompName+'/'+CompName+'.css') );
-        //START Angular##########################################################################################################################
+        
+            
+            
+            
+            //START Angular##########################################################################################################################
             var app = angular.module(AppName, []);//e.g. PaginationApp
             app.controller(CtrlName, function($scope) {
-                $scope.test="I AM IN"
+                $scope.test="I AM IN";
+                $scope.SyncPagFromGlobalScope=function(){
+                    $scope.Pagination=TempViewSettings.Pagination;
+                }
+                $scope.SyncPagToGlobalScope=function(){
+                    TempViewSettings.Pagination=$scope.Pagination;
+                }
+                $scope.initialize=function(){
+                    $scope.SyncPagFromGlobalScope();
+                    for (i=0;i<$scope.Pagination.PagerLenght;i++){
+                        $scope.Pagination.PaginationWindow.push(i+1);
+                    }
+                    
+                }
             });
         //END Angular##########################################################################################################################
 

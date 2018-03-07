@@ -167,7 +167,8 @@ var TempViewSettings=   {
                                     TotalPages          :   1,  //calculated on run time
                                     ItemsPerPage        :   20, //or Default
                                     PagerLenght         :   5,  //if 5 then <Previos  1-5 Next>
-                                    TotalItems          :   20    //total items of query
+                                    TotalItems          :   20,    //total items of query
+                                    PaginationWindow    :  []
                             }
 //                                                              {
 //                                                             
@@ -307,9 +308,9 @@ $(document).ready(function() {
     ListenerSearchBox();
     ListenerRowSelector();
 
-    $('[data-crud-comp="NewItemControl"]' ).load( "../../views/ListView/Components/NewItemControl/NewItemControl.html?i=100" );
-    $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html?u=1005");
-    $('[data-crud-comp="Pagination"]' ).load( "../../views/ListView/Components/Pagination/Pagination.html?u=1005");
+    $('[data-crud-comp="NewItemControl"]' ).load( "../../views/ListView/Components/NewItemControl/NewItemControl.html");
+    $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html");
+    $('[data-crud-comp="Pagination"]' ).load( "../../views/ListView/Components/Pagination/Pagination.html");
     //$.getScript("../../scripts/js/ListView/Components/NewItemButton.js");
 });
 //**************************************************************MAIN END
