@@ -76,12 +76,13 @@
                 $scope.SyncPagToGlobalScope=function(){
                     TempViewSettings.Pagination=$scope.Pagination;
                 }
-                $scope.initialize=function(){
+                $scope.initialize1=function(){
                     $scope.SyncPagFromGlobalScope();
+                    var hold=[]
                     for (i=0;i<$scope.Pagination.PagerLenght;i++){
-                        $scope.Pagination.PaginationWindow.push(i+1);
+                        hold.push(i+1);
                     }
-                    
+                    $scope.Pagination.PaginationWindow=hold;
                 }
             });
         //END Angular##########################################################################################################################

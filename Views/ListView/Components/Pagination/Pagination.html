@@ -9,13 +9,13 @@ and open the template in the editor.
 
 
 <script src="Components/Pagination/Pagination.js"></script>
-<div class="PaginationComp" style="bottom: 0px"  data-ng-controller="PaginationCtrl">
-             {{initialize()}}   
+<div class="PaginationComp" style="bottom: 0px"  data-ng-controller="PaginationCtrl" data-ng-init="initialize1()">
+             {{}}   
              <div class="PaginationPageNo">  
                     <ul class="pagination pagination">
                       <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
                       
-                      <li class="page-item" data-ng-repeat="x in Pagination.PaginationWindow"><a class="page-link " href="#">1</a></li>
+                      <li class="page-item" data-ng-repeat="x in Pagination.PaginationWindow"><a class="page-link " href="#">{{x}}</a></li>
 <!--                      <li class="page-item active"><a class="page-link" href="#">2</a></li>
                       <li class="page-item"><a class="page-link" href="#">3</a></li>
                       <li class="page-item"><a class="page-link" href="#">4</a></li>
