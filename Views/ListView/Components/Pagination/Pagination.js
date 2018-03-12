@@ -84,6 +84,16 @@
                     }
                     $scope.Pagination.PaginationWindow=hold;
                 }
+                $scope.ClassPageItem=function(x){
+                    if (x==$scope.Pagination.CurrPage){
+                        return "page-item active";
+                    }
+                    else{
+                        return "page-item";
+                    }
+                }
+                $scope.ClickPageItem=function(x){
+                }
             });
         //END Angular##########################################################################################################################
 
