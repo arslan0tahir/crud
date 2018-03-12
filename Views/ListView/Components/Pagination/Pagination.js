@@ -79,11 +79,27 @@
                 $scope.initialize1=function(){
                     $scope.SyncPagFromGlobalScope();
                     var hold=[]
+                    
+                    //building paginaion window
                     for (i=0;i<$scope.Pagination.PagerLenght;i++){
                         hold.push(i+1);
                     }
                     $scope.Pagination.PaginationWindow=hold;
+                
+                    //START&&&&&&&&&&&&&&& [this placement of script is temporay] initialize items perpage
+                    $('.PaginationItemsPerPageContainer input').val(TempViewSettings.Pagination.ItemsPerPage);
+                    $('.PaginationItemsPerPageContainer input').on('click', function() {
+                        $(this).val('');
+                      });
+                      $('.PaginationItemsPerPage input').on('mouseleave', function() {
+                        if ($(this).val() == '') {
+                          $(this).val(TempViewSettings.Pagination.ItemsPerPage);
+                        }
+                      });
+                    //END&&&&&&&&&&&&&&&
                 }
+                
+                
                 $scope.ClassPageItem=function(x){
                     if (x==$scope.Pagination.CurrPage){
                         return "page-item active";
@@ -92,7 +108,73 @@
                         return "page-item";
                     }
                 }
-                $scope.ClickPageItem=function(x){
+                
+                
+                $scope.ListnerPageNo=function(e){//will listen to click event occur within pagination window
+                    $scope.Pagination.CurrPage=parseInt($(e.target).html());
+                    $scope.ActionLoadPage($scope.Pagination.CurrPage);
+                }
+                
+                
+                $scope.ListnerPageNav=function(e){//will listen to click event occur on Pagination Nav Buttons
+                    if($(e.target).parents("li").hasClass("PaginationNavBack")){
+                        $scope.ActionPagNavBack();
+                    }
+                    else if ($(e.target).parents("li").hasClass("PaginationNavForward")){
+                        $scope.ActionPagNavForward();
+                    }
+                }
+                
+                
+                $scope.ActionPagNavForward=function(){
+                    if ($scope.Pagination.CurrPage==$scope.Pagination.TotalPages){
+                        return "Forward limit exceeds"; //return and do nothing
+                    }
+                    
+                    if ($scope.Pagination.CurrPage==($scope.Pagination.PaginationWindow[$scope.Pagination.PagerLenght-1])){
+                        $scope.Pagination.PaginationWindow=[];
+                         for (i=0;i<$scope.Pagination.PagerLenght;i++){
+                             if (($scope.Pagination.CurrPage+i+1)>$scope.Pagination.TotalPages){
+                                 break;
+                             }
+                            $scope.Pagination.PaginationWindow.push($scope.Pagination.CurrPage+i+1);
+                         }
+                    }
+                    
+                    $scope.Pagination.CurrPage++;
+                    $scope.ActionLoadPage($scope.Pagination.CurrPage);
+                }
+                
+                
+                
+                
+                $scope.ActionPagNavBack=function(){
+                    if ($scope.Pagination.CurrPage==1){
+                        return "Backward limit exceeds"; //return and do nothing
+                    }
+                    
+                    
+                    //if Pagination window limit exceeds
+                    if ($scope.Pagination.CurrPage==($scope.Pagination.PaginationWindow[0])){
+                        $scope.Pagination.PaginationWindow=[];
+                         for (i=($scope.Pagination.CurrPage-$scope.Pagination.PagerLenght);i<=$scope.Pagination.PagerLenght;i++){
+//                             if (($scope.Pagination.CurrPage+i)>$scope.Pagination.TotalPages){
+//                                 break;
+//                             }
+                            $scope.Pagination.PaginationWindow.push(i);
+                         }
+                    }
+                    
+                    $scope.Pagination.CurrPage--;
+                    $scope.ActionLoadPage($scope.Pagination.CurrPage);
+                    
+                }
+                
+                
+                
+                $scope.ActionLoadPage=function(PageNo){
+                    console.log(PageNo)
+                    return 0;
                 }
             });
         //END Angular##########################################################################################################################

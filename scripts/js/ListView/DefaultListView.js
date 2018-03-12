@@ -164,7 +164,7 @@ var TempViewSettings=   {
                                         ItemPerPage     :   1
                                     },                                    
                                     CurrPage            :   1,
-                                    TotalPages          :   1,  //calculated on run time
+                                    TotalPages          :   7,  //calculated on run time
                                     ItemsPerPage        :   20, //or Default
                                     PagerLenght         :   5,  //if 5 then <Previos  1-5 Next>
                                     TotalItems          :   20,    //total items of query
@@ -317,7 +317,7 @@ $(document).ready(function() {
 
 
 Initialize= function(io){
-    InitializePagination();
+  
     InitializeTempViewSettings();
     
 }
@@ -344,9 +344,7 @@ InitializeFilterQuery= function(io){
 
 }
 
-InitializePagination=function(){
-    $('.PaginationItemsPerPage input').val(TempViewSettings.Pagination.ItemsPerPage);
-}
+
 
 ListFetchData= function(io){
     
@@ -650,14 +648,7 @@ ListnerBody=function(io){
 
 ListnerPagination=function(io){
   
-                $('.PaginationItemsPerPage input').on('click', function() {
-                  $(this).val('');
-                });
-                $('.PaginationItemsPerPage input').on('mouseleave', function() {
-                  if ($(this).val() == '') {
-                    $(this).val(TempViewSettings.Pagination.ItemsPerPage);
-                  }
-                });
+                
                 
 }
 
