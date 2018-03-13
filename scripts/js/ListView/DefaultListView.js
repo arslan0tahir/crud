@@ -164,7 +164,7 @@ var TempViewSettings=   {
                                         ItemPerPage     :   1
                                     },                                    
                                     CurrPage            :   1,
-                                    TotalPages          :   7,  //calculated on run time
+                                    TotalPages          :   14,  //calculated on run time
                                     ItemsPerPage        :   20, //or Default
                                     PagerLenght         :   5,  //if 5 then <Previos  1-5 Next>
                                     TotalItems          :   20,    //total items of query

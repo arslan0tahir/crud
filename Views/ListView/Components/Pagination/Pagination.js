@@ -22,6 +22,9 @@
         var CompSelector="";
         var AppName="";
         var CtrlName="";
+        var Timer=0;
+        var DiffTimer=0;
+
 
         CompName="Pagination"
         CompSelector="."+CompName+"Comp";
@@ -36,8 +39,8 @@
         //Loading Parts of This Component
         CompPart.forEach(function(part,i){        
             $("[data-crud-comp='"+CompName+"-"+part+"'" ).load( "../../views/ListView/Components/"+CompName+"/Parts/"+part+".html" );
+          //  $.getScript();
         })
-
 
 
 
@@ -86,17 +89,7 @@
                     }
                     $scope.Pagination.PaginationWindow=hold;
                 
-                    //START&&&&&&&&&&&&&&& [this placement of script is temporay] initialize items perpage
-                    $('.PaginationItemsPerPageContainer input').val(TempViewSettings.Pagination.ItemsPerPage);
-                    $('.PaginationItemsPerPageContainer input').on('click', function() {
-                        $(this).val('');
-                      });
-                      $('.PaginationItemsPerPage input').on('mouseleave', function() {
-                        if ($(this).val() == '') {
-                          $(this).val(TempViewSettings.Pagination.ItemsPerPage);
-                        }
-                      });
-                    //END&&&&&&&&&&&&&&&
+
                 }
                 
                 
@@ -117,23 +110,56 @@
                 
                 
                 $scope.ListnerPageNav=function(e){//will listen to click event occur on Pagination Nav Buttons
+                    
+                    
+                    //calculate time difference b/w mouse down and up
+                    var ByPass;
+                    DiffTimer=new Date() - Timer                    
+                    //if greater than 500ms then goto eith first page or last page.
+                    if (DiffTimer>500){
+                       ByPass=1;
+                    }
+                    
+                    
+                    //Navigate Forward of Backward depending upon the key pressed.
                     if($(e.target).parents("li").hasClass("PaginationNavBack")){
-                        $scope.ActionPagNavBack();
+                        f=(ByPass==1)? $scope.ActionPagNavFirstPage():$scope.ActionPagNavBack();
+                       
                     }
                     else if ($(e.target).parents("li").hasClass("PaginationNavForward")){
-                        $scope.ActionPagNavForward();
+                        f=(ByPass==1)?$scope.ActionPagNavLastPage():$scope.ActionPagNavForward();
                     }
                 }
                 
                 
-                $scope.ActionPagNavForward=function(){
+                
+                
+                $scope.ListenerMouseDownTimer=function(){
+                    Timer= new Date();;
+                    
+                }
+                
+//                $scope.ListenerMouseUpTimer=function(){
+//                    DiffTimer=new Date() - Timer
+//                    
+//                    if (DiffTimer>500){
+//                        alert("start or stop")
+//                    }
+//                }
+                
+                $scope.ActionPagNavForward=function(e){
+                    
+                    //if current page is the last page then do nothing.
                     if ($scope.Pagination.CurrPage==$scope.Pagination.TotalPages){
                         return "Forward limit exceeds"; //return and do nothing
                     }
                     
+                    
+                    //if currnt page is the last page in pagination window; generate new pagination window starting from next page
                     if ($scope.Pagination.CurrPage==($scope.Pagination.PaginationWindow[$scope.Pagination.PagerLenght-1])){
                         $scope.Pagination.PaginationWindow=[];
                          for (i=0;i<$scope.Pagination.PagerLenght;i++){
+                             //if page no in window exceeds total pages then break the loop
                              if (($scope.Pagination.CurrPage+i+1)>$scope.Pagination.TotalPages){
                                  break;
                              }
@@ -148,20 +174,20 @@
                 
                 
                 
-                $scope.ActionPagNavBack=function(){
+                $scope.ActionPagNavBack=function(e){
+                    //if current page is the first page then do nothing.
                     if ($scope.Pagination.CurrPage==1){
                         return "Backward limit exceeds"; //return and do nothing
                     }
                     
                     
-                    //if Pagination window limit exceeds
+                    //if currnt page is the first page in pagination window; generate new pagination with previous page as last element
                     if ($scope.Pagination.CurrPage==($scope.Pagination.PaginationWindow[0])){
                         $scope.Pagination.PaginationWindow=[];
-                         for (i=($scope.Pagination.CurrPage-$scope.Pagination.PagerLenght);i<=$scope.Pagination.PagerLenght;i++){
-//                             if (($scope.Pagination.CurrPage+i)>$scope.Pagination.TotalPages){
-//                                 break;
-//                             }
-                            $scope.Pagination.PaginationWindow.push(i);
+                        var h=($scope.Pagination.CurrPage-$scope.Pagination.PagerLenght);
+                         for (i=0;i<$scope.Pagination.PagerLenght;i++){
+//                             
+                            $scope.Pagination.PaginationWindow.push(h+i);
                          }
                     }
                     
@@ -170,12 +196,42 @@
                     
                 }
                 
-                
+                $scope.ActionPagNavFirstPage=function(){
+                    var hold=[]
+                    
+                    //building paginaion window
+                    for (i=0;i<$scope.Pagination.PagerLenght;i++){
+                        hold.push(i+1);
+                    }
+                    $scope.Pagination.PaginationWindow=hold;
+                    $scope.Pagination.CurrPage=1;
+                    
+                    
+                    $scope.ActionLoadPage($scope.Pagination.CurrPage)
+                }
+                $scope.ActionPagNavLastPage=function(){
+                    var hold=[]
+                    
+                    var s=$scope.Pagination.TotalPages-$scope.Pagination.PagerLenght
+                    for (i=0;i<$scope.Pagination.PagerLenght;i++){
+                        hold.push(i+s+1);
+                    }
+                    $scope.Pagination.PaginationWindow=hold;
+                    $scope.Pagination.CurrPage=$scope.Pagination.TotalPages;
+                    
+                    
+                    $scope.ActionLoadPage($scope.Pagination.CurrPage)
+                    
+                }
                 
                 $scope.ActionLoadPage=function(PageNo){
                     console.log(PageNo)
                     return 0;
                 }
+                
+                
+ 
+                
             });
         //END Angular##########################################################################################################################
 
@@ -189,10 +245,15 @@
 
             //manual bootstrapping of PaginationComp and parts
             angular.bootstrap(document.querySelector(CompSelector), [AppName])//manual bootstrapping of PaginationComp
+
             CompPart.forEach(function(part,i){//bootstrapping parts   
                 angular.bootstrap(document.querySelector("[data-crud-comp='"+CompName+"-"+part+"'" ), [AppName])//manual bootstrapping of PaginationComp
             })
 
+            
+            $.getScript("../../views/ListView/Components/"+CompName+"/Parts/ItemsPerPage.js",function(){});
+
+    
         };
 
 
