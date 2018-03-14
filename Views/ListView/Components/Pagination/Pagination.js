@@ -60,7 +60,7 @@
 //                            }
 
 
-        Beat=function(){//core of  component
+        var Beat=function(){//core of  component
 
 
         //load corresponding css
@@ -228,6 +228,9 @@
                     console.log(PageNo)
                     return 0;
                 }
+                $scope.TestFuncOutside=function(){
+                            alert("a");
+                }
                 
                 
  
@@ -245,13 +248,13 @@
 
             //manual bootstrapping of PaginationComp and parts
             angular.bootstrap(document.querySelector(CompSelector), [AppName])//manual bootstrapping of PaginationComp
-
-            CompPart.forEach(function(part,i){//bootstrapping parts   
-                angular.bootstrap(document.querySelector("[data-crud-comp='"+CompName+"-"+part+"'" ), [AppName])//manual bootstrapping of PaginationComp
-            })
+            Register[CompName].Bootstrap=1;
+//            CompPart.forEach(function(part,i){//bootstrapping parts   
+//                angular.bootstrap(document.querySelector("[data-crud-comp='"+CompName+"-"+part+"'" ), [AppName])//manual bootstrapping of PaginationComp
+//            })
 
             
-            $.getScript("../../views/ListView/Components/"+CompName+"/Parts/ItemsPerPage.js",function(){});
+            //$.getScript("../../views/ListView/Components/"+CompName+"/Parts/ItemsPerPage.js",function(){});
 
     
         };

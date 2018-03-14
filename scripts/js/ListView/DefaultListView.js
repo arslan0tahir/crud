@@ -60,6 +60,7 @@
 
 var TemplateModel={};
 var DDPosition={};
+var Register={};
 var ListSettings={
 
                     ListName: "Students",
@@ -308,6 +309,10 @@ $(document).ready(function() {
     ListenerSearchBox();
     ListenerRowSelector();
 
+
+    Register["Pagination"]={};
+    Register["SearchList"]={};
+    Register["NewItemControl"]={};
     $('[data-crud-comp="NewItemControl"]' ).load( "../../views/ListView/Components/NewItemControl/NewItemControl.html");
     $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html");
     $('[data-crud-comp="Pagination"]' ).load( "../../views/ListView/Components/Pagination/Pagination.html");
