@@ -30,17 +30,21 @@
         CompSelector="."+CompName+"Comp";
         AppName=CompName+'App';
         CtrlName=CompName+'Ctrl';
-        //Component parts to be loaded
-        CompPart[0]="ItemsPerPage"; //e.g. Pagination-ItemsPerPage
-        CompPart[1]="PaginationSummary";
 
-
+        //RegisteringParts
+        Register[CompName]["ItemsPerPage"]={};
+        Register[CompName]["PaginationSummary"]={};
 
         //Loading Parts of This Component
-        CompPart.forEach(function(part,i){        
-            $("[data-crud-comp='"+CompName+"-"+part+"'" ).load( "../../views/ListView/Components/"+CompName+"/Parts/"+part+".html" );
-          //  $.getScript();
+        
+        $.each(Register[CompName],function(key,val){
+            $("[data-crud-comp='"+CompName+"-"+key+"'" ).load( "../../views/ListView/Components/"+CompName+"/Parts/"+key+".html" );
         })
+    
+//        Register[CompName].forEach(function(part,i){        
+//            $("[data-crud-comp='"+CompName+"-"+part+"'" ).load( "../../views/ListView/Components/"+CompName+"/Parts/"+part+".html" );
+//          //  $.getScript();
+//        })
 
 
 
@@ -71,13 +75,30 @@
             
             //START Angular##########################################################################################################################
             var app = angular.module(AppName, []);//e.g. PaginationApp
-            app.controller(CtrlName, function($scope) {
-                $scope.test="I AM IN";
+            app.service('PaginationSrv', function() {
+                this.Pagination = TempViewSettings.Pagination;
+                this.PaginationService = {};
+
+                this.set = function(Prop,Val) {
+                    this.Pagination[Prop]=Val;                 
+                };
+                
+                this.get = function(Prop) {
+                    return this.Pagination[Prop];
+                };
+
+                //return this.PaginationService;
+            });
+            app.controller(CtrlName, function($scope,PaginationSrv) {
+                
+     //           $scope.Pagination={};
+                Register[CompName].scope=$scope;
                 $scope.SyncPagFromGlobalScope=function(){
-                    $scope.Pagination=TempViewSettings.Pagination;
+                    
+                    $scope.Pagination=TempViewSettings.Pagination;//decalre obselete as obects are copied by refrence
                 }
                 $scope.SyncPagToGlobalScope=function(){
-                    TempViewSettings.Pagination=$scope.Pagination;
+                    TempViewSettings.Pagination=$scope.Pagination;//obselete as obects are copied by refrence
                 }
                 $scope.initialize1=function(){
                     $scope.SyncPagFromGlobalScope();
@@ -148,7 +169,8 @@
 //                }
                 
                 $scope.ActionPagNavForward=function(e){
-                    
+                    PaginationSrv.set("TotalItems",69);
+
                     //if current page is the last page then do nothing.
                     if ($scope.Pagination.CurrPage==$scope.Pagination.TotalPages){
                         return "Forward limit exceeds"; //return and do nothing
@@ -233,7 +255,7 @@
                 }
                 
                 
- 
+
                 
             });
         //END Angular##########################################################################################################################
@@ -249,6 +271,8 @@
             //manual bootstrapping of PaginationComp and parts
             angular.bootstrap(document.querySelector(CompSelector), [AppName])//manual bootstrapping of PaginationComp
             Register[CompName].Bootstrap=1;
+            
+            
 //            CompPart.forEach(function(part,i){//bootstrapping parts   
 //                angular.bootstrap(document.querySelector("[data-crud-comp='"+CompName+"-"+part+"'" ), [AppName])//manual bootstrapping of PaginationComp
 //            })
@@ -264,7 +288,7 @@
 
         var CHKLoading = setInterval(function() {
                                 if (CompAndPartsLoaded()) {
-                                    console.log(CompName+" Loaded With All Parts");
+                                    console.log("Loaded Successfully........"+CompName);
                                     clearInterval(CHKLoading);
                                     Beat();
                                 }                        

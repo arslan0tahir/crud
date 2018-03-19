@@ -59,6 +59,8 @@
 
 
 var TemplateModel={};
+var testScope={};
+var testScope1={};
 var DDPosition={};
 var Register={};
 var ListSettings={
@@ -309,7 +311,9 @@ $(document).ready(function() {
     ListenerSearchBox();
     ListenerRowSelector();
 
-
+    
+    
+    
     Register["Pagination"]={};
     Register["SearchList"]={};
     Register["NewItemControl"]={};
@@ -1015,3 +1019,28 @@ ActionSyncViewWihRowSelection=function(io){
     
     
 };
+
+CrossScopeCall =function(ScopeName,FuncName){
+    var Reg=Register;
+    var GetScope=function(Reg,func) {
+            
+            for (var i in Reg) {
+                if (i==ScopeName){
+                    return Reg[i].scope
+                }
+                //break recursion
+                
+                if (Reg[i] !== null && typeof(Reg[i])=="object") {
+                    //going one step down in the object tree!!
+                    GetScope(Reg[i],func);
+                }
+                else{
+                    return 0;
+                }
+            }
+        }
+    
+    var Scope=GetScope(Reg,function(){});
+    Scope[FuncName]();
+    Scope.$apply();   
+}

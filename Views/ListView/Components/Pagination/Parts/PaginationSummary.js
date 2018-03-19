@@ -7,44 +7,39 @@
 (function() {//avoid pollution of gloabl scope
         
         var CompName="Pagination";
-        var MyPart="ItemsPerPage"
+        var MyPart="PaginationSummary"
         var AppName=CompName+"App"
         var MyCompSelector="."+CompName+"Comp";
         var MyItem=CompName+"-"+MyPart;
         var MyItemSelector="."+CompName+"-"+MyPart;
-    
         var Beat=function(){
                 
             //##################temp
                 var app = angular.module(AppName);//e.g. PaginationApp
-                app.controller(CompName+"-"+MyPart+"Ctrl", function($scope) {
+                app.controller(CompName+"-"+MyPart+"Ctrl", function($scope,PaginationSrv) {
                     Register[CompName][MyPart].scope=$scope;
-                    $scope.Pagination=TempViewSettings.Pagination;
-                    $scope.initialize=function(){
-                                    $(MyItemSelector+' input').val($scope.Pagination.ItemsPerPage);
-                                    $(MyItemSelector+' input').on('click', function() {
-                                        $(this).val('');
-                                      });
-                                      $(MyItemSelector+' input').on('mouseleave', function() {
-                                        if ($(this).val() == '') {
-                                          $(this).val($scope.Pagination.ItemsPerPage);
-                                        }
-
-                                      });
+                    //$scope.TotalItems=$rootScope.Pagination.TotalItems;
+                    $scope.TotalItems=21;
+                     
+                     
+                    $scope.TotalItemsService=function(){
+                        return PaginationSrv.get("TotalItems");
                     }
-                    $scope.ListenerItemsPerPage=function(){
-                            CrossScopeCall("Pagination","ActionPagNavFirstPage")
-
-                    }
-                    //$scope.$watch("Pagination",function(v){alert("a");})
                     
-                })
+                    $scope.$watch("TotalItemsService()", function(newValue, oldValue) {
+                        if (newValue!=oldValue){
+                                $scope.TotalItems = newValue;
+                        }
+                        
+                      });
+
+               })
           
               angular.bootstrap(document.querySelector(MyItemSelector), [AppName])//manual bootstrapping of Parts
         }
         var CHKLoading = setInterval(function() {
                                 if ($(MyItemSelector).length) {
-                                    console.log("Loaded Successfully........"+MyItem);
+                                    console.log("Loaded Successfully........Pagination-PaginationSummary");
                                     clearInterval(CHKLoading);
                                     Beat();
                                 }                        
