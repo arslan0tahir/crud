@@ -76,7 +76,9 @@
             //START Angular##########################################################################################################################
             var app = angular.module(AppName, []);//e.g. PaginationApp
             app.service('PaginationSrv', function() {
+                var t=this;
                 this.Pagination = TempViewSettings.Pagination;
+                this.TotalItems = TempViewSettings.Pagination.TotalItems;
                 this.PaginationService = {};
 
                 this.set = function(Prop,Val) {
@@ -86,7 +88,13 @@
                 this.get = function(Prop) {
                     return this.Pagination[Prop];
                 };
-
+                setTimeout(function(){
+                    var test=function(){
+                                           t.Pagination.TotalItems=65
+                                            console.log('updated');
+                    }
+                    test();
+                }, 1000,t);
                 //return this.PaginationService;
             });
             app.controller(CtrlName, function($scope,PaginationSrv) {
@@ -169,8 +177,8 @@
 //                }
                 
                 $scope.ActionPagNavForward=function(e){
-                    PaginationSrv.set("TotalItems",69);
-
+                    PaginationSrv.Pagination.TotalItems=69;
+                    $scope.aa= PaginationSrv.Pagination.TotalItems;
                     //if current page is the last page then do nothing.
                     if ($scope.Pagination.CurrPage==$scope.Pagination.TotalPages){
                         return "Forward limit exceeds"; //return and do nothing

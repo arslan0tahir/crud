@@ -19,19 +19,22 @@
                 app.controller(CompName+"-"+MyPart+"Ctrl", function($scope,PaginationSrv) {
                     Register[CompName][MyPart].scope=$scope;
                     //$scope.TotalItems=$rootScope.Pagination.TotalItems;
+                    
                     $scope.TotalItems=21;
-                     
-                     
+                    $scope.test1="I am working";
                     $scope.TotalItemsService=function(){
-                        return PaginationSrv.get("TotalItems");
+                        $scope.TotalItems=PaginationSrv.get("TotalItems");
+                        return $scope.TotalItems;
                     }
                     
-                    $scope.$watch("TotalItemsService()", function(newValue, oldValue) {
-                        if (newValue!=oldValue){
-                                $scope.TotalItems = newValue;
-                        }
-                        
-                      });
+                    $scope.TotalItems = $scope.TotalItemsService();
+
+//                    $scope.$watch("TotalItemsService()", function(newValue, oldValue) {
+//                        if (newValue!=oldValue){
+//                                $scope.TotalItems = newValue;
+//                        }
+//                        
+//                    });
 
                })
           
