@@ -62,7 +62,35 @@ var TemplateModel={};
 var testScope={};
 var testScope1={};
 var DDPosition={};
-var Register={};
+var Register={
+    
+        set:function(prop,val){       
+            var hold=[];
+            var Target;
+            
+            hold=prop.split(".")
+            
+            hold.forEach(function(i){
+                if(i==0){
+                    Target=hold[0]
+                }
+                else{
+                    Target=Target[hold[i]] || {};
+                }
+                
+           })
+        },    
+        get:function(prop){
+
+        },
+};
+
+
+
+
+
+
+
 var ListSettings={
 
                     ListName: "Students",
