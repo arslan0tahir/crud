@@ -70,13 +70,30 @@ var Register={
             
             hold=prop.split(".")
             
-            hold.forEach(function(i){
+            hold.forEach(function(v,i){
                 if(i==0){
-                    Target=hold[0]
+                    Target=Register[hold[0]]
                 }
                 else{
-                    Target=Target[hold[i]] || {};
+                    if (Target[hold[i]]&&(i!=(hold.length-1))){
+                        Target=Target[hold[i]]
+                    }
+                    else if(i==(hold.length-1)){
+                        if (typeof Target[hold[i]] != "object"){
+                            Target[hold[i]]=val 
+                        }
+                        else{
+                            console.log("CRUD: Modification of Object is Prohibited")
+                        }
+                        
+                    }
+                    
+ 
                 }
+                
+//                if(i==(hold.length-1)){
+//                    Target=val
+//                }
                 
            })
         },    
