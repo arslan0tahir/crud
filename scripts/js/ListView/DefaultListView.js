@@ -63,7 +63,7 @@ var testScope={};
 var testScope1={};
 var DDPosition={};
 var Register={
-    
+        
         set:function(prop,val){       
             var hold=[];
             var Target;
@@ -87,6 +87,9 @@ var Register={
                         }
                         
                     }
+                    else {
+                        r
+                    }
                     
  
                 }
@@ -96,7 +99,30 @@ var Register={
 //                }
                 
            })
-        },    
+        }, 
+        apply:function(root){
+                
+
+                for (var prop in root) {
+                    
+//                    if (prop==ScopeName){
+//                        return 
+//                    }
+                    //break recursion
+                                                                     
+                    if (root[prop] !== null && typeof(root[prop])=="object") {
+                        //going one step down in the object tree!!
+                        console.log(prop);
+                        root[prop].scope.apply();
+                        this.apply(root[prop]);
+                    }
+                    else{
+                        return 0;
+                    }
+                }
+                
+            
+        },
         get:function(prop){
 
         },
