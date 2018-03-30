@@ -62,71 +62,7 @@ var TemplateModel={};
 var testScope={};
 var testScope1={};
 var DDPosition={};
-var Register={
-        
-        set:function(prop,val){       
-            var hold=[];
-            var Target;
-            
-            hold=prop.split(".")
-            
-            hold.forEach(function(v,i){
-                if(i==0){
-                    Target=Register[hold[0]]
-                }
-                else{
-                    if (Target[hold[i]]&&(i!=(hold.length-1))){
-                        Target=Target[hold[i]]
-                    }
-                    else if(i==(hold.length-1)){
-                        if (typeof Target[hold[i]] != "object"){
-                            Target[hold[i]]=val 
-                        }
-                        else{
-                            console.log("CRUD: Modification of Object is Prohibited")
-                        }
-                        
-                    }
-                    else {
-                        r
-                    }
-                    
- 
-                }
-                
-//                if(i==(hold.length-1)){
-//                    Target=val
-//                }
-                
-           })
-        }, 
-        apply:function(root){
-                
 
-                for (var prop in root) {
-                    
-//                    if (prop==ScopeName){
-//                        return 
-//                    }
-                    //break recursion
-                                                                     
-                    if (root[prop] !== null && typeof(root[prop])=="object") {
-                        //going one step down in the object tree!!
-                        console.log(prop);
-                        root[prop].scope.apply();
-                        this.apply(root[prop]);
-                    }
-                    else{
-                        return 0;
-                    }
-                }
-                
-            
-        },
-        get:function(prop){
-
-        },
-};
 
 
 
@@ -188,6 +124,10 @@ var TempViewSettings=   {
                           * --TempViewSettings will send as ajax queries to the server 
                           *
                           *contained in this object.
+                          *
+                          *
+                          *
+                          *--Each comppponent will have corresponding object in TempViewSettings
                           */ 
                             RenderSr            : 1,
                             ColumnsWithOrder    : "RISTRICTED",
@@ -243,7 +183,8 @@ var TempViewSettings=   {
                                     PagerLenght         :   5,  //if 5 then <Previos  1-5 Next>
                                     TotalItems          :   20,    //total items of query
                                     PaginationWindow    :  []
-                            }
+                            },
+                            NewItemControl: {}
 //                                                              {
 //                                                             
 //                                                                  13          :{
@@ -329,6 +270,82 @@ var ListData= {
                                     }
                             ]
             }
+
+
+
+var Register={
+    // this obejct will hold the herarichy of compnents and their scopes.
+    // Settings child obect will point to TempViewSettings and which hold associated settings of components
+        Settings:TempViewSettings,//point to TempViewSettings
+        set:function(prop,val){ //it will set the global TempViewSettings props and will apply it to itself associated registeres child scopes.      
+            var hold=[];
+            var Target;
+            var CompStruct="" // hold comp name 
+            
+            
+            hold=prop.split(".")
+            
+            hold.forEach(function(v,i){ //traverse nested key e.g. Pagination.Render.ItemsPerPage 
+                if(i==0){
+                    Target=Register.Settings[hold[0]]
+                    CompStruct=Register[hold[0]];
+                }
+                else{
+                    if (Target[hold[i]]&&(i!=(hold.length-1))){
+                        Target=Target[hold[i]]
+                    }
+                    else if(i==(hold.length-1)){
+                        if (typeof Target[hold[i]] != "object"){
+                            Target[hold[i]]=val 
+                        }
+                        else{
+                            console.log("CRUD: Modification of Object is Prohibited")
+                        }
+                        
+                    }
+                    else {
+                        
+                    }
+                    
+ 
+                }
+                
+//                if(i==(hold.length-1)){
+//                    Target=val
+//                }
+                
+           })
+           this.apply(CompStruct)
+        }, 
+        apply:function(root){  //call angular.$applly to all nested comps
+                var f=!root.scope.$$phase? root.scope.$apply():'';
+                for (var prop in root) {
+                    
+//                    if (prop==ScopeName){
+//                        return 
+//                    }
+                    //break recursion
+                                                                     
+                    if (root[prop] !== null && typeof(root[prop])=="object" && prop!="scope") {
+                        //going one step down in the object tree!!
+                        console.log(prop);
+                        root[prop].scope.$apply();
+                        if (!root.scope.$$phase){
+                            this.apply(root[prop]);
+                        }
+                        
+                    }
+                    else{
+                        //return 0;
+                    }
+                }
+                
+            
+        },
+        get:function(prop){
+
+        },
+};
 
 
 

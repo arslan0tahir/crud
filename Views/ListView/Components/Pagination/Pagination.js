@@ -75,32 +75,56 @@
             
             //START Angular##########################################################################################################################
             var app = angular.module(AppName, []);//e.g. PaginationApp
-            app.service('PaginationSrv', function() {
-                var t=this;
-                this.Pagination = TempViewSettings.Pagination;
-                this.TotalItems = TempViewSettings.Pagination.TotalItems;
-                this.PaginationService = {};
-
-                this.set = function(Prop,Val) {
-                    this.Pagination[Prop]=Val;                 
-                };
-                
-                this.get = function(Prop) {
-                    return this.Pagination[Prop];
-                };
-                setTimeout(function(){
-                    var test=function(){
-                                           t.Pagination.TotalItems=65
-                                            console.log('updated');
-                    }
-                    test();
-                }, 1000,t);
-                //return this.PaginationService;
-            });
-            app.controller(CtrlName, function($scope,PaginationSrv) {
+//            app.service('PaginationSrv', function() {
+//                var t=this;
+//                this.Pagination = TempViewSettings.Pagination;
+//                this.TotalItems = TempViewSettings.Pagination.TotalItems;
+//                this.PaginationService = {};
+//
+//                this.set = function(Prop,Val) {
+//                    this.Pagination[Prop]=Val;                 
+//                };
+//                
+//                this.get = function(Prop) {
+//                    return this.Pagination[Prop];
+//                };
+//                setTimeout(function(){
+//                    var test=function(){
+//                                           t.Pagination.TotalItems=65
+//                                            console.log('updated');
+//                    }
+//                    test();
+//                }, 1000,t);
+//                //return this.PaginationService;
+//            });
+            app.controller(CtrlName, function($scope,$timeout) {
                 
      //           $scope.Pagination={};
                 Register[CompName].scope=$scope;
+                
+                
+                
+                
+                
+                a=0;
+                $scope.$watch(function(){
+                    a++
+                    console.log("gg"+a)
+                })
+                $scope.$$postDigest(function(){
+                    console.log("pagination digest")
+                });
+                $timeout(function(){
+                    console.log("post Digest with $timeout");
+                },0,false);
+                
+                
+                
+                
+                
+                
+                
+                $scope.Pagination=TempViewSettings.Pagination;
                 $scope.SyncPagFromGlobalScope=function(){
                     
                     $scope.Pagination=TempViewSettings.Pagination;//decalre obselete as obects are copied by refrence
@@ -135,6 +159,9 @@
                 $scope.ListnerPageNo=function(e){//will listen to click event occur within pagination window
                     $scope.Pagination.CurrPage=parseInt($(e.target).html());
                     $scope.ActionLoadPage($scope.Pagination.CurrPage);
+                    
+                    //apply chnages to all nested angular comps and parts.
+                    Register.apply(Register.Pagination);
                 }
                 
                 
@@ -158,6 +185,10 @@
                     else if ($(e.target).parents("li").hasClass("PaginationNavForward")){
                         f=(ByPass==1)?$scope.ActionPagNavLastPage():$scope.ActionPagNavForward();
                     }
+                    
+                    
+                    //apply chnages to all nested angular comps and parts.
+                    Register.apply(Register.Pagination);
                 }
                 
                 
@@ -177,8 +208,6 @@
 //                }
                 
                 $scope.ActionPagNavForward=function(e){
-                    PaginationSrv.Pagination.TotalItems=69;
-                    $scope.aa= PaginationSrv.Pagination.TotalItems;
                     //if current page is the last page then do nothing.
                     if ($scope.Pagination.CurrPage==$scope.Pagination.TotalPages){
                         return "Forward limit exceeds"; //return and do nothing

@@ -16,25 +16,12 @@
                 
             //##################temp
                 var app = angular.module(AppName);//e.g. PaginationApp
-                app.controller(CompName+"-"+MyPart+"Ctrl", function($scope,PaginationSrv) {
+                app.controller(CompName+"-"+MyPart+"Ctrl", function($scope) {
                     Register[CompName][MyPart].scope=$scope;
+                    $scope.Pagination=TempViewSettings.Pagination;
                     //$scope.TotalItems=$rootScope.Pagination.TotalItems;
                     
-                    $scope.TotalItems=21;
-                    $scope.test1="I am working";
-                    $scope.TotalItemsService=function(){
-                        $scope.TotalItems=PaginationSrv.get("TotalItems");
-                        return $scope.TotalItems;
-                    }
-                    
-                    $scope.TotalItems = $scope.TotalItemsService();
-
-//                    $scope.$watch("TotalItemsService()", function(newValue, oldValue) {
-//                        if (newValue!=oldValue){
-//                                $scope.TotalItems = newValue;
-//                        }
-//                        
-//                    });
+//                    $scope.TotalItems = $scope.TotalItemsService();
 
                })
           
