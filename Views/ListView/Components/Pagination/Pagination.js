@@ -102,30 +102,8 @@
      //           $scope.Pagination={};
                 Register[CompName].scope=$scope;
                 
-                
-                
-                
-                
-                a=0;
-                $scope.$watch(function(){
-                    a++
-                    console.log("gg"+a)
-                })
-                $scope.$$postDigest(function(){
-                    console.log("pagination digest")
-                });
-                $timeout(function(){
-                    console.log("post Digest with $timeout");
-                },0,false);
-                
-                
-                
-                
-                
-                
-                
                 $scope.Pagination=TempViewSettings.Pagination;
-                $scope.SyncPagFromGlobalScope=function(){
+               $scope.SyncPagFromGlobalScope=function(){
                     
                     $scope.Pagination=TempViewSettings.Pagination;//decalre obselete as obects are copied by refrence
                 }
@@ -161,7 +139,7 @@
                     $scope.ActionLoadPage($scope.Pagination.CurrPage);
                     
                     //apply chnages to all nested angular comps and parts.
-                    Register.apply(Register.Pagination);
+                    //Register.apply(Register.Pagination);
                 }
                 
                 
@@ -186,9 +164,9 @@
                         f=(ByPass==1)?$scope.ActionPagNavLastPage():$scope.ActionPagNavForward();
                     }
                     
-                    
+                      
                     //apply chnages to all nested angular comps and parts.
-                    Register.apply(Register.Pagination);
+                    //Register.apply(Register.Pagination);
                 }
                 
                 
@@ -292,6 +270,21 @@
                 }
                 
                 
+                //     [[this chuck conains post digest routines 
+                var hold=1;
+                $scope.$watch(function(){
+                    if (hold){
+                        hold=0
+                        $scope.$$postDigest(function(){
+                            hold=1;
+                            var xyz=Register.apply([Register[CompName],0,CompName,CompName]);//propagate $apply from root component
+                            console.log(xyz)
+                        });
+                    }
+//                    a++
+//                    console.log("gg"+a)
+                    
+                })//    ]]
 
                 
             });

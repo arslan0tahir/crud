@@ -277,6 +277,7 @@ var Register={
     // this obejct will hold the herarichy of compnents and their scopes.
     // Settings child obect will point to TempViewSettings and which hold associated settings of components
         Settings:TempViewSettings,//point to TempViewSettings
+        Applying: {},
         set:function(prop,val){ //it will set the global TempViewSettings props and will apply it to itself associated registeres child scopes.      
             var hold=[];
             var Target;
@@ -317,10 +318,33 @@ var Register={
            })
            this.apply(CompStruct)
         }, 
-        apply:function(root){  //call angular.$applly to all nested comps
-                var f=!root.scope.$$phase? root.scope.$apply():'';
+        apply:function(param){  //call angular.$applly to all nested comps
+            //para is array 
+            //[
+            //0     object      (i.e root object form where $apply in initiated and propogated),
+            //1     bool        if 1 $apply cycle is also applied on root otherwise its only propagated to children  
+            //2     string      hold name of current comp/part and exclude it form manual $apply cycle. 
+            //3     string      hold name of root comp     
+            //]
+            //
+                if (this.Applying[param[3]]){
+                    return "Called By"+param[2]+"Request failed--";
+                }
+                this.Applying[param[3]]=1;
+                
+                var root=param[0];
+                
+                                                             
+                if (param[1] && typeof root.scope=='object'){
+                    var f=!root.scope.$$phase? root.scope.$apply():'';
+                }
                 for (var prop in root) {
                     
+                    
+                    
+                    if (typeof root[prop].scope!='object' || prop==param[2]){
+                        continue;//true if scope has not bootstrapped yet or manually excluded
+                    }
 //                    if (prop==ScopeName){
 //                        return 
 //                    }
@@ -328,7 +352,7 @@ var Register={
                                                                      
                     if (root[prop] !== null && typeof(root[prop])=="object" && prop!="scope") {
                         //going one step down in the object tree!!
-                        console.log(prop);
+                        //console.log(prop);
                         root[prop].scope.$apply();
                         if (!root.scope.$$phase){
                             this.apply(root[prop]);
@@ -339,8 +363,9 @@ var Register={
                         //return 0;
                     }
                 }
-                
-            
+               
+            this.Applying[param[3]]=0;
+            return "Called By"+param[2]+" Applied--";
         },
         get:function(prop){
 
