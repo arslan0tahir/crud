@@ -173,7 +173,7 @@
                 
                 
                 $scope.ListenerMouseDownTimer=function(){
-                    Timer= new Date();;
+                    Timer= new Date();
                     
                 }
                 
@@ -245,6 +245,8 @@
                     
                     
                     $scope.ActionLoadPage($scope.Pagination.CurrPage)
+                    
+                    alert(arguments.callee.caller.name);
                 }
                 $scope.ActionPagNavLastPage=function(){
                     var hold=[]
@@ -270,21 +272,7 @@
                 }
                 
                 
-                //     [[this chuck conains post digest routines 
-                var hold=1;
-                $scope.$watch(function(){
-                    if (hold){
-                        hold=0
-                        $scope.$$postDigest(function(){
-                            hold=1;
-                            var xyz=Register.apply([Register[CompName],0,CompName,CompName]);//propagate $apply from root component
-                            console.log(xyz)
-                        });
-                    }
-//                    a++
-//                    console.log("gg"+a)
-                    
-                })//    ]]
+                
 
                 
             });

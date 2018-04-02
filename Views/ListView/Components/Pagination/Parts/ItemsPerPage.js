@@ -39,21 +39,6 @@
                     //$scope.$watch("Pagination",function(v){alert("a");})
                     
                     
-                    //     [[this chuck conains post digest routines 
-                var hold=1;
-                $scope.$watch(function(){
-                    if (hold){
-                        hold=0
-                        $scope.$$postDigest(function(){
-                            hold=1;
-                            var xyz=Register.apply([Register[CompName],0,MyPart,CompName]);//propagate $apply from root component
-                            console.log(xyz)
-                        });
-                    }
-//                    a++
-//                    console.log("gg"+a)
-                    
-                })//    ]]
                 })
           
               angular.bootstrap(document.querySelector(MyItemSelector), [AppName])//manual bootstrapping of Parts

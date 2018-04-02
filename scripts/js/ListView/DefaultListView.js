@@ -327,10 +327,7 @@ var Register={
             //3     string      hold name of root comp     
             //]
             //
-                if (this.Applying[param[3]]){
-                    return "Called By"+param[2]+"Request failed--";
-                }
-                this.Applying[param[3]]=1;
+                
                 
                 var root=param[0];
                 
@@ -364,12 +361,15 @@ var Register={
                     }
                 }
                
-            this.Applying[param[3]]=0;
-            return "Called By"+param[2]+" Applied--";
+            
+            
         },
         get:function(prop){
 
         },
+        propagateChanges:function(Comp){
+            this.apply(Register[Comp]);
+        }
 };
 
 
