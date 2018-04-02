@@ -1148,7 +1148,7 @@ CrossScopeCall =function(ScopeName,FuncName){
                     GetScope(Reg[i],func);
                 }
                 else{
-                    return 0;
+                    //return 0;
                 }
             }
         }
