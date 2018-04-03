@@ -11,7 +11,13 @@
  * and open the template in the editor.
  */
 
-
+//three type of functions exists]
+//
+//Listner______________
+//Actions______________
+//Helpers______________
+//
+//
 
 
 (function() {//avoid pollution of gloabl scope
@@ -32,12 +38,12 @@
         CtrlName=CompName+'Ctrl';
 
         //RegisteringParts
-        Register[CompName]["ItemsPerPage"]={};
-        Register[CompName]["PaginationSummary"]={};
+        Register.Tree[CompName]["ItemsPerPage"]={};
+        Register.Tree[CompName]["PaginationSummary"]={};
 
         //Loading Parts of This Component
         
-        $.each(Register[CompName],function(key,val){
+        $.each(Register.Tree[CompName],function(key,val){
             $("[data-crud-comp='"+CompName+"-"+key+"'" ).load( "../../views/ListView/Components/"+CompName+"/Parts/"+key+".html" );
         })
     
@@ -100,9 +106,10 @@
             app.controller(CtrlName, function($scope,$timeout) {
                 
      //           $scope.Pagination={};
-                Register[CompName].scope=$scope;
+                Register.Tree[CompName].scope=$scope;
                 
-                $scope.Pagination=TempViewSettings.Pagination;
+               
+               $scope.Pagination=TempViewSettings.Pagination;
                $scope.SyncPagFromGlobalScope=function(){
                     
                     $scope.Pagination=TempViewSettings.Pagination;//decalre obselete as obects are copied by refrence
@@ -135,11 +142,10 @@
                 
                 
                 $scope.ListnerPageNo=function(e){//will listen to click event occur within pagination window
-                    $scope.Pagination.CurrPage=parseInt($(e.target).html());
+                    $scope.ActionGotoPage(parseInt($(e.target).html()))
                     $scope.ActionLoadPage($scope.Pagination.CurrPage);
                     
-                    //apply chnages to all nested angular comps and parts.
-                    //Register.apply(Register.Pagination);
+                    //Register.propagateChanges(CompName,arguments.callee.caller.name)  
                 }
                 
                 
@@ -164,9 +170,7 @@
                         f=(ByPass==1)?$scope.ActionPagNavLastPage():$scope.ActionPagNavForward();
                     }
                     
-                      
-                    //apply chnages to all nested angular comps and parts.
-                    //Register.apply(Register.Pagination);
+                    //Register.propagateChanges(CompName,arguments.callee.caller.name)                 
                 }
                 
                 
@@ -184,6 +188,12 @@
 //                        alert("start or stop")
 //                    }
 //                }
+                
+                $scope.ActionGotoPage=function(num){
+                    $scope.Pagination.CurrPage=num;   
+                    
+                    Register.propagateChanges([Register.Tree[CompName],0,CompName,CompName],arguments.callee.caller.name);
+                }
                 
                 $scope.ActionPagNavForward=function(e){
                     //if current page is the last page then do nothing.
@@ -206,6 +216,9 @@
                     
                     $scope.Pagination.CurrPage++;
                     $scope.ActionLoadPage($scope.Pagination.CurrPage);
+                    
+                    
+                    Register.propagateChanges([Register.Tree[CompName],0,CompName,CompName],arguments.callee.caller.name);
                 }
                 
                 
@@ -231,6 +244,8 @@
                     $scope.Pagination.CurrPage--;
                     $scope.ActionLoadPage($scope.Pagination.CurrPage);
                     
+                    
+                    Register.propagateChanges([Register.Tree[CompName],0,CompName,CompName],arguments.callee.caller.name);
                 }
                 
                 $scope.ActionPagNavFirstPage=function(){
@@ -246,21 +261,22 @@
                     
                     $scope.ActionLoadPage($scope.Pagination.CurrPage)
                     
-                    alert(arguments.callee.caller.name);
+                    Register.propagateChanges([Register.Tree[CompName],0,CompName,CompName],arguments.callee.caller.name);
                 }
                 $scope.ActionPagNavLastPage=function(){
                     var hold=[]
                     
-                    var s=$scope.Pagination.TotalPages-$scope.Pagination.PagerLenght
-                    for (i=0;i<$scope.Pagination.PagerLenght;i++){
+                    var limit=$scope.Pagination.TotalPages%$scope.Pagination.PagerLenght;
+                    var s=$scope.Pagination.TotalPages-limit;
+                    for (i=0;i<limit;i++){
                         hold.push(i+s+1);
                     }
                     $scope.Pagination.PaginationWindow=hold;
-                    $scope.Pagination.CurrPage=$scope.Pagination.TotalPages;
-                    
-                    
+                    $scope.Pagination.CurrPage=$scope.Pagination.TotalPages;                   
                     $scope.ActionLoadPage($scope.Pagination.CurrPage)
                     
+                    
+                    Register.propagateChanges([Register.Tree[CompName],0,CompName,CompName],arguments.callee.caller.name);
                 }
                 
                 $scope.ActionLoadPage=function(PageNo){
@@ -288,7 +304,6 @@
 
             //manual bootstrapping of PaginationComp and parts
             angular.bootstrap(document.querySelector(CompSelector), [AppName])//manual bootstrapping of PaginationComp
-            Register[CompName].Bootstrap=1;
             
             
 //            CompPart.forEach(function(part,i){//bootstrapping parts   

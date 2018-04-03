@@ -17,11 +17,10 @@
             //##################temp
                 var app = angular.module(AppName);//e.g. PaginationApp
                 app.controller(CompName+"-"+MyPart+"Ctrl", function($scope) {
-                    Register[CompName][MyPart].scope=$scope;
-                    $scope.Pagination=TempViewSettings.Pagination;
-                    //$scope.TotalItems=$rootScope.Pagination.TotalItems;
+                    Register.Tree[CompName][MyPart].scope=$scope;
                     
-//                    $scope.TotalItems = $scope.TotalItemsService();
+                    $scope.Pagination=TempViewSettings.Pagination;
+
 
                })
           

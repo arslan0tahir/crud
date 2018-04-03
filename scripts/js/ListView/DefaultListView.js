@@ -278,6 +278,7 @@ var Register={
     // Settings child obect will point to TempViewSettings and which hold associated settings of components
         Settings:TempViewSettings,//point to TempViewSettings
         Applying: {},
+        Tree:{},
         set:function(prop,val){ //it will set the global TempViewSettings props and will apply it to itself associated registeres child scopes.      
             var hold=[];
             var Target;
@@ -309,12 +310,7 @@ var Register={
                     }
                     
  
-                }
-                
-//                if(i==(hold.length-1)){
-//                    Target=val
-//                }
-                
+                }              
            })
            this.apply(CompStruct)
         }, 
@@ -367,9 +363,37 @@ var Register={
         get:function(prop){
 
         },
-        propagateChanges:function(Comp){
-            this.apply(Register[Comp]);
-        }
+        propagateChanges:function(param,Caller){
+            if (Caller!="csc"){
+                this.apply(param);
+            }
+        },
+        csc:function(ScopeName,FuncName){//cross scope call
+            var Reg=Register.Tree;
+            var GetScope=function(Reg,func) {
+
+                    for (var i in Reg) {
+                        if (i==ScopeName){
+                            return Reg[i].scope
+                        }
+                        //break recursion
+
+                        if (Reg[i] !== null && typeof(Reg[i])=="object") {
+                            //going one step down in the object tree!!
+                            GetScope(Reg[i],func);
+                        }
+                        else{
+                            return 0;
+                        }
+                    }
+                }
+
+            var Scope=GetScope(Reg,function(){});
+            Scope[FuncName]();
+            Scope.$apply();   
+        },
+        
+        
 };
 
 
@@ -427,9 +451,9 @@ $(document).ready(function() {
     
     
     
-    Register["Pagination"]={};
-    Register["SearchList"]={};
-    Register["NewItemControl"]={};
+    Register.Tree["Pagination"]={};
+    Register.Tree["SearchList"]={};
+    Register.Tree["NewItemControl"]={};
     $('[data-crud-comp="NewItemControl"]' ).load( "../../views/ListView/Components/NewItemControl/NewItemControl.html");
     $('[data-crud-comp="SearchList"]' ).load( "../../views/ListView/Components/SearchList/SearchList.html");
     $('[data-crud-comp="Pagination"]' ).load( "../../views/ListView/Components/Pagination/Pagination.html");
@@ -1133,27 +1157,4 @@ ActionSyncViewWihRowSelection=function(io){
     
 };
 
-CrossScopeCall =function(ScopeName,FuncName){
-    var Reg=Register;
-    var GetScope=function(Reg,func) {
-            
-            for (var i in Reg) {
-                if (i==ScopeName){
-                    return Reg[i].scope
-                }
-                //break recursion
-                
-                if (Reg[i] !== null && typeof(Reg[i])=="object") {
-                    //going one step down in the object tree!!
-                    GetScope(Reg[i],func);
-                }
-                else{
-                    return 0;
-                }
-            }
-        }
-    
-    var Scope=GetScope(Reg,function(){});
-    Scope[FuncName]();
-    Scope.$apply();   
-}
+

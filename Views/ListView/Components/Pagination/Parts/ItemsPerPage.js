@@ -18,7 +18,9 @@
             //##################temp
                 var app = angular.module(AppName);//e.g. PaginationApp
                 app.controller(CompName+"-"+MyPart+"Ctrl", function($scope) {
-                    Register[CompName][MyPart].scope=$scope;
+                    
+                    Register.Tree[CompName][MyPart].scope=$scope;
+                    
                     $scope.Pagination=TempViewSettings.Pagination;
                     $scope.initialize=function(){
                                     $(MyItemSelector+' input').val($scope.Pagination.ItemsPerPage);
@@ -33,11 +35,15 @@
                                       });
                     }
                     $scope.ListenerItemsPerPage=function(){
-                            CrossScopeCall("Pagination","ActionPagNavFirstPage")
-
+                            Register.csc("Pagination","ActionPagNavFirstPage")
+                            $scope.ActionItemsPerPage();
+                            
                     }
                     //$scope.$watch("Pagination",function(v){alert("a");})
-                    
+                    $scope.ActionItemsPerPage=function(){
+                            
+                            Register.propagateChanges([Register.Tree[CompName],0,MyPart,CompName],arguments.callee.caller.name);
+                    }
                     
                 })
           
