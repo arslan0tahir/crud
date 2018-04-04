@@ -1,5 +1,5 @@
  <script src="Components/Pagination/Parts/PaginationSummary.js"></script>
                       
 <div data-ng-controller="Pagination-PaginationSummaryCtrl" class="Pagination-PaginationSummary">
-    <div>Showing <span class="ShownItems">{{(Pagination.CurrPage*Pagination.ItemsPerPage)-Pagination.ItemsPerPage+1}} to {{(Pagination.CurrPage*Pagination.ItemsPerPage)}}</span> of <span class="" >{{Pagination.TotalItems}}</span></div>{{test1}}
+    <div>Showing <span class="ShownItems">{{(Pagination.CurrPage*Pagination.ItemsPerPage)-Pagination.ItemsPerPage+1}} to {{HelperLastItemOnPage()}}</span>  of <span class="" >{{Pagination.TotalItems}}</span> items</div> 
 </div>

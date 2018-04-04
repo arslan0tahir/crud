@@ -35,6 +35,7 @@
                                       });
                     }
                     $scope.ListenerItemsPerPage=function(){
+                            Register.csc("Pagination","HelperCalcPages")
                             Register.csc("Pagination","ActionPagNavFirstPage")
                             $scope.ActionItemsPerPage();
                             

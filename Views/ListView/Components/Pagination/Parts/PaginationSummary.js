@@ -17,10 +17,22 @@
             //##################temp
                 var app = angular.module(AppName);//e.g. PaginationApp
                 app.controller(CompName+"-"+MyPart+"Ctrl", function($scope) {
+                    
                     Register.Tree[CompName][MyPart].scope=$scope;
                     
+                    
+                    $scope.PageLastItem=0;
+                    $scope.PageFirstItem=0;
                     $scope.Pagination=TempViewSettings.Pagination;
-
+                    $scope.HelperLastItemOnPage=function(){
+                            $scope.PageLastItem=$scope.Pagination.CurrPage*$scope.Pagination.ItemsPerPage;
+                            if ($scope.PageLastItem>$scope.Pagination.TotalItems){
+                               $scope.PageLastItem=$scope.Pagination.TotalItems;
+                               
+                            }
+                            return $scope.PageLastItem;
+                            
+                    }
 
                })
           

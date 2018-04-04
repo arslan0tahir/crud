@@ -129,13 +129,14 @@ var TempViewSettings=   {
                           *
                           *--Each comppponent will have corresponding object in TempViewSettings
                           */ 
-                            RenderSr            : 1,
-                            ColumnsWithOrder    : "RISTRICTED",
-                            RowOrderBy          : "DEFAULT",
-                            GroupSortEnable     : 0,
-                            GroupSortColumns    : [],
-                            GroupSortOrder      : "Ascending", //Ascending/Descending
-                            SearchListComp      :{
+                            RenderSr                : 1,
+                            ColumnsWithOrder        : "RISTRICTED",
+                            FormColumnsWithOrder    : "",         //if empty then populate it with data from Columns with order otherwise   
+                            RowOrderBy              : "DEFAULT",
+                            GroupSortEnable         : 0,
+                            GroupSortColumns        : [],
+                            GroupSortOrder          : "Ascending", //Ascending/Descending
+                            SearchListComp          :{
                                     
                                     
                                     Render:{
@@ -167,10 +168,8 @@ var TempViewSettings=   {
                                     AllSelectedAbs      : 0,//holds 1 if all all rows in a db are selected
                                     SelectedRows        : [],//contains selected
                                     HoldUnSelectedRows  : [],//hold unselcted rows. Reinitialized after updating view.  
-                                
-                                
                             },
-                            Pagination          :{
+                            Pagination :{
                                     
                                     Render:{
                                         DisplayModule   :   1,
@@ -185,12 +184,6 @@ var TempViewSettings=   {
                                     PaginationWindow    :  []
                             },
                             NewItemControl: {}
-//                                                              {
-//                                                             
-//                                                                  13          :{
-//                                                                                     "SortOrder": "Ascending" //Ascending/Descending
-//                                                                                },
-//                                                              }      
 
                         }
 

@@ -118,18 +118,24 @@
                     TempViewSettings.Pagination=$scope.Pagination;//obselete as obects are copied by refrence
                 }
                 $scope.initialize1=function(){
-                    $scope.SyncPagFromGlobalScope();
+
                     var hold=[]
                     
+                    
+                    $scope.HelperCalcPages();
                     //building paginaion window
                     for (i=0;i<$scope.Pagination.PagerLenght;i++){
+                        if (i==$scope.Pagination.TotalPages){break;}
                         hold.push(i+1);
                     }
-                    $scope.Pagination.PaginationWindow=hold;
-                
+                    $scope.Pagination.PaginationWindow=hold;                   
 
                 }
                 
+                $scope.HelperCalcPages=function(){
+                    $scope.Pagination.TotalPages=Math.ceil($scope.Pagination.TotalItems/$scope.Pagination.ItemsPerPage);
+
+                }
                 
                 $scope.ClassPageItem=function(x){
                     if (x==$scope.Pagination.CurrPage){
@@ -253,6 +259,7 @@
                     
                     //building paginaion window
                     for (i=0;i<$scope.Pagination.PagerLenght;i++){
+                        if (i==$scope.Pagination.TotalPages){break;}
                         hold.push(i+1);
                     }
                     $scope.Pagination.PaginationWindow=hold;
