@@ -65,7 +65,24 @@
 
                        $scope.initialize=function(){
                             alert("NewItemControl")
-                       }              
+                       }
+                       $scope.HelperGetCsrfTocken=function(){
+                           
+                       }
+                       $scope.HelperAppendCsrfTocken=function(){
+                           
+                       }                       
+                       
+                       $scope.ListnerSubmitButton=function(){
+                           
+                       }                    
+                       
+                       $scope.ActionSubmitForm=function(){
+                           
+                       }
+                       $scope.ActionAppendItem=function(){
+                           
+                       }
 
                 
             });
