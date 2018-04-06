@@ -9,12 +9,13 @@ and open the template in the editor.
 
 <script src="Components\NewItemControl\NewItemControl.js"></script>
 
+
 <div class="NewItemControlComp" style="bottom: 0px"  data-ng-controller="NewItemControlCtrl" data-ng-init="initialize()">
-    <button type="button" class="btn btn-default ">
+    <button type="button" class="btn btn-default " data-ng-click="ListnerAddItem()">
         <span class="glyphicon glyphicon-plus-sign"></span> Add Item
     </button>
 
-    <div id="AddItem" title="Create new user" style="display:none;">
+    <div id="AddListItemDialog" title="Create new user" >
       <p class="validateTips">All form fields are required.</p>
 
       <form>

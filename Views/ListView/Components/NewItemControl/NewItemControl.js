@@ -64,7 +64,15 @@
                        Register.Tree[CompName].scope=$scope;
 
                        $scope.initialize=function(){
-                            alert("NewItemControl")
+                           // alert("NewItemControl")
+                           
+//                           dialog = $("#AddListItemDialog").dialog({
+//                                        autoOpen: false
+//                                    });
+                                    
+                                    
+                              
+                                    
                        }
                        $scope.HelperGetCsrfTocken=function(){
                            
@@ -75,7 +83,15 @@
                        
                        $scope.ListnerSubmitButton=function(){
                            
-                       }                    
+                       } 
+                       
+                       $scope.ListnerAddItem=function(){
+                             dialog.dialog("open")
+//                           dialog = $("#AddListItemDialog").dialog({
+//                               autoOpen: false
+//                           });
+                       }
+                       
                        
                        $scope.ActionSubmitForm=function(){
                            
@@ -83,7 +99,7 @@
                        $scope.ActionAppendItem=function(){
                            
                        }
-
+      
                 
             });
         //END Angular##########################################################################################################################
@@ -108,7 +124,10 @@
                                 if (CompAndPartsLoaded()) {
                                     console.log("Loaded Successfully........"+CompName);
                                     clearInterval(CHKLoading);
+                                      
                                     Beat();
+                                                            
+                                    
                                 }                        
                              }, 100);
 
