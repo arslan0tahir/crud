@@ -19,6 +19,34 @@
 //
 //
 
+TempViewSettings.NewItemControl={
+        Render:{
+            
+        },
+        ModalWindow             : 1,    //if form is rendered in modal window              
+        FormColumnsWithOrder    : {
+            Persoanl: [12,13,16],
+            Class   : [21,19]
+        },         
+        //
+        //its an object e.g.
+        //  {
+        //      Persoanl: [12,13,16],  //these ids can be native or foreign
+        //      Class   : [21,19],
+        //      Subject : [55,56]
+        //              //      }
+        //  }
+        //  
+        //  
+        //  [12,13,16,21,19]
+        //**these all ColIds must be a subset of ColumnsWithOrder otherwise data of that feild will not
+        //be saved
+        //
+        
+        
+    
+}
+
 
 (function() {//avoid pollution of gloabl scope
         var ContainerId="";
@@ -86,7 +114,7 @@
                        } 
                        
                        $scope.ListnerAddItem=function(){
-                             dialog.dialog("open")
+//                             dialog.dialog("open")
 //                           dialog = $("#AddListItemDialog").dialog({
 //                               autoOpen: false
 //                           });

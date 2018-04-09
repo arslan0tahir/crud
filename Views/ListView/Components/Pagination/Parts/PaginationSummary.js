@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 
+
+
+
 (function() {//avoid pollution of gloabl scope
         
         var CompName="Pagination";
