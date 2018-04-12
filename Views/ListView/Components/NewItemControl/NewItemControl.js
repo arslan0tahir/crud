@@ -25,11 +25,11 @@ TempViewSettings.NewItemControl={
         },
         ModalWindow             : 1,    //if form is rendered in modal window              
         FormColumnsWithOrder    : {
-            Persoanl: [12,13,16],
+            Personel: [12,13,16],
             Class   : [21,19]
         },         
         //
-        //its an object e.g.
+        //its an object e.g.(Fieldset Name and 
         //  {
         //      Persoanl: [12,13,16],  //these ids can be native or foreign
         //      Class   : [21,19],
@@ -45,7 +45,7 @@ TempViewSettings.NewItemControl={
         
         
     
-}
+};
 
 
 (function() {//avoid pollution of gloabl scope
@@ -72,7 +72,7 @@ TempViewSettings.NewItemControl={
         //Loading Parts of This Component        
         $.each(Register.Tree[CompName],function(key,val){
             $("[data-crud-comp='"+CompName+"-"+key+"'" ).load( "../../views/ListView/Components/"+CompName+"/Parts/"+key+".html" );
-        })
+        });
 
         var Beat=function(){//core of  component
 
@@ -107,12 +107,91 @@ TempViewSettings.NewItemControl={
                        }
                        $scope.HelperAppendCsrfTocken=function(){
                            
-                       }                       
+                       }
+                       
+                       $scope.HelperFormElementHtml=function(Elem){
+                            //
+                            //{
+                            //    ColId     :
+                            //    ColName   :
+                            //    Type      :
+                            //    Attr      :   {
+                            //                      max: 2,
+                            //                      min: 3,
+                            //                      autocomplete: "",
+                            //                      
+                            //                  }
+                            //}
+                            //
+                            //
+                            //
+                            //
+                            //*********************Types of elements
+                            //input.text
+                            //input.password
+                            //input.submit
+                            //input.reset
+                            //input.radio
+                            //input.checkbox
+                            //input.button
+                            //######HTML5[
+                            //input.color
+                            //input.date
+                            //input.datetime-local
+                            //input.email
+                            //input.month
+                            //input.number
+                            //input.range
+                            //input.search
+                            //input.tel
+                            //input.time
+                            //input.url
+                            //input.week
+                            //]HTML5#######
+                            //select
+                            //selectMultiple
+                            //textarea
+                            //button
+                            //
+                            //
+                            //
+                            //*********************Attributes
+                            //disabled	          
+                            //max
+                            //maxlength
+                            //maxlength
+                            //min	
+                            //pattern	
+                            //readonly
+                            //required
+                            //size	
+                            //step	
+                            //value
+                            //#######HTML5[
+                            //autocomplete
+                            //autofocus
+                            //form
+                            //formaction
+                            //formenctype
+                            //formmethod
+                            //formnovalidate
+                            //formtarget
+                            //height and width
+                            //list
+                            //min and max
+                            //multiple
+                            //pattern (regexp)
+                            //placeholder
+                            //required
+                            //step
+                            //]#######HTML5
+                            //
+                            //
+                       } 
                        
                        $scope.ListnerSubmitButton=function(){
                            
-                       } 
-                       
+                       }                       
                        $scope.ListnerAddItem=function(){
 //                             dialog.dialog("open")
 //                           dialog = $("#AddListItemDialog").dialog({
@@ -170,7 +249,7 @@ TempViewSettings.NewItemControl={
             }
             return false;
 
-        }
+        };
 
 
         //check if all part of a component are loaded
@@ -191,7 +270,7 @@ TempViewSettings.NewItemControl={
                 ReturnVal=0;
                 return ReturnVal;
             }
-        }
+        };
 
 
 })();
