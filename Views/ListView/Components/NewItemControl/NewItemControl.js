@@ -114,12 +114,18 @@ TempViewSettings.NewItemControl={
                             //{
                             //    ColId     :
                             //    ColName   :
-                            //    Type      :
-                            //    Attr      :   {
-                            //                      max: 2,
-                            //                      min: 3,
-                            //                      autocomplete: "",
+                            //    HtmlForDataType  :   {   
+                            //                      Input: {
+                            //                                type          : 
+                            //                                max           : 2,
+                            //                                min           : 3,
+                            //                                autocomplete  : "",
+                            //                                ChildNode     :   {
+                            //                                //if any e.g for select we have options
+                            //                                }
+                            //                      }                      
                             //                      
+                            //    
                             //                  }
                             //}
                             //
@@ -148,10 +154,14 @@ TempViewSettings.NewItemControl={
                             //input.url
                             //input.week
                             //]HTML5#######
-                            //select
+                            //select    option,optgroup
                             //selectMultiple
                             //textarea
                             //button
+                            //#######HTML5[
+                            //list datalist
+                            //output
+                            //]HTML5#######
                             //
                             //
                             //
